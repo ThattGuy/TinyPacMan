@@ -3,7 +3,6 @@ package pt.isec.pa.a2019128044.tinypac.model.data.maze.elements;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.Level;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.Empty;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.Portal;
-import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.SmallBall;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.Warp;
 
 public class Pacman extends Element {
@@ -16,7 +15,7 @@ public class Pacman extends Element {
     }
 
     @Override
-    public void evolve(long currentTime) {
+    public boolean evolve(long currentTime) {
 
         if (currentTime - lastMovedTime >= 10) {
 

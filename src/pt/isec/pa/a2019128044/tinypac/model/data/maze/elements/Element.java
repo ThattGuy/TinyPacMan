@@ -2,10 +2,6 @@ package pt.isec.pa.a2019128044.tinypac.model.data.maze.elements;
 
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.IMazeElement;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.Level;
-import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public abstract class Element implements IMazeElement {
 
@@ -17,7 +13,9 @@ public abstract class Element implements IMazeElement {
         this.level = level;
     }
 
-    public void evolve(long currentTime){};
+    public boolean evolve(long currentTime){
+        return true;
+    };
 
     @Override
     public char getSymbol() {

@@ -15,70 +15,25 @@ public class Inky extends Ghost {
     }
 
     @Override
-    public void evolve(long currentTime) {
-            if (currentTime - lastMovedTime >= 10) {
+    public boolean evolve(long currentTime) {
 
-                Level.Position myPos = level.getPositionOf(this);
-                if (myPos == null)
-                    return;
-
-                if (inSpawn) {
-                    KEYPRESS = KEYPRESS.UP;
-                    Level.Position neighborPosition = level.getNeighboorPosition(myPos, this.KEYPRESS);
-
-                    if (level.getElement(neighborPosition) instanceof Ghost || level.getElement(neighborPosition).getSymbol() == 'x') {
-
-                        KEYPRESS = KEYPRESS.LEFT;
-                        neighborPosition = level.getNeighboorPosition(myPos, this.KEYPRESS);
-                        if (level.getElement(neighborPosition) instanceof Ghost || level.getElement(neighborPosition).getSymbol() == 'x') {
-
-                            KEYPRESS = KEYPRESS.RIGHT;
-                            neighborPosition = level.getNeighboorPosition(myPos, this.KEYPRESS);
-                            if (level.getElement(neighborPosition) instanceof Ghost || level.getElement(neighborPosition).getSymbol() == 'x') {
-
-                            } else {
-                                boolean moved = level.setElementPosition(this, neighborPosition);
-                                if (moved) {
-                                    level.setElementPosition(new Empty(level), myPos);
-                                    if(level.getElement(myPos).getSymbol() == Elements.PORTAL.getValue())
-                                        inSpawn = false;
-                                }
-                            }
-                        } else {
-                            boolean moved = level.setElementPosition(this, neighborPosition);
-                            if (moved) {
-                                level.setElementPosition(new Empty(level), myPos);
-                            }
-                        }
-                    } else {
-                        boolean moved = level.setElementPosition(this, neighborPosition);
-                        if (moved) {
-                            level.setElementPosition(new Empty(level), myPos);
-                        }
-                    }
-                }
-            } else {
-
-                Level.Position myPos = level.getPositionOf(this);
-                if (myPos == null)
-                    return;
-
-                Level.Position neighboorPosition = level.getNeighboorPosition(myPos, level.getDirection());
-
-                if (level.getElement(neighboorPosition) instanceof Portal || level.getElement(neighboorPosition) instanceof Warp) {
-
-                } else {
-                    boolean moved = level.setElementPosition(this, neighboorPosition);
-                    if (moved) {
-                        level.setElementPosition(new Empty(level), myPos);
-                    } else {
-                        KEYPRESS[] values = KEYPRESS.values();
-                        Random random = new Random();
-                        KEYPRESS = values[random.nextInt(values.length)];
-                    }
-                }
-            }
-            lastMovedTime = currentTime;
+        if(isVulnerable){
+            return run();
         }
+        follow();
+        return true;
+    }
+
+    private boolean run(){
+        if(isAlive)
+            return true;
+        else
+            return false;
+    }
+
+    private void follow(){
+
+    }
+
 }
 

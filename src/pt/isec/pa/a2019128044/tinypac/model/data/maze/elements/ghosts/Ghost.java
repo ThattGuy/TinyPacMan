@@ -23,4 +23,9 @@ public abstract class Ghost extends Element {
         this.movements = new ArrayList<>();
         inSpawn = true;
     }
+
+    public boolean isVulnerable() {
+        return isVulnerable;
+    }
+
 }
