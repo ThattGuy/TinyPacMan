@@ -19,8 +19,7 @@ public class GameData {
     private StringBuilder currentLevel;
     private Level level;
     private int levelNumber;
-
-    private KEYPRESS currentKEYPRESS;
+    int points;
     static final Map<Character, Class<? extends Element>> elements = new HashMap<>() {{
         put('y', Cavern.class);
         put('F', FruitZone.class);

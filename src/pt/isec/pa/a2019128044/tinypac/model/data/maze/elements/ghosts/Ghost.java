@@ -28,4 +28,20 @@ public abstract class Ghost extends Element {
         return isVulnerable;
     }
 
+    @Override
+    public void evolve(long currentTime) {
+
+        if(isVulnerable()){
+            run();
+        }else
+            follow();
+    }
+
+    protected void run(){
+        //TODO REVERTER MOVIMENTOS
+        //todo voltar a seguir assim que voltar ao spawn
+    }
+
+    abstract void follow();
+
 }

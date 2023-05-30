@@ -28,7 +28,7 @@ public class GameContext implements IGameEngineEvolve {
     @Override
     public void evolve(IGameEngine gameEngine, long currentTime) {
         if(!state.evolve(currentTime))
-            gameEngine.stop();
+           gameEngine.stop();
     }
 
     public void pressKey(KEYPRESS KEYPRESS)  {

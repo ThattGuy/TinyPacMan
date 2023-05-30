@@ -5,24 +5,55 @@ import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.Element;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.Elements;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.Pacman;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.ghosts.*;
+import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.Portal;
+import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.Wall;
+import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.Warp;
+
+import java.util.Random;
 
 public class Level {
     private int height, width;
     private Maze maze;
-    private KEYPRESS KEYPRESS;
-    private KEYPRESS lastKEYPRESS;
-
+    private KEYPRESS keypress;
     public record Position(int y, int x) {}
 
     public Level(int height, int width) {
         this.height = height;
         this.width = width;
         this.maze = new Maze(height, width);
-        KEYPRESS = null;
+        keypress = null;
     }
 
     public void addElement(Element element, int y, int x) {
         maze.set(y, x, element);
+    }
+
+    public void spawnLiveElements() {
+
+        int nGhosts = 0;
+        boolean pacmanExists = false;
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (maze.get(i, j).getSymbol() == Elements.CAVERN.getValue() && nGhosts < 4) {
+                    switch (nGhosts) {
+                        case 0 -> maze.set(i, j, new Blinky(this));
+                        case 1 -> maze.set(i, j, new Clyde(this));
+                        case 2 -> maze.set(i, j, new Inky(this));
+                        case 3 -> maze.set(i, j, new Pinky(this));
+                    }
+                    nGhosts++;
+                }
+
+                if (maze.get(i, j).getSymbol() == Elements.PACMANSPAWN.getValue() && !pacmanExists) {
+                    maze.set(i,j, new Pacman(this));
+                }
+            }
+
+        }
+    }
+
+    public char[][] getLevel() {
+        return maze.getMaze();
     }
 
     public void evolve(long currentTime) {
@@ -74,42 +105,31 @@ public class Level {
         return new Position(newY, newX);
     }
 
+    private Position getPacmanPos(){
 
-    public void spawnLiveElements() {
-
-        int nGhosts = 0;
-        boolean pacmanExists = false;
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                if (maze.get(i, j).getSymbol() == Elements.CAVERN.getValue() && nGhosts < 4) {
-                    switch (nGhosts) {
-                        case 0 -> maze.set(i, j, new Blinky(this));
-                        case 1 -> maze.set(i, j, new Clyde(this));
-                        case 2 -> maze.set(i, j, new Inky(this));
-                        case 3 -> maze.set(i, j, new Pinky(this));
-                    }
-                    nGhosts++;
-                }
-
-                if (maze.get(i, j).getSymbol() == Elements.PACMANSPAWN.getValue() && !pacmanExists) {
-                    maze.set(i,j, new Pacman(this));
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (maze.get(y, x) instanceof Pacman) {
+                    return new Position(y,x);
                 }
             }
-
         }
+        return null;
     }
 
-    public char[][] getLevel() {
-        return maze.getMaze();
-    }
+    public void setDirection(KEYPRESS keypress) {
 
-    public void setDirection(KEYPRESS KEYPRESS) {
-        lastKEYPRESS = this.KEYPRESS;
-        this.KEYPRESS = KEYPRESS;
+        Position neightboor = getNeighboorPosition(getPacmanPos(),keypress);
+
+        if(getElement(neightboor) instanceof Wall || getElement(neightboor) instanceof Portal || getElement(neightboor) instanceof Warp){
+            return;
+        }
+
+        this.keypress = keypress;
     }
 
     public KEYPRESS getDirection() {
-        return KEYPRESS;
+        return keypress;
     }
 
     public  IMazeElement getElement(Position position){
@@ -128,12 +148,8 @@ public class Level {
         IMazeElement elementAtPosition = this.getElement(nextPosition);
 
         if(elementAtPosition.getSymbol() == Elements.WALL.getValue()) {
-            if(element.getSymbol() == Elements.PACMAN.getValue()){
-                KEYPRESS = lastKEYPRESS;
-            }
             return false;
         }
-
 
         maze.set(nextPosition.y,nextPosition.x,element);
 

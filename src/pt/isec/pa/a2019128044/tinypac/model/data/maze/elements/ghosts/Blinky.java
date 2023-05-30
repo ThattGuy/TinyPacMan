@@ -9,25 +9,8 @@ public class Blinky extends Ghost {
     }
 
     @Override
-    public boolean evolve(long currentTime) {
-
-        if(isVulnerable){
-            return run();
-        }
-        follow();
-        return true;
-    }
-
-    private boolean run(){
-        if(isAlive)
-            return true;
-        else
-            return false;
-    }
-
-    private void follow(){
+    void follow() {
 
     }
-
 }
 

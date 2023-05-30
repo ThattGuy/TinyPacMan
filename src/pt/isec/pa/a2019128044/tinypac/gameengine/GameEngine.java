@@ -1,8 +1,8 @@
 package pt.isec.pa.a2019128044.tinypac.gameengine;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 public final class GameEngine implements IGameEngine {
     private GameEngineState state;
     private GameEngineThread controlThread;
@@ -11,7 +11,7 @@ public final class GameEngine implements IGameEngine {
 
     private void setState(GameEngineState state) {
         this.state = state;
-        logger.log(System.Logger.Level.INFO,state.toString());
+        logger.log(System.Logger.Level.INFO, state.toString());
     }
 
     public GameEngine() {
@@ -82,7 +82,6 @@ public final class GameEngine implements IGameEngine {
 
     @Override
     public void waitForTheEnd() {
-        //controlThread.setDaemon(false);
         try {
             controlThread.join();
         } catch (InterruptedException e) {
@@ -96,20 +95,22 @@ public final class GameEngine implements IGameEngine {
             this.interval = interval;
             this.setDaemon(true);
         }
+
         @Override
         public void run() {
             int errCounter = 0;
             while (true) {
-                if (state == GameEngineState.READY)
-                    break;
+                if (state == GameEngineState.READY) break;
                 if (state == GameEngineState.RUNNING) {
                     new Thread(() -> {
                         long time = System.nanoTime();
-                        List.copyOf(clients).forEach(client -> client.evolve(GameEngine.this, time));
+                        List.copyOf(clients).forEach(
+                                client -> client.evolve(GameEngine.this, time)
+                        );
                     }).start();
                 }
                 try {
-                    //noinspection BusyWait
+//noinspection BusyWait
                     sleep(interval);
                     errCounter = 0;
                 } catch (InterruptedException e) {

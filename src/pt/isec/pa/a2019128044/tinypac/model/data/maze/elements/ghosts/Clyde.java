@@ -14,6 +14,11 @@ public class Clyde extends Ghost {
         super('C', level);
     }
 
+    @Override
+    void follow() {
+
+    }
+
 }
 
 

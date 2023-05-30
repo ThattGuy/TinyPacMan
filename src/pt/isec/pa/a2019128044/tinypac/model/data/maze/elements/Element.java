@@ -13,8 +13,8 @@ public abstract class Element implements IMazeElement {
         this.level = level;
     }
 
-    public boolean evolve(long currentTime){
-        return true;
+    public void evolve(long currentTime){
+
     };
 
     @Override

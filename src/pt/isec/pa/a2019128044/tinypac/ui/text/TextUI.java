@@ -20,7 +20,7 @@ public class TextUI implements IGameEngineEvolve {
     GameContext context;
     Screen screen;
 
-    public TextUI(GameContext  context) throws IOException {
+    public TextUI(GameContext context) throws IOException {
         this.context = context;
         screen = new DefaultTerminalFactory().setInitialTerminalSize(new TerminalSize(80, 40)).createScreen();
         screen.setCursorPosition(null);
@@ -30,7 +30,7 @@ public class TextUI implements IGameEngineEvolve {
 
     public void show() throws IOException {
 
-        char [][] level = context.getLevel();
+        char[][] level = context.getLevel();
         screen.startScreen();
 
         System.out.println();
@@ -40,12 +40,12 @@ public class TextUI implements IGameEngineEvolve {
             for (int x = 0; x < level[y].length; x++) {
 
                 Elements elements = Elements.getElement(level[y][x]);
-                TextColor tc = switch(elements) {
+                TextColor tc = switch (elements) {
                     case WALL -> TextColor.ANSI.BLUE;
-                    case WARP-> TextColor.ANSI.GREEN;
+                    case WARP -> TextColor.ANSI.GREEN;
                     case SMALLBALL -> TextColor.ANSI.YELLOW;
                     case FRUITSPAWN -> TextColor.ANSI.RED;
-                    case PACMANSPAWN-> TextColor.ANSI.BLACK;
+                    case PACMANSPAWN -> TextColor.ANSI.BLACK;
                     case POWERUP -> TextColor.ANSI.YELLOW_BRIGHT;
                     case PORTAL -> TextColor.ANSI.BLUE_BRIGHT;
                     case CAVERN -> TextColor.ANSI.BLACK;
@@ -56,12 +56,12 @@ public class TextUI implements IGameEngineEvolve {
                     case PACMAN -> TextColor.ANSI.YELLOW;
                     case EMPTY -> TextColor.ANSI.BLACK;
                 };
-                TextColor bc = switch(elements) {
+                TextColor bc = switch (elements) {
                     case WALL -> TextColor.ANSI.BLUE;
-                    case WARP-> TextColor.ANSI.GREEN;
+                    case WARP -> TextColor.ANSI.GREEN;
                     case SMALLBALL -> TextColor.ANSI.BLACK;
                     case FRUITSPAWN -> TextColor.ANSI.RED;
-                    case PACMANSPAWN-> TextColor.ANSI.BLACK;
+                    case PACMANSPAWN -> TextColor.ANSI.BLACK;
                     case POWERUP -> TextColor.ANSI.BLACK;
                     case PORTAL -> TextColor.ANSI.BLUE_BRIGHT;
                     case CAVERN -> TextColor.ANSI.BLACK;
@@ -72,7 +72,7 @@ public class TextUI implements IGameEngineEvolve {
                     case PACMAN -> TextColor.ANSI.YELLOW_BRIGHT;
                     case EMPTY -> TextColor.ANSI.BLACK;
                 };
-                screen.setCharacter(x,y, TextCharacter.fromCharacter(level[y][x],tc,bc)[0]);
+                screen.setCharacter(x, y, TextCharacter.fromCharacter(level[y][x], tc, bc)[0]);
             }
         }
         screen.refresh();
@@ -80,12 +80,14 @@ public class TextUI implements IGameEngineEvolve {
 
     @Override
     public void evolve(IGameEngine gameEngine, long currentTime) {
+        System.out.printf("[%d]\n",currentTime);
+
         try {
-                show();
-                KeyStroke keyStroke = screen.pollInput();
-                if(keyStroke == null) {
-                    return;
-                }
+            show();
+            KeyStroke keyStroke = screen.pollInput();
+            if (keyStroke == null) {
+                return;
+            }
             switch (keyStroke.getKeyType()) {
                 case ArrowUp -> context.pressKey(KEYPRESS.UP);
                 case ArrowDown -> context.pressKey(KEYPRESS.DOWN);
@@ -98,7 +100,6 @@ public class TextUI implements IGameEngineEvolve {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-
     }
 
 }

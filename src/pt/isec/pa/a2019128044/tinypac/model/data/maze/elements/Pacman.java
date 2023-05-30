@@ -15,27 +15,21 @@ public class Pacman extends Element {
     }
 
     @Override
-    public boolean evolve(long currentTime) {
+    public void evolve(long currentTime) {
 
         if (currentTime - lastMovedTime >= 10) {
-
+            //todo perguntar ao professor como ajustar o click do relogio para se mover mais do que uma vez por segundo
             Level.Position myPos = level.getPositionOf(this);
-            if (myPos == null)
-                return;
 
             Level.Position neighboorPosition = level.getNeighboorPosition(myPos, level.getDirection());
 
-            if (level.getElement(neighboorPosition) instanceof Portal || level.getElement(neighboorPosition)
-                    instanceof Warp) {
-
-            } else {
+            if (!(level.getElement(neighboorPosition) instanceof Portal || level.getElement(neighboorPosition) instanceof Warp)) {
                 boolean moved = level.setElementPosition(this, neighboorPosition);
                 if (moved) {
                     level.setElementPosition(new Empty(level), myPos);
                 }
             }
-            lastMovedTime = currentTime;
         }
-
+        lastMovedTime = currentTime;
     }
 }
