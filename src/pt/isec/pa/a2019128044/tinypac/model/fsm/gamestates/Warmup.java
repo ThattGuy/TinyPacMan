@@ -10,6 +10,7 @@ public class Warmup  extends GameStateAdapter {
 
     public Warmup(GameContext context, GameData data) {
         super(context, data);
+        System.out.println("Warmup State");
     }
 
     @Override
@@ -19,10 +20,9 @@ public class Warmup  extends GameStateAdapter {
             stateTimer = currentTime;
         }
         
-        long warmUpTime = 500000000L; // 5 segundos
+        long warmUpTime = 5000000000L; // 5 segundos
 
-        //TODO perguntar ao professor que função chamar aqui para mover os ghosts
-        data.evolve(currentTime);
+        data.movePacman(currentTime);
 
         if (currentTime - stateTimer >= warmUpTime) {
                 changeState(GameState.PACMAN_VULNERABLE);

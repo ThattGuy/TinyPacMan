@@ -9,8 +9,6 @@ import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.Wall;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.Warp;
 
-import java.util.Random;
-
 public class Level {
     private int height, width;
     private Maze maze;
@@ -56,7 +54,7 @@ public class Level {
         return maze.getMaze();
     }
 
-    public void evolve(long currentTime) {
+    public void moveAll(long currentTime) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (maze.get(y, x) instanceof Element element) {
@@ -66,10 +64,26 @@ public class Level {
         }
     }
 
+    public void movePacman(long currentTime) {
+        Position pacmanPos = getPacmanPos();
+
+        if(maze.get(pacmanPos.y(), pacmanPos.x()) instanceof Element element){
+            element.evolve(currentTime);
+        }
+    }
+
     public Position getPositionOf(Element element) {
         for(int y = 0; y < height;y++)
             for(int x = 0;x < width; x++)
                 if (maze.get(y,x) == element)
+                    return new Position(y,x);
+        return null;
+    }
+
+    public Position getPortalPosition(){
+        for(int y = 0; y < height;y++)
+            for(int x = 0;x < width; x++)
+                if (maze.get(y,x).getSymbol() == Elements.PORTAL.getValue())
                     return new Position(y,x);
         return null;
     }

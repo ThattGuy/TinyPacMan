@@ -9,6 +9,7 @@ import pt.isec.pa.a2019128044.tinypac.model.fsm.GameStateAdapter;
 public class Initial extends GameStateAdapter {
     public Initial(GameContext context, GameData data) {
         super(context, data);
+        System.out.println("Initial State");
     }
 
 

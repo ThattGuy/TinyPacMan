@@ -144,15 +144,28 @@ public class GameData {
         level.setDirection(KEYPRESS);
     }
 
-    public void evolve(long currentTime) {
-        if(level == null)
-            return;
+    public void movePacman(long currentTime) {
+        /*if(level == null)
+            return;*/
 
         if(!level.isPacmanAlive() && playerLives > 0){
             level.spawnLiveElements();
             playerLives--;
         }
 
-        level.evolve(currentTime);
+        level.movePacman(currentTime);
+    }
+
+    public void moveAll(long currentTime){
+        /*if(level == null)
+            return;*/
+
+        if(!level.isPacmanAlive() && playerLives > 0){
+            level.spawnLiveElements();
+            playerLives--;
+        }
+
+        level.moveAll(currentTime);
+
     }
 }
