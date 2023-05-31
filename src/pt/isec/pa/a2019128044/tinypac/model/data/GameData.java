@@ -20,6 +20,8 @@ public class GameData {
     private Level level;
     private int levelNumber;
     int points;
+    int playerLives;
+
     static final Map<Character, Class<? extends Element>> elements = new HashMap<>() {{
         put('y', Cavern.class);
         put('F', FruitZone.class);
@@ -40,6 +42,7 @@ public class GameData {
         }
         level.spawnLiveElements();
         level.getLevel();
+        playerLives = 3;
     }
 
     private Level createLevel() {
@@ -124,8 +127,7 @@ public class GameData {
 
     public void setCurrentLevel(int currentLevel) {
         if (currentLevel >= FIRSTLEVEL && currentLevel <= MAXLEVEL){
-            this.currentLevel.append("Level").append(currentLevel).append("." +
-                    "txt");
+            this.currentLevel.append("Level").append(currentLevel).append("." + "txt");
 
         }
     }
@@ -138,10 +140,6 @@ public class GameData {
         return level.getLevel();
     }
 
-    public KEYPRESS getDirection() {
-        return level.getDirection();
-    }
-
     public void setDirection(KEYPRESS KEYPRESS) {
         level.setDirection(KEYPRESS);
     }
@@ -149,7 +147,12 @@ public class GameData {
     public void evolve(long currentTime) {
         if(level == null)
             return;
+
+        if(!level.isPacmanAlive() && playerLives > 0){
+            level.spawnLiveElements();
+            playerLives--;
+        }
+
         level.evolve(currentTime);
     }
-
 }

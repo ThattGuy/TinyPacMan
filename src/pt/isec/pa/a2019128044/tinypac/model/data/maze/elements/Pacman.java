@@ -6,13 +6,11 @@ import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements
 
 public class Pacman extends Element {
     private long lastMovedTime = 0;
-    int lives;
     int points;
     int fruitsEaten;
 
     public Pacman(Level level) {
         super('P', level);
-        lives = 3;
         points = 0;
         fruitsEaten = 0;
     }

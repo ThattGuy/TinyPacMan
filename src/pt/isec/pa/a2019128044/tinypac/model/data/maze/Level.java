@@ -156,4 +156,9 @@ public class Level {
         return true;
     }
 
+    //getpacmanpos returns a Position
+    public boolean isPacmanAlive(){
+        return getPacmanPos() != null;
+    }
+
 }
