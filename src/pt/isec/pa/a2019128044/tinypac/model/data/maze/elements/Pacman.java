@@ -1,17 +1,20 @@
 package pt.isec.pa.a2019128044.tinypac.model.data.maze.elements;
 
+import pt.isec.pa.a2019128044.tinypac.model.data.maze.IMazeElement;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.Level;
-import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.Empty;
-import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.Portal;
-import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.Warp;
+import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.*;
 
 public class Pacman extends Element {
     private long lastMovedTime = 0;
     int lives;
+    int points;
+    int fruitsEaten;
 
     public Pacman(Level level) {
         super('P', level);
         lives = 3;
+        points = 0;
+        fruitsEaten = 0;
     }
 
     @Override
@@ -24,10 +27,39 @@ public class Pacman extends Element {
             Level.Position neighboorPosition = level.getNeighboorPosition(myPos, level.getDirection());
 
             if (!(level.getElement(neighboorPosition) instanceof Portal || level.getElement(neighboorPosition) instanceof Warp)) {
+
+                IMazeElement oldPositionElement = new Empty(level);
                 boolean moved = level.setElementPosition(this, neighboorPosition);
-                if (moved) {
-                    level.setElementPosition(new Empty(level), myPos);
+
+                //In case nextzone has a smallBall
+                if(level.getElement(neighboorPosition) instanceof SmallBall){
+                    points++;
                 }
+
+                //In case nextzone has a PowerUp
+                if(level.getElement(neighboorPosition) instanceof PowerUp){
+                    points += 5;
+                }
+
+                //In case nextzone is a fruitzone and is fruit
+                if(level.getElement(neighboorPosition) instanceof FruitZone){
+                    if(((FruitZone) level.getElement(neighboorPosition)).hasFruit()){
+                        fruitsEaten *= 25;
+                    }
+                    oldPositionElement = new FruitZone(level);
+                }
+
+                //In case nextzone is a PacmanSpawn
+                if(level.getElement(neighboorPosition) instanceof PacmanSpawn){
+                    if (moved) {
+                        level.setElementPosition(new PacmanSpawn(level), myPos);
+                    }
+                }
+
+                if (moved) {
+                    level.setElementPosition(oldPositionElement, myPos);
+                }
+
             }
         }
         lastMovedTime = currentTime;
