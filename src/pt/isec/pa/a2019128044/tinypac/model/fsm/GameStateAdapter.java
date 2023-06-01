@@ -14,8 +14,8 @@ public abstract class GameStateAdapter implements IGameState {
         this.data = data;
     }
 
-    protected void changeState(GameState newState) {
-        context.changeState(newState.createState(context,data));
+    protected void changeState(GameState newState, GameState lastState) {
+        context.changeState(newState.createState(context,data,lastState));
     }
 
     //todo pause e unpause nos estados que usam
@@ -25,12 +25,6 @@ public abstract class GameStateAdapter implements IGameState {
         return false;
     }
 
-    @Override
-    public boolean allGhostsDead() {
-        return false;
-    }
-
-    @Override
     public boolean evolve(long currentTime) {
         return true;
     }

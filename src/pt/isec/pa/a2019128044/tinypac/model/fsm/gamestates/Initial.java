@@ -12,16 +12,14 @@ public class Initial extends GameStateAdapter {
         System.out.println("Initial State");
     }
 
-
-
     @Override
     public boolean pressKey(KEYPRESS keypress) {
 
         if(keypress == KEYPRESS.ESC){
-            changeState(GameState.PAUSE);
+            changeState(GameState.PAUSE,null);
         }else{
             data.setDirection(keypress);
-            changeState(GameState.WARMUP);
+            changeState(GameState.WARMUP,null);
         }
 
         return true;

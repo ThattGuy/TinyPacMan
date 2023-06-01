@@ -11,14 +11,11 @@ public class GameContext implements IGameEngineEvolve {
 
     public GameContext() {
         data = new GameData();
-        state = GameState.INITIAL.createState(this, data);
+        state = GameState.INITIAL.createState(this, data, null);
     }
 
     public char[][] getLevel(){
         return data.getLevel();
-    }
-    public GameState getState() {
-        return state.getState();
     }
 
     void changeState(IGameState newState) {
@@ -34,6 +31,5 @@ public class GameContext implements IGameEngineEvolve {
     public void pressKey(KEYPRESS KEYPRESS)  {
         state.pressKey(KEYPRESS);
     }
-
 
 }

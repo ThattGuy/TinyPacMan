@@ -12,11 +12,6 @@ public class GhostsVulnerable extends GameStateAdapter {
     }
 
     @Override
-    public boolean allGhostsDead() {
-        return super.allGhostsDead();
-    }
-
-    @Override
     public boolean evolve(long currentTime) {
         if(stateTimer == 0){
             stateTimer = currentTime;
@@ -25,7 +20,7 @@ public class GhostsVulnerable extends GameStateAdapter {
         data.moveAll(currentTime);
 
         if (currentTime - stateTimer >= 10000000000L) {
-                changeState(GameState.PACMAN_VULNERABLE);
+                changeState(GameState.PACMAN_VULNERABLE,null);
         }
         return true;
     }
@@ -34,7 +29,7 @@ public class GhostsVulnerable extends GameStateAdapter {
     public boolean pressKey(KEYPRESS keypress) {
 
         if(keypress == KEYPRESS.ESC){
-            changeState(GameState.PAUSE);
+            changeState(GameState.PAUSE,null);
         }else{
             data.setDirection(keypress);
         }
