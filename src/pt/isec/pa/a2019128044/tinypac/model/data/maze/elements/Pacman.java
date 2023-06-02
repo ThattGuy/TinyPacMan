@@ -18,7 +18,7 @@ public class Pacman extends Element {
     @Override
     public void evolve(long currentTime) {
 
-        if (currentTime - lastMovedTime >= 10) {
+        //if (currentTime - lastMovedTime >= 10) {
             //todo perguntar ao professor como ajustar o click do relogio para se mover mais do que uma vez por segundo
             Level.Position myPos = level.getPositionOf(this);
 
@@ -60,6 +60,6 @@ public class Pacman extends Element {
 
             }
         }
-        lastMovedTime = currentTime;
-    }
+      //  lastMovedTime = currentTime;
+    //}
 }

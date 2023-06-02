@@ -9,6 +9,9 @@ import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.Wall;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.Warp;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Level {
     private int height, width;
     private Maze maze;
@@ -55,13 +58,22 @@ public class Level {
     }
 
     public void moveAll(long currentTime) {
+        //todo perguntar se devo criar array com elemntos ja percorridos?
+
+        List<Element> evolvedElements = new ArrayList<>();
+
+        //Element evolvedElement = null;
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (maze.get(y, x) instanceof Element element) {
-                    element.evolve(currentTime);
+                    if(!evolvedElements.contains(element)){
+                        element.evolve(currentTime);
+                        evolvedElements.add(element);
+                    }
                 }
             }
         }
+
     }
 
     public void movePacman(long currentTime) {
