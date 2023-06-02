@@ -25,7 +25,7 @@ public class Warmup  extends GameStateAdapter {
         data.movePacman(currentTime);
 
         if (currentTime - stateTimer >= warmUpTime) {
-                changeState(GameState.PACMAN_VULNERABLE);
+                changeState(GameState.PACMAN_VULNERABLE,null);
         }
 
         return true;
@@ -34,7 +34,7 @@ public class Warmup  extends GameStateAdapter {
     @Override
     public boolean pressKey(KEYPRESS keypress) {
         if(keypress == KEYPRESS.ESC){
-            changeState(GameState.PAUSE);
+            changeState(GameState.PAUSE,null);
         }else{
             data.setDirection(keypress);
         }

@@ -9,11 +9,13 @@ import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.Wall;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.Warp;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Level {
     private int height, width;
     private Maze maze;
     private KEYPRESS keypress;
-    private KEYPRESS nextDirection;
     public record Position(int y, int x) {}
 
     public Level(int height, int width) {
@@ -55,17 +57,26 @@ public class Level {
         return maze.getMaze();
     }
 
-    public void evolveAll(long currentTime) {
+    public void moveAll(long currentTime) {
+        //todo perguntar se devo criar array com elemntos ja percorridos?
+
+        List<Element> evolvedElements = new ArrayList<>();
+
+        //Element evolvedElement = null;
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (maze.get(y, x) instanceof Element element) {
-                    element.evolve(currentTime);
+                    if(!evolvedElements.contains(element)){
+                        element.evolve(currentTime);
+                        evolvedElements.add(element);
+                    }
                 }
             }
         }
+
     }
 
-    public void evolvePacman(long currentTime) {
+    public void movePacman(long currentTime) {
         Position pacmanPos = getPacmanPos();
 
         if(maze.get(pacmanPos.y(), pacmanPos.x()) instanceof Element element){
@@ -134,10 +145,6 @@ public class Level {
 
     public void setDirection(KEYPRESS keypress) {
 
-        if(keypress != this.keypress){
-            nextDirection = keypress;
-        }
-
         Position neightboor = getNeighboorPosition(getPacmanPos(),keypress);
 
         if(getElement(neightboor) instanceof Wall || getElement(neightboor) instanceof Portal || getElement(neightboor) instanceof Warp){
@@ -151,10 +158,6 @@ public class Level {
         return keypress;
     }
 
-    public KEYPRESS getNextDirection(){
-        return nextDirection;
-    }
-
     public  IMazeElement getElement(Position position){
         if(position == null){
             return null;
@@ -162,7 +165,6 @@ public class Level {
 
         return maze.get(position.y, position.x);
     }
-
 
     public boolean setElementPosition(IMazeElement element, Position nextPosition){
 

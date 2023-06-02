@@ -9,6 +9,7 @@ import pt.isec.pa.a2019128044.tinypac.model.fsm.GameStateAdapter;
 public class PacmanVulnerable  extends GameStateAdapter {
     public PacmanVulnerable(GameContext context, GameData data) {
         super(context, data);
+        System.out.println("ghost vulnerable");
     }
 
     @Override
@@ -21,7 +22,7 @@ public class PacmanVulnerable  extends GameStateAdapter {
     public boolean pressKey(KEYPRESS keypress) {
 
         if(keypress == KEYPRESS.ESC){
-            changeState(GameState.PAUSE);
+            changeState(GameState.PAUSE,null);
         }else{
             data.setDirection(keypress);
         }

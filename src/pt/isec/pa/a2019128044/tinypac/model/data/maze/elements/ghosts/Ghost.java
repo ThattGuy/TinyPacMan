@@ -45,7 +45,6 @@ public abstract class Ghost extends Element {
         } else {
             follow();
         }
-
     }
 
     protected void leaveCavern() {
