@@ -29,7 +29,6 @@ public class GhostsVulnerable extends GameStateAdapter {
         }
         return true;
     }
-
     @Override
     public boolean pressKey(KEYPRESS keypress) {
 
@@ -40,10 +39,8 @@ public class GhostsVulnerable extends GameStateAdapter {
         }
         return true;
     }
-
     @Override
     public GameState getState() {
         return GameState.GHOSTS_VULNERABLE;
     }
-
 }

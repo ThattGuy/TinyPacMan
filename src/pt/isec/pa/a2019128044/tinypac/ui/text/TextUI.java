@@ -80,7 +80,7 @@ public class TextUI implements IGameEngineEvolve {
 
     @Override
     public void evolve(IGameEngine gameEngine, long currentTime) {
-        System.out.printf("[%d]\n",currentTime);
+        System.out.printf("*Tick*\n");
 
         try {
             show();

@@ -8,7 +8,6 @@ import pt.isec.pa.a2019128044.tinypac.model.data.GameData;
 public class GameContext implements IGameEngineEvolve {
     private GameData data;
     private IGameState state;
-
     public GameContext() {
         data = new GameData();
         state = GameState.INITIAL.createState(this, data);
@@ -17,10 +16,6 @@ public class GameContext implements IGameEngineEvolve {
     public char[][] getLevel(){
         return data.getLevel();
     }
-    public GameState getState() {
-        return state.getState();
-    }
-
     void changeState(IGameState newState) {
         this.state = newState;
     }
@@ -34,6 +29,4 @@ public class GameContext implements IGameEngineEvolve {
     public void pressKey(KEYPRESS KEYPRESS)  {
         state.pressKey(KEYPRESS);
     }
-
-
 }

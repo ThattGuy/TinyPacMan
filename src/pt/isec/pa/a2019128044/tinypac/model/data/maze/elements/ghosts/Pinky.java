@@ -20,6 +20,7 @@ public class Pinky extends Ghost {
             if (level.setElementPosition(this, portal)) {
                 level.setElementPosition(new Empty(level), myPos);
             }
+            inSpawn = false;
         } else {
             // Move towards the portal
             int nextY = myPos.y();

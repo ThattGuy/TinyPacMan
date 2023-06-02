@@ -153,7 +153,7 @@ public class GameData {
             playerLives--;
         }
 
-        level.movePacman(currentTime);
+        level.evolvePacman(currentTime);
     }
 
     public void moveAll(long currentTime){
@@ -165,7 +165,7 @@ public class GameData {
             playerLives--;
         }
 
-        level.moveAll(currentTime);
+        level.evolveAll(currentTime);
 
     }
 }

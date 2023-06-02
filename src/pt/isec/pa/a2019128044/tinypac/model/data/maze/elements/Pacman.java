@@ -22,6 +22,14 @@ public class Pacman extends Element {
             //todo perguntar ao professor como ajustar o click do relogio para se mover mais do que uma vez por segundo
             Level.Position myPos = level.getPositionOf(this);
 
+            /*Level.Position nextMoveNeighboorPosition = level.getNeighboorPosition(myPos, level.getNextDirection());
+
+            if(!(level.getElement(nextMoveNeighboorPosition) instanceof PowerUp) ||
+                    !(level.getElement(nextMoveNeighboorPosition) instanceof SmallBall) ||
+                    !(level.getElement(nextMoveNeighboorPosition) instanceof PowerUp)){
+
+            }*/
+
             Level.Position neighboorPosition = level.getNeighboorPosition(myPos, level.getDirection());
 
             if (!(level.getElement(neighboorPosition) instanceof Portal || level.getElement(neighboorPosition) instanceof Warp)) {

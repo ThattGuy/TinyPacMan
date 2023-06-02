@@ -13,6 +13,7 @@ public class Level {
     private int height, width;
     private Maze maze;
     private KEYPRESS keypress;
+    private KEYPRESS nextDirection;
     public record Position(int y, int x) {}
 
     public Level(int height, int width) {
@@ -54,7 +55,7 @@ public class Level {
         return maze.getMaze();
     }
 
-    public void moveAll(long currentTime) {
+    public void evolveAll(long currentTime) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (maze.get(y, x) instanceof Element element) {
@@ -64,7 +65,7 @@ public class Level {
         }
     }
 
-    public void movePacman(long currentTime) {
+    public void evolvePacman(long currentTime) {
         Position pacmanPos = getPacmanPos();
 
         if(maze.get(pacmanPos.y(), pacmanPos.x()) instanceof Element element){
@@ -133,6 +134,10 @@ public class Level {
 
     public void setDirection(KEYPRESS keypress) {
 
+        if(keypress != this.keypress){
+            nextDirection = keypress;
+        }
+
         Position neightboor = getNeighboorPosition(getPacmanPos(),keypress);
 
         if(getElement(neightboor) instanceof Wall || getElement(neightboor) instanceof Portal || getElement(neightboor) instanceof Warp){
@@ -146,6 +151,10 @@ public class Level {
         return keypress;
     }
 
+    public KEYPRESS getNextDirection(){
+        return nextDirection;
+    }
+
     public  IMazeElement getElement(Position position){
         if(position == null){
             return null;
@@ -153,6 +162,7 @@ public class Level {
 
         return maze.get(position.y, position.x);
     }
+
 
     public boolean setElementPosition(IMazeElement element, Position nextPosition){
 

@@ -12,8 +12,7 @@ public class Pause extends GameStateAdapter {
         super(context, data);
     }
 
-
-    //TODO peruntar como returnar ao estado anterior
+    //TODO perguntar como retornar ao estado anterior
     @Override
     public boolean pressKey(KEYPRESS keypress) {
         if(keypress == KEYPRESS.ESC){
