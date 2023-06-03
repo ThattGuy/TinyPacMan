@@ -10,16 +10,15 @@ public class Pinky extends Ghost {
 
     @Override
     protected void leaveCavern() {
-        /*Level.Position myPos = level.getPositionOf(this);
+        Level.Position myPos = level.getPositionOf(this);
         Level.Position portal = level.getPortalPosition();
-
-        System.out.println("tou auqi");
 
         if (isAdjacentToExit(myPos, portal)) {
             // Move the element inside the exit
             if (level.setElementPosition(this, portal)) {
                 level.setElementPosition(new Empty(level), myPos);
             }
+            inSpawn = false;
         } else {
             // Move towards the portal
             int nextY = myPos.y();
@@ -45,7 +44,7 @@ public class Pinky extends Ghost {
                     inSpawn = false;
                 }
             }
-        }*/
+        }
     }
 
     private boolean isAdjacentToExit(Level.Position position, Level.Position exitPosition) {

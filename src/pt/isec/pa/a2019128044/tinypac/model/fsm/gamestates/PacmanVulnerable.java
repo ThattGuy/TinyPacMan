@@ -14,7 +14,7 @@ public class PacmanVulnerable  extends GameStateAdapter {
 
     @Override
     public boolean evolve(long currentTime) {
-        data.moveAll(currentTime);
+        data.evolveAll(currentTime);
         return true;
     }
 

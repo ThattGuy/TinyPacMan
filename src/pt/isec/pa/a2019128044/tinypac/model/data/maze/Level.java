@@ -59,7 +59,7 @@ public class Level {
         return maze.getMaze();
     }
 
-    public void moveAll(long currentTime) {
+    public void evolveAll(long currentTime) {
         //todo perguntar se devo criar array com elemntos ja percorridos?
 
         for (int y = 0; y < height; y++) {
@@ -137,7 +137,7 @@ public class Level {
         return new Position(newY, newX);
     }
 
-    private Position getPacmanPos(){
+    public Position getPacmanPos(){
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -188,9 +188,16 @@ public class Level {
         return true;
     }
 
-    //getpacmanpos returns a Position
     public boolean isPacmanAlive(){
         return getPacmanPos() != null;
     }
 
+
+    public int getPoints(){
+        if(getElement(getPacmanPos()) instanceof Pacman pacman){
+            System.out.println("pacman points" + pacman.getPoints());
+            return pacman.getPoints();
+        }
+        return 0;
+    }
 }

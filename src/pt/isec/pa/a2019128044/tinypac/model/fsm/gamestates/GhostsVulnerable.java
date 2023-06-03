@@ -17,14 +17,13 @@ public class GhostsVulnerable extends GameStateAdapter {
             stateTimer = currentTime;
         }
 
-        data.moveAll(currentTime);
+        data.evolveAll(currentTime);
 
         if (currentTime - stateTimer >= 10000000000L) {
                 changeState(GameState.PACMAN_VULNERABLE,null);
         }
         return true;
     }
-
     @Override
     public boolean pressKey(KEYPRESS keypress) {
 
@@ -35,10 +34,8 @@ public class GhostsVulnerable extends GameStateAdapter {
         }
         return true;
     }
-
     @Override
     public GameState getState() {
         return GameState.GHOSTS_VULNERABLE;
     }
-
 }
