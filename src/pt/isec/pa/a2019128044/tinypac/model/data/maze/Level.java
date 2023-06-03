@@ -9,21 +9,19 @@ import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.Wall;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.Warp;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Level {
     private int height, width;
     private Maze maze;
     private KEYPRESS keypress;
     int points;
-    int fruitsEaten;
+
     public record Position(int y, int x) {}
 
     public Level(int height, int width) {
         this.height = height;
         this.width = width;
         this.maze = new Maze(height, width);
+        points = 0;
         keypress = null;
     }
 
@@ -179,9 +177,9 @@ public class Level {
 
         IMazeElement elementAtPosition = this.getElement(nextPosition);
 
-        if(elementAtPosition.getSymbol() == Elements.WALL.getValue()) {
+        /*if(elementAtPosition.getSymbol() == Elements.WALL.getValue()) {
             return false;
-        }
+        }*/
 
         maze.set(nextPosition.y,nextPosition.x,element);
 
@@ -194,10 +192,11 @@ public class Level {
 
 
     public int getPoints(){
-        if(getElement(getPacmanPos()) instanceof Pacman pacman){
-            System.out.println("pacman points" + pacman.getPoints());
-            return pacman.getPoints();
-        }
-        return 0;
+        return points;
     }
+
+    public void addPoints(int points) {
+        this.points += points;
+    }
+
 }

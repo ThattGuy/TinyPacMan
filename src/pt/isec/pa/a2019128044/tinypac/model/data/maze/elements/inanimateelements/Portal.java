@@ -14,4 +14,12 @@ public class Portal extends Element {
     public char getSymbol() {
         return symbol;
     }
+
+    @Override
+    public boolean isTransversable(char type) {
+        if(type == 'P'){
+            return false;
+        }
+        return true;
+    }
 }

@@ -7,11 +7,14 @@ public class FruitZone extends Element {
 
     //TODO GARANTIR QUE APENAS EXISTE UMA ZONA DETAS; Garantir que apenas é criada uma fruta caso n exista
     //todo buscar os pontos para criar fruta
-    boolean fruit;
+    boolean hasFruit;
+
+    int numberOfFruits;
 
     public FruitZone(Level level) {
         super('F',level);
-        fruit = false;
+        hasFruit = false;
+        numberOfFruits = 1;
     }
 
     @Override
@@ -19,8 +22,19 @@ public class FruitZone extends Element {
         return symbol;
     }
 
-    public boolean hasFruit(){
-        return fruit;
+    @Override
+    public void evolve(long currentTime) {
+        if(level.getPoints()%20 == 0){
+            hasFruit = true;
+        }
+    }
+
+    @Override
+    public boolean isTransversable(char type) {
+        if(type == 'P' && hasFruit){
+            level.addPoints(numberOfFruits * 25);
+        }
+        return true;
     }
 
 }

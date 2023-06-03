@@ -36,7 +36,7 @@ public class GameData {
     public GameData() {
         currentLevel = new StringBuilder();
         currentLevel.append("files/Level").append(String.format("%02d", FIRSTLEVEL)).append(".txt");
-        level = createLevel();
+        createLevel();
         if(level == null){
             return;
         }
@@ -45,14 +45,13 @@ public class GameData {
         playerLives = 3;
     }
 
-    private Level createLevel() {
+    private void createLevel() {
         FileReader fileReader = null;
-        Level newLevel = null;
 
         try {
             File file = new File(currentLevel.toString());
             if (!file.exists()) {
-                return null;
+                return;
             }
 
             fileReader = new FileReader(file);
@@ -69,7 +68,7 @@ public class GameData {
                 }
             }
 
-            newLevel = new Level(numRows, numCols);
+            level = new Level(numRows, numCols);
 
             scanner.close();
             fileReader = new FileReader(file);
@@ -81,7 +80,7 @@ public class GameData {
                 String line = scanner.nextLine();
                 for (col = 0; col < line.length(); col++) {
                     char character = line.charAt(col);
-                    newLevel.addElement(createElement(character), row, col);
+                    level.addElement(createElement(character), row, col);
                 }
                 row++;
             }
@@ -103,8 +102,6 @@ public class GameData {
                 }
             }
         }
-
-        return newLevel;
     }
 
     private Element createElement(char symbol){

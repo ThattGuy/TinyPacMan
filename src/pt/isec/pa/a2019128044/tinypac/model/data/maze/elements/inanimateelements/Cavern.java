@@ -12,4 +12,9 @@ public class Cavern extends Element {
     public char getSymbol() {
         return symbol;
     }
+
+    @Override
+    public boolean isTransversable(char type) {
+        return type != 'P';
+    }
 }

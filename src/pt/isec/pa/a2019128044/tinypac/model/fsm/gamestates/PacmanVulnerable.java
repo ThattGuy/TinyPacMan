@@ -15,6 +15,7 @@ public class PacmanVulnerable  extends GameStateAdapter {
     @Override
     public boolean evolve(long currentTime) {
         data.evolveAll(currentTime);
+
         return true;
     }
 
@@ -22,7 +23,7 @@ public class PacmanVulnerable  extends GameStateAdapter {
     public boolean pressKey(KEYPRESS keypress) {
 
         if(keypress == KEYPRESS.ESC){
-            changeState(GameState.PAUSE,null);
+            changeState(GameState.PAUSE,this.getState());
         }else{
             data.setDirection(keypress);
         }

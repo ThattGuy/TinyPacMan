@@ -34,7 +34,7 @@ public class Warmup  extends GameStateAdapter {
     @Override
     public boolean pressKey(KEYPRESS keypress) {
         if(keypress == KEYPRESS.ESC){
-            changeState(GameState.PAUSE,null);
+            changeState(GameState.PAUSE,this.getState());
         }else{
             data.setDirection(keypress);
         }

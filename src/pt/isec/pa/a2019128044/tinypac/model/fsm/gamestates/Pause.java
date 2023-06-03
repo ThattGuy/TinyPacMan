@@ -8,13 +8,16 @@ import pt.isec.pa.a2019128044.tinypac.model.fsm.GameStateAdapter;
 
 public class Pause extends GameStateAdapter {
 
+    GameState lastState;
+
     public Pause(GameContext context, GameData data, GameState lastState) {
         super(context, data);
+        this.lastState = lastState;
     }
     @Override
     public boolean pressKey(KEYPRESS keypress) {
         if(keypress == KEYPRESS.ESC){
-           // volta para o estado anterior
+            changeState(lastState,null);
         }
         return true;
     }

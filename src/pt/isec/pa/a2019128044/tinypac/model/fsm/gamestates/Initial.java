@@ -16,7 +16,7 @@ public class Initial extends GameStateAdapter {
     public boolean pressKey(KEYPRESS keypress) {
 
         if(keypress == KEYPRESS.ESC){
-            changeState(GameState.PAUSE,null);
+            changeState(GameState.PAUSE,this.getState());
         }else{
             data.setDirection(keypress);
             changeState(GameState.WARMUP,null);

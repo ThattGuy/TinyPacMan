@@ -28,7 +28,7 @@ public abstract class Element implements IMazeElement {
     }
 
     public boolean isTransversable(char type){
-        return false;
+        return true;
     }
 
     @Override

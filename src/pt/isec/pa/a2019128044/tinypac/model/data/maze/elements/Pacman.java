@@ -5,29 +5,36 @@ import pt.isec.pa.a2019128044.tinypac.model.data.maze.Level;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.*;
 
 public class Pacman extends Element {
-    int points;
-    int fruitsEaten;
     public Pacman(Level level) {
         super('P', level);
-        points = 0;
-        fruitsEaten = 0;
     }
 
     @Override
     public void evolve(long currentTime) {
 
-        //todo perguntar ao professor como ajustar o click do relogio para se mover mais do que uma vez por segundo
         Level.Position myPos = level.getPositionOf(this);
-
 
         Level.Position neighboorPosition = level.getNeighboorPosition(myPos, level.getDirection());
 
-        Element neighboor = (Element) level.getElement(neighboorPosition);
+        Element neighboor = (Element)level.getElement(neighboorPosition);
+
+        System.out.println("myPos: " + myPos);
+        System.out.println("neighboor position:" + neighboorPosition + "neighboor element: " + neighboor.getSymbol());
+
+        System.out.println("direction:" + level.getDirection());
+
+        if (neighboor.isTransversable(this.getSymbol())) {
+            IMazeElement oldPositionElement = new Empty(level);
+            boolean moved = level.setElementPosition(this, neighboorPosition);
+            if (moved) {
+                level.setElementPosition(oldPositionElement, myPos);
+            }
+        }
 
 
-        System.out.println("neighboor position:" + neighboorPosition + "\n direction: " + level.getDirection());
 
-        if (!(level.getElement(neighboorPosition) instanceof Portal) || !(level.getElement(neighboorPosition) instanceof Warp)) {
+
+        /*if (!(level.getElement(neighboorPosition) instanceof Portal) || !(level.getElement(neighboorPosition) instanceof Warp)) {
 
             IMazeElement oldPositionElement = new Empty(level);
             boolean moved = level.setElementPosition(this, neighboorPosition);
@@ -63,16 +70,7 @@ public class Pacman extends Element {
             if (moved) {
                 level.setElementPosition(oldPositionElement, myPos);
             }
-        }
-
-        if (neighboor.isTransversable(this.getSymbol())) {
-
-        }
-    }
-
-
-    public int getPoints() {
-        return points;
+        }*/
     }
 
 }

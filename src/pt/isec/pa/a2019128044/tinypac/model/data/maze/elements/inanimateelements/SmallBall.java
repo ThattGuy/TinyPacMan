@@ -13,4 +13,14 @@ public class SmallBall extends Element {
     public char getSymbol() {
         return symbol;
     }
+
+    @Override
+    public boolean isTransversable(char type) {
+        if(type == 'P'){
+            //todo indicar à fsm ou flag?
+
+            level.addPoints(1);
+        }
+        return true;
+    }
 }
