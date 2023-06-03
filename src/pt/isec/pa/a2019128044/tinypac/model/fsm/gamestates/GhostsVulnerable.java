@@ -17,7 +17,7 @@ public class GhostsVulnerable extends GameStateAdapter {
             stateTimer = currentTime;
         }
 
-        data.moveAll(currentTime);
+        data.evolveAll(currentTime);
 
         if (currentTime - stateTimer >= 10000000000L) {
                 changeState(GameState.PACMAN_VULNERABLE,null);

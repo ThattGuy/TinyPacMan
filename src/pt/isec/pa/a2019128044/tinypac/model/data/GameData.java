@@ -124,6 +124,9 @@ public class GameData {
         return element;
     }
 
+    private int getPoints(){
+        return points;
+    }
 
     public void setCurrentLevel(int currentLevel) {
         if (currentLevel >= FIRSTLEVEL && currentLevel <= MAXLEVEL){
@@ -145,20 +148,24 @@ public class GameData {
     }
 
     public void movePacman(long currentTime) {
-        /*if(level == null)
-            return;*/
+        if(level == null)
+            return;
+
+        points += level.getPoints();
 
         if(!level.isPacmanAlive() && playerLives > 0){
             level.spawnLiveElements();
             playerLives--;
         }
 
-        level.evolvePacman(currentTime);
+        level.movePacman(currentTime);
     }
 
-    public void moveAll(long currentTime){
-        /*if(level == null)
-            return;*/
+    public void evolveAll(long currentTime){
+        if(level == null)
+            return;
+
+        points += level.getPoints();
 
         if(!level.isPacmanAlive() && playerLives > 0){
             level.spawnLiveElements();
@@ -167,5 +174,6 @@ public class GameData {
 
         level.evolveAll(currentTime);
 
+        System.out.printf("points" + getPoints());
     }
 }

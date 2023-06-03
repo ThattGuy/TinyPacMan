@@ -17,6 +17,7 @@ public abstract class Element implements IMazeElement {
 
     };
 
+    //
     @Override
     public char getSymbol() {
         return symbol;
