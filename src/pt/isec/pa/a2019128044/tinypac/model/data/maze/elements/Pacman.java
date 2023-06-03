@@ -19,12 +19,16 @@ public class Pacman extends Element {
     public void evolve(long currentTime) {
 
         //if (currentTime - lastMovedTime >= 10) {
-            //todo perguntar ao professor como ajustar o click do relogio para se mover mais do que uma vez por segundo
-            Level.Position myPos = level.getPositionOf(this);
+        //todo perguntar ao professor como ajustar o click do relogio para se mover mais do que uma vez por segundo
+        Level.Position myPos = level.getPositionOf(this);
 
-            Level.Position neighboorPosition = level.getNeighboorPosition(myPos, level.getDirection());
+        Level.Position neighboorPosition = level.getNeighboorPosition(myPos, level.getDirection());
+
+        Element neighboor = (Element) level.getElement(neighboorPosition);
 
             if (!(level.getElement(neighboorPosition) instanceof Portal || level.getElement(neighboorPosition) instanceof Warp)) {
+
+                System.out.println("points:" + level.get);
 
                 IMazeElement oldPositionElement = new Empty(level);
                 boolean moved = level.setElementPosition(this, neighboorPosition);
@@ -57,9 +61,10 @@ public class Pacman extends Element {
                 if (moved) {
                     level.setElementPosition(oldPositionElement, myPos);
                 }
-
             }
+
+        if (neighboor.isTransversable(this.getSymbol())){
+
         }
-      //  lastMovedTime = currentTime;
-    //}
+    }
 }

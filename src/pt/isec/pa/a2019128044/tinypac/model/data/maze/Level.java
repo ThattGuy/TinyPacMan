@@ -16,6 +16,8 @@ public class Level {
     private int height, width;
     private Maze maze;
     private KEYPRESS keypress;
+    int points;
+    int fruitsEaten;
     public record Position(int y, int x) {}
 
     public Level(int height, int width) {
@@ -60,20 +62,24 @@ public class Level {
     public void moveAll(long currentTime) {
         //todo perguntar se devo criar array com elemntos ja percorridos?
 
-        List<Element> evolvedElements = new ArrayList<>();
-
-        //Element evolvedElement = null;
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (maze.get(y, x) instanceof Element element) {
-                    if(!evolvedElements.contains(element)){
+                    if(!element.hasEvolved()){
+                        element.setEvolved(true);
                         element.evolve(currentTime);
-                        evolvedElements.add(element);
                     }
                 }
             }
         }
 
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (maze.get(y, x) instanceof Element element) {
+                    element.setEvolved(false);
+                }
+            }
+        }
     }
 
     public void movePacman(long currentTime) {
