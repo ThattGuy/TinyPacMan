@@ -121,7 +121,7 @@ public class GameData {
         return element;
     }
 
-    private int getPoints(){
+    public int getPoints(){
         return points;
     }
 

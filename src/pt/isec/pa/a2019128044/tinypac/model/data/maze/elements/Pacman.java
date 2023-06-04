@@ -24,53 +24,12 @@ public class Pacman extends Element {
         System.out.println("direction:" + level.getDirection());
 
         if (neighboor.isTransversable(this.getSymbol())) {
-            IMazeElement oldPositionElement = new Empty(level);
+            Element oldPositionElement = new Empty(level);
             boolean moved = level.setElementPosition(this, neighboorPosition);
             if (moved) {
                 level.setElementPosition(oldPositionElement, myPos);
             }
         }
-
-
-
-
-        /*if (!(level.getElement(neighboorPosition) instanceof Portal) || !(level.getElement(neighboorPosition) instanceof Warp)) {
-
-            IMazeElement oldPositionElement = new Empty(level);
-            boolean moved = level.setElementPosition(this, neighboorPosition);
-
-            System.out.println("neighboor" + level.getElement(neighboorPosition).getSymbol());
-
-            //In case nextzone has a smallBall
-            if (level.getElement(neighboorPosition) instanceof SmallBall) {
-                points++;
-            }
-
-            //In case nextzone has a PowerUp
-            if (level.getElement(neighboorPosition) instanceof PowerUp) {
-                points += 5;
-            }
-
-            //In case nextzone is a fruitzone and is fruit
-            if (level.getElement(neighboorPosition) instanceof FruitZone) {
-                if (((FruitZone) level.getElement(neighboorPosition)).hasFruit()) {
-                    points = fruitsEaten * 25;
-                    fruitsEaten++;
-                }
-                oldPositionElement = new FruitZone(level);
-            }
-
-            //In case nextzone is a PacmanSpawn
-            if (level.getElement(neighboorPosition) instanceof PacmanSpawn) {
-                if (moved) {
-                    level.setElementPosition(new PacmanSpawn(level), myPos);
-                }
-            }
-
-            if (moved) {
-                level.setElementPosition(oldPositionElement, myPos);
-            }
-        }*/
     }
 
 }

@@ -170,16 +170,13 @@ public class Level {
         return maze.get(position.y, position.x);
     }
 
-    public boolean setElementPosition(IMazeElement element, Position nextPosition){
+    public boolean setElementPosition(Element element, Position nextPosition){
 
         if(nextPosition == null)
             return false;
 
-        IMazeElement elementAtPosition = this.getElement(nextPosition);
+        Position elementPos = getPositionOf(element);
 
-        /*if(elementAtPosition.getSymbol() == Elements.WALL.getValue()) {
-            return false;
-        }*/
 
         maze.set(nextPosition.y,nextPosition.x,element);
 

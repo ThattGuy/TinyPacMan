@@ -15,6 +15,7 @@ public class PacmanVulnerable  extends GameStateAdapter {
     @Override
     public boolean evolve(long currentTime) {
         data.evolveAll(currentTime);
+        System.out.println("points: " + data.getPoints());
 
         return true;
     }
