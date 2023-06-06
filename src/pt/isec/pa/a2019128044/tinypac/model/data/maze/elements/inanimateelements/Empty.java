@@ -8,4 +8,9 @@ public class Empty extends Element {
     public Empty(Level level) {
         super(' ', level);
     }
+
+    @Override
+    public Element isTransversable(char type) {
+        return this;
+    }
 }

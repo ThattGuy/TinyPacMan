@@ -4,16 +4,17 @@ import pt.isec.pa.a2019128044.tinypac.model.data.KEYPRESS;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.Element;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.Elements;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.Pacman;
+import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.Result;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.ghosts.*;
-import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.Portal;
-import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.Wall;
-import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.Warp;
+import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.*;
 
 public class Level {
     private int height, width;
     private Maze maze;
     private KEYPRESS keypress;
     int points;
+
+    Element fruitZone;
 
     public record Position(int y, int x) {}
 
@@ -170,17 +171,18 @@ public class Level {
         return maze.get(position.y, position.x);
     }
 
-    public boolean setElementPosition(Element element, Position nextPosition){
+    public void setElementPosition(Element element, Position nextPosition){
+
 
         if(nextPosition == null)
-            return false;
+            return;
+
 
         Position elementPos = getPositionOf(element);
 
-
         maze.set(nextPosition.y,nextPosition.x,element);
+        maze.set(elementPos.y,elementPos.x, element.getOldElement());
 
-        return true;
     }
 
     public boolean isPacmanAlive(){

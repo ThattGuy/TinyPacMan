@@ -10,10 +10,15 @@ public class Blinky extends Ghost {
         super('B', level);
     }
 
-
     @Override
     void follow() {
 
     }
+
+    @Override
+    protected void run() {
+        super.run();
+    }
+
 }
 

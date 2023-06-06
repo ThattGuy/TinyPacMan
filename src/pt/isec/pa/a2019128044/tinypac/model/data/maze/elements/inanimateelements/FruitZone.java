@@ -2,10 +2,11 @@ package pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelement
 
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.Level;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.Element;
+import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.Result;
 
 public class FruitZone extends Element {
 
-    //TODO GARANTIR QUE APENAS EXISTE UMA ZONA DETAS; Garantir que apenas é criada uma fruta caso n exista
+    //TODO GARANTIR QUE APENAS EXISTE UMA ZONA DESTAS; Garantir que apenas é criada uma fruta caso n exista
     //todo buscar os pontos para criar fruta
     boolean hasFruit;
 
@@ -30,11 +31,11 @@ public class FruitZone extends Element {
     }
 
     @Override
-    public boolean isTransversable(char type) {
+    public Element isTransversable(char type) {
         if(type == 'P' && hasFruit){
             level.addPoints(numberOfFruits * 25);
         }
-        return true;
+        return this;
     }
 
 }

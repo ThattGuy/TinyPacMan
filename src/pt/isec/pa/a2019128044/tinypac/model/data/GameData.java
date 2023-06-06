@@ -162,7 +162,7 @@ public class GameData {
         if(level == null)
             return;
 
-        points += level.getPoints();
+        points = level.getPoints();
 
         if(!level.isPacmanAlive() && playerLives > 0){
             level.spawnLiveElements();

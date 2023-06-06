@@ -3,8 +3,7 @@ package pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.ghosts;
 import pt.isec.pa.a2019128044.tinypac.model.data.KEYPRESS;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.Level;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.Element;
-import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.Empty;
-import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.PacmanSpawn;
+import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.Portal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +15,7 @@ public abstract class Ghost extends Element {
     protected boolean isAlive;
     protected boolean isVulnerable;
 
-    protected KEYPRESS KEYPRESS;
-
+    protected KEYPRESS direction;
     protected List<Integer[][]> movements;
 
     public Ghost(char symbol, Level level) {
@@ -48,6 +46,36 @@ public abstract class Ghost extends Element {
     }
 
     protected void leaveCavern() {
+
+        Level.Position myPos = level.getPositionOf(this);
+        Level.Position portalPos = level.getPortalPosition();
+
+        int nextY = myPos.y();
+        int nextX = myPos.x();
+
+        if (myPos.x() < portalPos.x()) {
+            nextX++;
+        } else if (myPos.x() > portalPos.x()) {
+            nextX--;
+        }
+
+        if (myPos.y() < portalPos.y()) {
+            nextY++;
+        } else if (myPos.y() > portalPos.y()) {
+            nextY--;
+        }
+
+        Level.Position neighboorPosition = new Level.Position(nextY, nextX);
+        Element neighboor = (Element) level.getElement(neighboorPosition);
+
+        if(neighboor.isTransversable(this.getSymbol()) != null){
+            level.setElementPosition(this,neighboorPosition);
+            oldElement = neighboor.isTransversable(this.getSymbol());
+        }
+
+        if (level.getElement(neighboorPosition).getSymbol() == 'Y'){
+            inSpawn = false;
+        }
 
     }
 

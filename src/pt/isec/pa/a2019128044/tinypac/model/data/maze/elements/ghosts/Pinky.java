@@ -10,41 +10,8 @@ public class Pinky extends Ghost {
 
     @Override
     protected void leaveCavern() {
-        Level.Position myPos = level.getPositionOf(this);
-        Level.Position portal = level.getPortalPosition();
 
-        if (isAdjacentToExit(myPos, portal)) {
-            // Move the element inside the exit
-            if (level.setElementPosition(this, portal)) {
-                level.setElementPosition(new Empty(level), myPos);
-            }
-            inSpawn = false;
-        } else {
-            // Move towards the portal
-            int nextY = myPos.y();
-            int nextX = myPos.x();
 
-            if (myPos.x() < portal.x()) {
-                nextX++;
-            } else if (myPos.x() > portal.x()) {
-                nextX--;
-            }
-
-            if (myPos.y() < portal.y()) {
-                nextY++;
-            } else if (myPos.y() > portal.y()) {
-                nextY--;
-            }
-
-            Level.Position nextPos = new Level.Position(nextY, nextX);
-
-            if (level.getElement(nextPos) instanceof Ghost) {
-                if (level.setElementPosition(this, nextPos)) {
-                    level.setElementPosition(new Empty(level), myPos);
-                    inSpawn = false;
-                }
-            }
-        }
     }
 
     private boolean isAdjacentToExit(Level.Position position, Level.Position exitPosition) {

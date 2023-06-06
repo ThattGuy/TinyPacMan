@@ -13,4 +13,9 @@ public class PacmanSpawn extends Element {
     public char getSymbol() {
         return symbol;
     }
+
+    @Override
+    public Element isTransversable(char type) {
+        return this;
+    }
 }

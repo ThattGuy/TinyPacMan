@@ -2,11 +2,12 @@ package pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelement
 
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.Level;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.Element;
+import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.Result;
 
 public class SmallBall extends Element {
 
     public SmallBall(Level level) {
-        super('o',level);
+        super('o', level);
     }
 
     @Override
@@ -15,12 +16,12 @@ public class SmallBall extends Element {
     }
 
     @Override
-    public boolean isTransversable(char type) {
-        if(type == 'P'){
-            //todo indicar à fsm ou flag?
+    public Element isTransversable(char type) {
+        if (type == 'P') {
 
             level.addPoints(1);
+            return new Empty(level);
         }
-        return true;
+        return this;
     }
 }
