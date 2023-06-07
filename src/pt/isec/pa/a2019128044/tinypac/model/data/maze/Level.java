@@ -4,7 +4,6 @@ import pt.isec.pa.a2019128044.tinypac.model.data.KEYPRESS;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.Element;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.Elements;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.Pacman;
-import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.Result;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.ghosts.*;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.*;
 
@@ -106,7 +105,7 @@ public class Level {
         return portalPosition;
     }
 
-    public Position getNeighboorPosition(Position currentPosition, KEYPRESS KEYPRESS) {
+    public Position getNeighborPosition(Position currentPosition, KEYPRESS KEYPRESS) {
         if(currentPosition == null) {
             return null;
         }
@@ -149,9 +148,66 @@ public class Level {
         return null;
     }
 
+    public boolean isPacmanVisible(Element clyde) {
+        Position clydePos = getPositionOf(clyde);
+        Position pacmanPos = getPacmanPos();
+
+        if (clydePos == null || pacmanPos == null) {
+            return false;
+        }
+
+        // Check if Pac-Man is in the same row or column as Clyde
+        if (clydePos.y == pacmanPos.y || clydePos.x == pacmanPos.x) {
+            return true;
+        }
+
+        // Check left direction
+        for (int x = clydePos.x - 1; x >= 0; x--) {
+            Element element = (Element) maze.get(clydePos.y, x);
+            if (element == null) {
+                break;
+            } else if (element.isTraversable(clyde.getSymbol()) == null) {
+                return false;
+            }
+        }
+
+        // Check right direction
+        for (int x = clydePos.x + 1; x < width; x++) {
+            Element element = (Element) maze.get(clydePos.y, x);
+            if (element == null) {
+                break;
+            } else if (element.isTraversable(clyde.getSymbol()) == null) {
+                return false;
+            }
+        }
+
+        // Check up direction
+        for (int y = clydePos.y - 1; y >= 0; y--) {
+            Element element = (Element) maze.get(y, clydePos.x);
+            if (element == null) {
+                break;
+            } else if (element.isTraversable(clyde.getSymbol()) == null) {
+                return false;
+            }
+        }
+
+        // Check down direction
+        for (int y = clydePos.y + 1; y < height; y++) {
+            Element element = (Element) maze.get(y, clydePos.x);
+            if (element == null) {
+                break;
+            } else if (element.isTraversable(clyde.getSymbol()) == null) {
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+
     public void setDirection(KEYPRESS keypress) {
 
-        Position neightboor = getNeighboorPosition(getPacmanPos(),keypress);
+        Position neightboor = getNeighborPosition(getPacmanPos(),keypress);
 
         if(getElement(neightboor) instanceof Wall || getElement(neightboor) instanceof Portal || getElement(neightboor) instanceof Warp){
             return;

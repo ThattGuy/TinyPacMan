@@ -31,7 +31,7 @@ public class FruitZone extends Element {
     }
 
     @Override
-    public Element isTransversable(char type) {
+    public Element isTraversable(char type) {
         if(type == 'P' && hasFruit){
             level.addPoints(numberOfFruits * 25);
         }

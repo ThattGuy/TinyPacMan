@@ -16,7 +16,7 @@ public class Warp extends Element {
     }
 
     @Override
-    public Element isTransversable(char type) {
+    public Element isTraversable(char type) {
         if(type == 'P'){
             return null;
         }

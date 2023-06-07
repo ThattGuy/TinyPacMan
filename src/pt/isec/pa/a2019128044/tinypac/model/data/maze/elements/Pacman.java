@@ -3,8 +3,6 @@ package pt.isec.pa.a2019128044.tinypac.model.data.maze.elements;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.Level;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.*;
 
-import javax.swing.plaf.synth.SynthOptionPaneUI;
-
 public class Pacman extends Element {
     public Pacman(Level level) {
         super('P', level);
@@ -15,15 +13,15 @@ public class Pacman extends Element {
     public void evolve(long currentTime) {
 
         Level.Position myPos = level.getPositionOf(this);
-        Level.Position neighboorPosition = level.getNeighboorPosition(myPos, level.getDirection());
-        Element neighboor = (Element) level.getElement(neighboorPosition);
-        if(neighboor == null){
+        Level.Position neighborPosition = level.getNeighborPosition(myPos, level.getDirection());
+        Element neighbor = (Element) level.getElement(neighborPosition);
+        if(neighbor == null){
             return;
         }
 
-        if(neighboor.isTransversable(this.getSymbol()) != null){
-            level.setElementPosition(this,neighboorPosition);
-            oldElement = neighboor.isTransversable(this.getSymbol());
+        if(neighbor.isTraversable(this.getSymbol()) != null){
+            level.setElementPosition(this,neighborPosition);
+            oldElement = neighbor.isTraversable(this.getSymbol());
         }
     }
 }

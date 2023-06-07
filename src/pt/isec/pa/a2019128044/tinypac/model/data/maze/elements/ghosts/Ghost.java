@@ -4,11 +4,10 @@ import pt.isec.pa.a2019128044.tinypac.model.data.KEYPRESS;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.Level;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.Element;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.Cavern;
-import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.PacmanSpawn;
-import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.Portal;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public abstract class Ghost extends Element {
 
@@ -56,51 +55,48 @@ public abstract class Ghost extends Element {
         int myRow = myPosition.y();
         int myColumn = myPosition.x();
 
-        int exitRow = exitPosition.y();
-        int exitColumn = exitPosition.x();
+        int portalRow = exitPosition.y();
+        int portalCol = exitPosition.x();
 
-        if (myRow == exitRow) {
+        if (myRow == portalRow) {
 
-            if (myColumn < exitColumn) {
-
-                moveTowardsExit(KEYPRESS.RIGHT);
-            } else if (myColumn > exitColumn) {
-                moveTowardsExit(KEYPRESS.LEFT);
+            if (myColumn < portalCol) {
+                direction = KEYPRESS.RIGHT;
+            } else if (myColumn > portalCol) {
+                direction = KEYPRESS.LEFT;
             } else {
                 inSpawn = false;
             }
-        } else if (myColumn == exitColumn) {
+        } else if (myColumn == portalCol) {
 
-            if (myRow < exitRow) {
-                moveTowardsExit(KEYPRESS.DOWN);
-            } else if (myRow > exitRow) {
-                moveTowardsExit(KEYPRESS.UP);
+            if (myRow < portalRow) {
+                direction = KEYPRESS.DOWN;
+            } else if (myRow > portalRow) {
+                direction = KEYPRESS.UP;
             } else {
                 inSpawn = false;
             }
         } else {
-            if (myRow < exitRow) {
-                moveTowardsExit(KEYPRESS.DOWN);
-            } else {
-                moveTowardsExit(KEYPRESS.UP);
-            }
 
-            if (myColumn < exitColumn) {
-                moveTowardsExit(KEYPRESS.RIGHT);
+            if (myColumn < portalCol) {
+                direction = KEYPRESS.RIGHT;
             } else {
-                moveTowardsExit(KEYPRESS.LEFT);
+                direction = KEYPRESS.LEFT;
             }
         }
+
+        moveTowardsExit();
     }
 
-    private void moveTowardsExit(KEYPRESS direction) {
+    private void moveTowardsExit() {
         Level.Position myPosition = level.getPositionOf(this);
-        Level.Position neighborPosition = level.getNeighboorPosition(myPosition, direction);
+        Level.Position neighborPosition = level.getNeighborPosition(myPosition, direction);
         Element neighbor = (Element) level.getElement(neighborPosition);
 
-        if (neighbor != null && neighbor.isTransversable(symbol) != null) {
+        if (neighbor != null && neighbor.isTraversable(symbol) != null) {
             movements.add(new Integer[myPosition.y()][myPosition.x()]);
             level.setElementPosition(this, neighborPosition);
+            oldElement = neighbor.isTraversable(this.getSymbol());
         }
     }
 
@@ -109,6 +105,56 @@ public abstract class Ghost extends Element {
         //todo voltar a seguir assim que voltar ao spawn
     }
 
-    abstract void follow();
+    void follow() {
+        Level.Position myPos = level.getPositionOf(this);
+        Level.Position neighborPosition = level.getNeighborPosition(myPos, this.direction);
+        Element neighbor = (Element) level.getElement(neighborPosition);
+
+        if (neighbor == null || neighbor.isTraversable(this.getSymbol()) == null) {
+            KEYPRESS newDirection = getRandomDirection();
+            neighborPosition = level.getNeighborPosition(myPos, newDirection);
+            neighbor = (Element) level.getElement(neighborPosition);
+
+            if (neighbor != null && neighbor.isTraversable(this.getSymbol()) != null) {
+                this.direction = newDirection;
+            } else {
+                // Go back if unable to turn either way
+                this.direction = getOppositeDirection(this.direction);
+                neighborPosition = level.getNeighborPosition(myPos, this.direction);
+                neighbor = (Element) level.getElement(neighborPosition);
+
+                if (neighbor == null || neighbor.isTraversable(this.getSymbol()) == null) {
+                    return; // Unable to go back, stop moving
+                }
+            }
+        }
+
+        level.setElementPosition(this, neighborPosition);
+        oldElement = neighbor.isTraversable(this.getSymbol());
+    }
+
+    protected KEYPRESS getRandomDirection() {
+        Random random = new Random();
+
+        if (this.direction == KEYPRESS.UP || this.direction == KEYPRESS.DOWN) {
+            int randomIndex = random.nextInt(2);
+            return (randomIndex == 0) ? KEYPRESS.RIGHT : KEYPRESS.LEFT;
+        } else {
+            int randomIndex = random.nextInt(2);
+            return (randomIndex == 0) ? KEYPRESS.UP : KEYPRESS.DOWN;
+        }
+    }
+
+    protected KEYPRESS getOppositeDirection(KEYPRESS direction) {
+        if (direction == KEYPRESS.UP) {
+            return KEYPRESS.DOWN;
+        } else if (direction == KEYPRESS.DOWN) {
+            return KEYPRESS.UP;
+        } else if (direction == KEYPRESS.LEFT) {
+            return KEYPRESS.RIGHT;
+        } else {
+            return KEYPRESS.LEFT;
+        }
+    }
 
 }

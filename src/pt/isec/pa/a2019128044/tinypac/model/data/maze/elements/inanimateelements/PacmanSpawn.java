@@ -15,7 +15,7 @@ public class PacmanSpawn extends Element {
     }
 
     @Override
-    public Element isTransversable(char type) {
+    public Element isTraversable(char type) {
         return this;
     }
 }

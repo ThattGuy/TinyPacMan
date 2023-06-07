@@ -16,7 +16,7 @@ public class Wall extends Element {
     }
 
     @Override
-    public Element isTransversable(char type) {
+    public Element isTraversable(char type) {
         return null;
     }
 }

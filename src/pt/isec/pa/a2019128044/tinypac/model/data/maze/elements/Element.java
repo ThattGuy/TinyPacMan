@@ -2,7 +2,6 @@ package pt.isec.pa.a2019128044.tinypac.model.data.maze.elements;
 
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.IMazeElement;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.Level;
-import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.Empty;
 
 public abstract class Element implements IMazeElement {
 
@@ -30,7 +29,7 @@ public abstract class Element implements IMazeElement {
         return evolved;
     }
 
-    public Element isTransversable(char type){
+    public Element isTraversable(char type){
         return null;
     }
 

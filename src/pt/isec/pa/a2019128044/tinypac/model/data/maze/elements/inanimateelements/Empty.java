@@ -10,7 +10,7 @@ public class Empty extends Element {
     }
 
     @Override
-    public Element isTransversable(char type) {
+    public Element isTraversable(char type) {
         return this;
     }
 }

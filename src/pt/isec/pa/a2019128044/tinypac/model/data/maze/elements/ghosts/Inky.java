@@ -7,10 +7,7 @@ public class Inky extends Ghost {
         super('I', level);
     }
 
-    @Override
-    void follow() {
 
-    }
 
 }
 
