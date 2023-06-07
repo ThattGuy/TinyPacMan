@@ -31,8 +31,8 @@ public abstract class Ghost extends Element {
         return isVulnerable;
     }
 
-    public void addMove(int x, int y) {
-        movements.add(new Integer[x][y]);
+    public void addMove(int y, int x) {
+        movements.add(new Integer[y][x]);
     }
 
     @Override
@@ -94,7 +94,7 @@ public abstract class Ghost extends Element {
         Element neighbor = (Element) level.getElement(neighborPosition);
 
         if (neighbor != null && neighbor.isTraversable(symbol) != null) {
-            movements.add(new Integer[myPosition.y()][myPosition.x()]);
+            addMove(myPosition.y(), myPosition.x());
             level.setElementPosition(this, neighborPosition);
             oldElement = neighbor.isTraversable(this.getSymbol());
         }
@@ -131,6 +131,8 @@ public abstract class Ghost extends Element {
 
         level.setElementPosition(this, neighborPosition);
         oldElement = neighbor.isTraversable(this.getSymbol());
+        addMove(myPos.y(), myPos.x());
+
     }
 
     protected KEYPRESS getRandomDirection() {

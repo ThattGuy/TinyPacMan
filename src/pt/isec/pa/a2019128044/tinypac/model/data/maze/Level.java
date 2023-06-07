@@ -56,7 +56,7 @@ public class Level {
     }
 
     public void evolveAll(long currentTime) {
-        //todo perguntar se devo criar array com elemntos ja percorridos?
+
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -204,14 +204,15 @@ public class Level {
         return false;
     }
 
-
-
-
     public void setDirection(KEYPRESS keypress) {
 
         Position neightboor = getNeighborPosition(getPacmanPos(),keypress);
 
         if(getElement(neightboor) instanceof Wall || getElement(neightboor) instanceof Portal || getElement(neightboor) instanceof Warp){
+            return;
+        }
+
+        if(this.keypress == keypress){
             return;
         }
 
@@ -247,7 +248,6 @@ public class Level {
     public boolean isPacmanAlive(){
         return getPacmanPos() != null;
     }
-
 
     public int getPoints(){
         return points;

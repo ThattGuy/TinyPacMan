@@ -7,7 +7,5 @@ public class Inky extends Ghost {
         super('I', level);
     }
 
-
-
 }
 

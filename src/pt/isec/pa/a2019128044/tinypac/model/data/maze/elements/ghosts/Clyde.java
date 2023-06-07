@@ -38,6 +38,7 @@ public class Clyde extends Ghost {
             if (neighbor.isTraversable(this.getSymbol()) != null) {
                 level.setElementPosition(this, neighborPosition);
                 oldElement = neighbor.isTraversable(this.getSymbol());
+                addMove(myPos.y(), myPos.x());
             }
         }
     }
