@@ -12,9 +12,6 @@ public class Level {
     private Maze maze;
     private KEYPRESS keypress;
     int points;
-
-    Element fruitZone;
-
     Position portalPosition;
 
     public record Position(int y, int x) {}
@@ -156,18 +153,15 @@ public class Level {
             return false;
         }
 
-        // Check if Pac-Man is in the same row or column as Clyde
-        if (clydePos.y == pacmanPos.y || clydePos.x == pacmanPos.x) {
-            return true;
-        }
-
         // Check left direction
         for (int x = clydePos.x - 1; x >= 0; x--) {
             Element element = (Element) maze.get(clydePos.y, x);
             if (element == null) {
                 break;
+            } else if (element.getSymbol() == 'P') {
+                return true;
             } else if (element.isTraversable(clyde.getSymbol()) == null) {
-                return false;
+                break;
             }
         }
 
@@ -176,8 +170,10 @@ public class Level {
             Element element = (Element) maze.get(clydePos.y, x);
             if (element == null) {
                 break;
+            } else if (element.getSymbol() == 'P') {
+                return true;
             } else if (element.isTraversable(clyde.getSymbol()) == null) {
-                return false;
+                break;
             }
         }
 
@@ -186,8 +182,10 @@ public class Level {
             Element element = (Element) maze.get(y, clydePos.x);
             if (element == null) {
                 break;
+            } else if (element.getSymbol() == 'P') {
+                return true;
             } else if (element.isTraversable(clyde.getSymbol()) == null) {
-                return false;
+                break;
             }
         }
 
@@ -196,13 +194,17 @@ public class Level {
             Element element = (Element) maze.get(y, clydePos.x);
             if (element == null) {
                 break;
+            } else if (element.getSymbol() == 'P') {
+                return true;
             } else if (element.isTraversable(clyde.getSymbol()) == null) {
-                return false;
+                break;
             }
         }
 
         return false;
     }
+
+
 
 
     public void setDirection(KEYPRESS keypress) {
