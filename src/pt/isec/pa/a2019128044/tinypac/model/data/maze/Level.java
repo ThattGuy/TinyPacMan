@@ -16,6 +16,8 @@ public class Level {
 
     Element fruitZone;
 
+    Position portalPosition;
+
     public record Position(int y, int x) {}
 
     public Level(int height, int width) {
@@ -23,7 +25,6 @@ public class Level {
         this.width = width;
         this.maze = new Maze(height, width);
         points = 0;
-        keypress = null;
     }
 
     public void addElement(Element element, int y, int x) {
@@ -97,12 +98,12 @@ public class Level {
         return null;
     }
 
-    public Position getPortalPosition(){
-        for(int y = 0; y < height;y++)
-            for(int x = 0;x < width; x++)
-                if (maze.get(y,x).getSymbol() == Elements.PORTAL.getValue())
-                    return new Position(y,x);
-        return null;
+    public void setPortalPos(int y, int x){
+        portalPosition = new Position(y,x);
+    }
+
+    public Position getPortalPosition() {
+        return portalPosition;
     }
 
     public Position getNeighboorPosition(Position currentPosition, KEYPRESS KEYPRESS) {

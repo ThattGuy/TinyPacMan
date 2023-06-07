@@ -80,7 +80,7 @@ public class GameData {
                 String line = scanner.nextLine();
                 for (col = 0; col < line.length(); col++) {
                     char character = line.charAt(col);
-                    level.addElement(createElement(character), row, col);
+                    level.addElement(createElement(character,row,col), row, col);
                 }
                 row++;
             }
@@ -104,7 +104,7 @@ public class GameData {
         }
     }
 
-    private Element createElement(char symbol){
+    private Element createElement(char symbol, int  row, int col){
         Element element = null;
         Elements elements = Elements.getElement(symbol);
         switch (elements){
@@ -114,7 +114,10 @@ public class GameData {
             case FRUITSPAWN -> element = new FruitZone(level);
             case PACMANSPAWN-> element = new PacmanSpawn(level);
             case POWERUP -> element = new PowerUp(level);
-            case PORTAL -> element = new Portal(level);
+            case PORTAL -> {
+                element = new Portal(level);
+                level.setPortalPos(row, col);
+            }
             case CAVERN -> element = new Cavern(level);
         }
 
