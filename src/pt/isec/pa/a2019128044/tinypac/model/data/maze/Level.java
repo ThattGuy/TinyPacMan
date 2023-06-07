@@ -13,6 +13,7 @@ public class Level {
     private KEYPRESS keypress;
     int points;
     Position portalPosition;
+    Position fruitZonePosition;
 
     public record Position(int y, int x) {}
 
@@ -55,8 +56,8 @@ public class Level {
         return maze.getMaze();
     }
 
-    public void evolveAll(long currentTime) {
 
+    public void evolveAll(long currentTime) {
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -98,8 +99,17 @@ public class Level {
         portalPosition = new Position(y,x);
     }
 
+
     public Position getPortalPosition() {
         return portalPosition;
+    }
+
+    public void setFruitZonePos(int row, int col) {
+        fruitZonePosition = new Position(row,col);
+    }
+
+    public Position getFruitZonePosition(){
+        return fruitZonePosition
     }
 
     public Position getNeighborPosition(Position currentPosition, KEYPRESS KEYPRESS) {

@@ -111,7 +111,10 @@ public class GameData {
             case WALL -> element = new Wall(level);
             case WARP-> element = new Warp(level);
             case SMALLBALL -> element = new SmallBall(level);
-            case FRUITSPAWN -> element = new FruitZone(level);
+            case FRUITSPAWN ->{
+                element = new FruitZone(level);
+                level.setFruitZonePos(row, col);
+            }
             case PACMANSPAWN-> element = new PacmanSpawn(level);
             case POWERUP -> element = new PowerUp(level);
             case PORTAL -> {

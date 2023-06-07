@@ -27,6 +27,7 @@ public class FruitZone extends Element {
     public void evolve(long currentTime) {
         if(level.getPoints()%20 == 0){
             hasFruit = true;
+            level.setElementPosition(new Fruit(this.level),level.getPositionOf(this));
         }
     }
 
