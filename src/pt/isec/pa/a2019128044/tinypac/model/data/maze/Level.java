@@ -265,6 +265,8 @@ public class Level {
         if(nextPosition == null)
             return;
 
+        Element neighbor = (Element) getElement(nextPosition);
+
         Position elementPos = getPositionOf(element);
 
         maze.set(nextPosition.y,nextPosition.x,element);
@@ -288,6 +290,10 @@ public class Level {
 
     public boolean isPacmanAlive(){
         return pacmanAlive;
+    }
+
+    public void killPacman() {
+        pacmanAlive = false;
     }
 
     public int getPoints(){

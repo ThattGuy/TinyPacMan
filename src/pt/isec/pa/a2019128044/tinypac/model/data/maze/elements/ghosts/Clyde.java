@@ -25,6 +25,7 @@ public class Clyde extends Ghost {
         Level.Position myPos = level.getPositionOf(this);
         Level.Position pacmanPos = level.getPacmanPos();
 
+
         KEYPRESS pacmanDir = getNextDirectionTowardsPacman(myPos, pacmanPos);
 
         if (pacmanDir != null) {
@@ -33,6 +34,10 @@ public class Clyde extends Ghost {
 
         Level.Position neighborPosition = level.getNeighborPosition(myPos, this.direction);
         Element neighbor = (Element) level.getElement(neighborPosition);
+
+        if(checkForPacman(neighborPosition,neighbor)){
+            return;
+        }
 
         if(neighbor !=null){
             if (neighbor.isTraversable(this.getSymbol()) != null) {

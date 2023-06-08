@@ -20,15 +20,12 @@ public class Pacman extends Element {
             return;
         }
 
-            if(neighbor instanceof Ghost){
+            if(neighbor instanceof Ghost) {
                 Ghost ghost = (Ghost) neighbor;
-                if(ghost.isVulnerable()){
+                if (ghost.isVulnerable()) {
                     ghost.dies();
-                    level.setElementPosition(this,neighborPosition);
+                    level.setElementPosition(this, neighborPosition);
                     return;
-
-                }else{
-
                 }
             }
 

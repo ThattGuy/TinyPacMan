@@ -161,9 +161,13 @@ public class GameData {
 
         points += level.getPoints();
 
-        if(!level.isPacmanAlive() && playerLives > 0){
-            level.spawnLiveElements();
-            playerLives--;
+        if(!level.isPacmanAlive()){
+            if(playerLives > 0){
+                level.spawnLiveElements();
+                playerLives--;
+                //todo reset ghosts position
+            }
+            return;
         }
 
         level.movePacman(currentTime);

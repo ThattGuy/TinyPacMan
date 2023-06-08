@@ -3,6 +3,7 @@ package pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.ghosts;
 import pt.isec.pa.a2019128044.tinypac.model.data.KEYPRESS;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.Level;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.Element;
+import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.Pacman;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.Cavern;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public abstract class Ghost extends Element {
         this.movements = new ArrayList<>();
         inSpawn = true;
         oldElement = new Cavern(level);
+
     }
 
     public boolean isVulnerable() {
@@ -29,7 +31,7 @@ public abstract class Ghost extends Element {
     }
 
     public void addMove(int y, int x) {
-        movements.add(new Level.Position(y,x));
+        movements.add(new Level.Position(y, x));
     }
 
     @Override
@@ -58,13 +60,13 @@ public abstract class Ghost extends Element {
         }
     }
 
-    public void dies(){
+    public void dies() {
 
         this.setVulnerability(false);
         this.movements = new ArrayList<>();
         oldElement = new Cavern(level);
         inSpawn = true;
-        level.setElementPosition(this,level.findCavern());
+        level.setElementPosition(this, level.findCavern());
 
     }
 
@@ -122,17 +124,17 @@ public abstract class Ghost extends Element {
     }
 
     protected void run() {
-                int lastPos = movements.size() - 1;
+        int lastPos = movements.size() - 1;
 
-        if(lastPos >= 0){
+        if (lastPos >= 0) {
             Element neighbor = (Element) level.getElement(movements.get(lastPos));
-            if(neighbor == null){
+            if (neighbor == null) {
                 return;
             }
             Element element = neighbor.isTraversable(this.getSymbol());
 
-            if(element != null){
-                level.setElementPosition(this,movements.get(lastPos));
+            if (element != null) {
+                level.setElementPosition(this, movements.get(lastPos));
                 oldElement = element;
                 movements.remove(lastPos);
             }
@@ -143,10 +145,27 @@ public abstract class Ghost extends Element {
         inSpawn = true;
     }
 
+    protected boolean checkForPacman(Level.Position neighborPos, Element neighbor) {
+
+        if (neighbor instanceof Pacman) {
+                if (!this.isVulnerable()) {
+                level.setElementPosition(this, neighborPos);
+                level.killPacman();
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     void follow() {
         Level.Position myPos = level.getPositionOf(this);
         Level.Position neighborPosition = level.getNeighborPosition(myPos, this.direction);
         Element neighbor = (Element) level.getElement(neighborPosition);
+
+        if(checkForPacman(neighborPosition,neighbor)){
+            return;
+        }
 
         if (neighbor == null || neighbor.isTraversable(this.getSymbol()) == null) {
             KEYPRESS newDirection = getRandomDirection();
@@ -170,7 +189,6 @@ public abstract class Ghost extends Element {
         level.setElementPosition(this, neighborPosition);
         oldElement = neighbor.isTraversable(this.getSymbol());
         addMove(myPos.y(), myPos.x());
-
     }
 
     protected KEYPRESS getRandomDirection() {
