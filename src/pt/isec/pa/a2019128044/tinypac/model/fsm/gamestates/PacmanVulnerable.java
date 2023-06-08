@@ -17,6 +17,10 @@ public class PacmanVulnerable  extends GameStateAdapter {
         data.evolveAll(currentTime);
         System.out.println("points: " + data.getPoints());
 
+        if (data.atePowerUp()){
+            changeState(GameState.GHOSTS_VULNERABLE,this.getState());
+        }
+
         return true;
     }
 
@@ -28,7 +32,6 @@ public class PacmanVulnerable  extends GameStateAdapter {
         }else{
             data.setDirection(keypress);
         }
-
         return true;
     }
     @Override

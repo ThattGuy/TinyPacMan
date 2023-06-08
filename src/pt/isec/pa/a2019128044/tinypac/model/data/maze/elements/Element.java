@@ -37,6 +37,10 @@ public abstract class Element implements IMazeElement {
         return oldElement;
     }
 
+    public void setOldElement(Element oldElement) {
+        this.oldElement = oldElement;
+    }
+
     @Override
     public char getSymbol() {
         return symbol;

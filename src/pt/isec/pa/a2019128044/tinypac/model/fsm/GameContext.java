@@ -32,8 +32,4 @@ public class GameContext implements IGameEngineEvolve {
         state.pressKey(KEYPRESS);
     }
 
-    public void atePowerUp(){
-        //TODO PERGUNTAR COMO FAZER QUANDO SE COME POWERUP
-    }
-
 }

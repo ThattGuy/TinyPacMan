@@ -19,9 +19,8 @@ public class Initial extends GameStateAdapter {
             changeState(GameState.PAUSE,this.getState());
         }else{
             data.setDirection(keypress);
-            changeState(GameState.WARMUP,null);
+            changeState(GameState.WARMUP,this.getState());
         }
-
         return true;
     }
 

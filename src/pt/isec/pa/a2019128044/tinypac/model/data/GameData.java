@@ -111,10 +111,7 @@ public class GameData {
             case WALL -> element = new Wall(level);
             case WARP-> element = new Warp(level);
             case SMALLBALL -> element = new SmallBall(level);
-            case FRUITSPAWN ->{
-                element = new FruitZone(level);
-                level.setFruitZonePos(row, col);
-            }
+            case FRUITSPAWN ->element = new FruitZone(level);
             case PACMANSPAWN-> element = new PacmanSpawn(level);
             case POWERUP -> element = new PowerUp(level);
             case PORTAL -> {
@@ -144,6 +141,14 @@ public class GameData {
 
     public char[][] getLevel(){
         return level.getLevel();
+    }
+
+    public boolean atePowerUp(){
+        return level.atePowerUp();
+    }
+
+    public void setPowerUp(boolean value){
+        level.setPowerUp(value);
     }
 
     public void setDirection(KEYPRESS KEYPRESS) {
@@ -178,5 +183,9 @@ public class GameData {
         level.evolveAll(currentTime);
 
         System.out.printf("points" + getPoints());
+    }
+
+    public void setGhostsVulnerability(boolean value) {
+        level.setGhostsVulnerability(value);
     }
 }

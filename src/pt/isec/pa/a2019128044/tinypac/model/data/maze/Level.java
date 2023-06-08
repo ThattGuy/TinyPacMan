@@ -14,6 +14,9 @@ public class Level {
     int points;
     Position portalPosition;
     Position fruitZonePosition;
+    boolean powerUp;
+
+    boolean pacmanAlive;
 
     public record Position(int y, int x) {}
 
@@ -22,6 +25,7 @@ public class Level {
         this.width = width;
         this.maze = new Maze(height, width);
         points = 0;
+        powerUp = false;
     }
 
     public void addElement(Element element, int y, int x) {
@@ -46,6 +50,7 @@ public class Level {
 
                 if (maze.get(i, j).getSymbol() == Elements.PACMANSPAWN.getValue() && !pacmanExists) {
                     maze.set(i,j, new Pacman(this));
+                    pacmanAlive = true;
                 }
             }
 
@@ -56,6 +61,13 @@ public class Level {
         return maze.getMaze();
     }
 
+    public void movePacman(long currentTime) {
+        Position pacmanPos = getPacmanPos();
+
+        if(maze.get(pacmanPos.y(), pacmanPos.x()) instanceof Element element){
+            element.evolve(currentTime);
+        }
+    }
 
     public void evolveAll(long currentTime) {
 
@@ -79,29 +91,30 @@ public class Level {
         }
     }
 
-    public void movePacman(long currentTime) {
-        Position pacmanPos = getPacmanPos();
-
-        if(maze.get(pacmanPos.y(), pacmanPos.x()) instanceof Element element){
-            element.evolve(currentTime);
-        }
-    }
-
-    public Position getPositionOf(Element element) {
-        for(int y = 0; y < height;y++)
-            for(int x = 0;x < width; x++)
-                if (maze.get(y,x) == element)
-                    return new Position(y,x);
-        return null;
-    }
-
     public void setPortalPos(int y, int x){
         portalPosition = new Position(y,x);
     }
 
-
     public Position getPortalPosition() {
         return portalPosition;
+    }
+
+    public void setPowerUp(boolean powerUp) {
+        this.powerUp = powerUp;
+    }
+
+    public boolean atePowerUp() {
+        return powerUp;
+    }
+
+    public void setGhostsVulnerability(boolean value) {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (maze.get(y, x) instanceof Ghost ghost) {
+                    ghost.setVulnerability(value);
+                }
+            }
+        }
     }
 
     public void setFruitZonePos(int row, int col) {
@@ -109,7 +122,7 @@ public class Level {
     }
 
     public Position getFruitZonePosition(){
-        return fruitZonePosition
+        return fruitZonePosition;
     }
 
     public Position getNeighborPosition(Position currentPosition, KEYPRESS KEYPRESS) {
@@ -143,8 +156,15 @@ public class Level {
         return new Position(newY, newX);
     }
 
-    public Position getPacmanPos(){
+    public Position getPositionOf(Element element) {
+        for(int y = 0; y < height;y++)
+            for(int x = 0;x < width; x++)
+                if (maze.get(y,x) == element)
+                    return new Position(y,x);
+        return null;
+    }
 
+    public Position getPacmanPos(){
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (maze.get(y, x) instanceof Pacman) {
@@ -242,21 +262,32 @@ public class Level {
     }
 
     public void setElementPosition(Element element, Position nextPosition){
-
-
         if(nextPosition == null)
             return;
-
 
         Position elementPos = getPositionOf(element);
 
         maze.set(nextPosition.y,nextPosition.x,element);
-        maze.set(elementPos.y,elementPos.x, element.getOldElement());
+
+        if(elementPos != null){
+            maze.set(elementPos.y,elementPos.x, element.getOldElement());
+        }
 
     }
 
+    public Position findCavern(){
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (maze.get(y, x) instanceof Cavern) {
+                    return new Position(y,x);
+                }
+            }
+        }
+        return null;
+    }
+
     public boolean isPacmanAlive(){
-        return getPacmanPos() != null;
+        return pacmanAlive;
     }
 
     public int getPoints(){

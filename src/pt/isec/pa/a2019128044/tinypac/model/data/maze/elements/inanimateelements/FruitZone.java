@@ -7,7 +7,6 @@ import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.Result;
 public class FruitZone extends Element {
 
     //TODO GARANTIR QUE APENAS EXISTE UMA ZONA DESTAS; Garantir que apenas é criada uma fruta caso n exista
-    //todo buscar os pontos para criar fruta
     boolean hasFruit;
 
     int numberOfFruits;
@@ -27,7 +26,6 @@ public class FruitZone extends Element {
     public void evolve(long currentTime) {
         if(level.getPoints()%20 == 0){
             hasFruit = true;
-            level.setElementPosition(new Fruit(this.level),level.getPositionOf(this));
         }
     }
 
@@ -35,6 +33,7 @@ public class FruitZone extends Element {
     public Element isTraversable(char type) {
         if(type == 'P' && hasFruit){
             level.addPoints(numberOfFruits * 25);
+            hasFruit = false;
         }
         return this;
     }

@@ -17,7 +17,7 @@ public class Pause extends GameStateAdapter {
     @Override
     public boolean pressKey(KEYPRESS keypress) {
         if(keypress == KEYPRESS.ESC){
-            changeState(lastState,null);
+            changeState(lastState,this.getState());
         }
         return true;
     }

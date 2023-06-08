@@ -1,6 +1,7 @@
 package pt.isec.pa.a2019128044.tinypac.model.data.maze.elements;
 
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.Level;
+import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.ghosts.Ghost;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.*;
 
 public class Pacman extends Element {
@@ -19,9 +20,24 @@ public class Pacman extends Element {
             return;
         }
 
-        if(neighbor.isTraversable(this.getSymbol()) != null){
+            if(neighbor instanceof Ghost){
+                Ghost ghost = (Ghost) neighbor;
+                if(ghost.isVulnerable()){
+                    ghost.dies();
+                    level.setElementPosition(this,neighborPosition);
+                    return;
+
+                }else{
+
+                }
+            }
+
+
+        Element element = neighbor.isTraversable(this.getSymbol());
+
+        if(element != null){
             level.setElementPosition(this,neighborPosition);
-            oldElement = neighbor.isTraversable(this.getSymbol());
+            oldElement = element;
         }
     }
 }

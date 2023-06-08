@@ -18,7 +18,6 @@ public class SmallBall extends Element {
     @Override
     public Element isTraversable(char type) {
         if (type == 'P') {
-
             level.addPoints(1);
             return new Empty(level);
         }

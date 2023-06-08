@@ -12,16 +12,13 @@ import java.util.Random;
 public abstract class Ghost extends Element {
 
     protected boolean inSpawn;
-    protected long lastMovedTime = 0;
-    protected boolean isAlive;
     protected boolean isVulnerable;
 
     protected KEYPRESS direction;
-    protected List<Integer[][]> movements;
+    protected List<Level.Position> movements;
 
     public Ghost(char symbol, Level level) {
         super(symbol, level);
-        this.isAlive = true;
         this.movements = new ArrayList<>();
         inSpawn = true;
         oldElement = new Cavern(level);
@@ -32,7 +29,21 @@ public abstract class Ghost extends Element {
     }
 
     public void addMove(int y, int x) {
-        movements.add(new Integer[y][x]);
+        movements.add(new Level.Position(y,x));
+    }
+
+    @Override
+    public Element isTraversable(char type) {
+        /*switch (type){
+            case 'B':
+            case 'C':
+            case 'I':
+            case 'R':
+                return this;
+            default:
+                return this;
+        }*/
+        return this;
     }
 
     @Override
@@ -45,6 +56,16 @@ public abstract class Ghost extends Element {
         } else {
             follow();
         }
+    }
+
+    public void dies(){
+
+        this.setVulnerability(false);
+        this.movements = new ArrayList<>();
+        oldElement = new Cavern(level);
+        inSpawn = true;
+        level.setElementPosition(this,level.findCavern());
+
     }
 
     public void leaveCavern() {
@@ -101,8 +122,25 @@ public abstract class Ghost extends Element {
     }
 
     protected void run() {
-        //TODO REVERTER MOVIMENTOS
-        //todo voltar a seguir assim que voltar ao spawn
+                int lastPos = movements.size() - 1;
+
+        if(lastPos >= 0){
+            Element neighbor = (Element) level.getElement(movements.get(lastPos));
+            if(neighbor == null){
+                return;
+            }
+            Element element = neighbor.isTraversable(this.getSymbol());
+
+            if(element != null){
+                level.setElementPosition(this,movements.get(lastPos));
+                oldElement = element;
+                movements.remove(lastPos);
+            }
+            return;
+        }
+
+        isVulnerable = false;
+        inSpawn = true;
     }
 
     void follow() {
@@ -159,4 +197,7 @@ public abstract class Ghost extends Element {
         }
     }
 
+    public void setVulnerability(boolean value) {
+        isVulnerable = value;
+    }
 }

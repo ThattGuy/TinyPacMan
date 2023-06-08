@@ -17,7 +17,7 @@ public class PowerUp extends Element {
     @Override
     public Element isTraversable(char type) {
         if(type == 'P'){
-            //todo indicar à fsm ou flag?
+            level.setPowerUp(true);
             level.addPoints(10);
             return new Empty(level);
         }

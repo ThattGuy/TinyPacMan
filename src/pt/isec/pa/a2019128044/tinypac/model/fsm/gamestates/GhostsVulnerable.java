@@ -9,6 +9,7 @@ import pt.isec.pa.a2019128044.tinypac.model.fsm.GameStateAdapter;
 public class GhostsVulnerable extends GameStateAdapter {
     public GhostsVulnerable(GameContext context, GameData data) {
         super(context, data);
+        data.setGhostsVulnerability(true);
     }
 
     @Override
@@ -20,7 +21,9 @@ public class GhostsVulnerable extends GameStateAdapter {
         data.evolveAll(currentTime);
 
         if (currentTime - stateTimer >= 10000000000L) {
-                changeState(GameState.PACMAN_VULNERABLE,null);
+                data.setPowerUp(false);
+                data.setGhostsVulnerability(false);
+                changeState(GameState.PACMAN_VULNERABLE,this.getState());
         }
         return true;
     }
