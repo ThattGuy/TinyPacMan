@@ -11,11 +11,11 @@ public class Level {
     private int height, width;
     private Maze maze;
     private KEYPRESS keypress;
+    private KEYPRESS nextDirection;
     int points;
     Position portalPosition;
     Position fruitZonePosition;
     boolean powerUp;
-
     boolean pacmanAlive;
 
     public record Position(int y, int x) {}
@@ -63,6 +63,7 @@ public class Level {
 
     public void movePacman(long currentTime) {
         Position pacmanPos = getPacmanPos();
+        checkNextKey();
 
         if(maze.get(pacmanPos.y(), pacmanPos.x()) instanceof Element element){
             element.evolve(currentTime);
@@ -70,6 +71,8 @@ public class Level {
     }
 
     public void evolveAll(long currentTime) {
+
+        checkNextKey();
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -236,17 +239,23 @@ public class Level {
 
     public void setDirection(KEYPRESS keypress) {
 
-        Position neightboor = getNeighborPosition(getPacmanPos(),keypress);
+        Position neightbor = getNeighborPosition(getPacmanPos(),keypress);
 
-        if(getElement(neightboor) instanceof Wall || getElement(neightboor) instanceof Portal || getElement(neightboor) instanceof Warp){
-            return;
-        }
+        nextDirection = keypress;
 
-        if(this.keypress == keypress){
+        if(getElement(neightbor) instanceof Wall || getElement(neightbor) instanceof Portal || getElement(neightbor) instanceof Warp){
             return;
         }
 
         this.keypress = keypress;
+    }
+
+    private void checkNextKey() {
+        Position neightbor = getNeighborPosition(getPacmanPos(),nextDirection);
+
+        if(!(getElement(neightbor) instanceof Wall || getElement(neightbor) instanceof Portal || getElement(neightbor) instanceof Warp)){
+            keypress = nextDirection;
+        }
     }
 
     public KEYPRESS getDirection() {
@@ -302,6 +311,26 @@ public class Level {
 
     public void addPoints(int points) {
         this.points += points;
+    }
+
+    public void removeGhosts(){
+
+        Element oldElement;
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (maze.get(y, x) instanceof Ghost ghost) {
+                    if(ghost.getOldElement() instanceof Ghost ghost2){
+                        oldElement = ghost2.getOldElement();
+                        maze.set(y,x,oldElement);
+                        continue;
+                    }
+                    oldElement = ghost.getOldElement();
+                    maze.set(y,x,oldElement);
+                }
+            }
+        }
+
     }
 
 }

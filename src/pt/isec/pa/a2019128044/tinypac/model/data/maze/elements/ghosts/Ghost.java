@@ -14,7 +14,6 @@ public abstract class Ghost extends Element {
 
     protected boolean inSpawn;
     protected boolean isVulnerable;
-
     protected KEYPRESS direction;
     protected List<Level.Position> movements;
 
@@ -23,7 +22,7 @@ public abstract class Ghost extends Element {
         this.movements = new ArrayList<>();
         inSpawn = true;
         oldElement = new Cavern(level);
-
+        isVulnerable = false;
     }
 
     public boolean isVulnerable() {
@@ -36,21 +35,12 @@ public abstract class Ghost extends Element {
 
     @Override
     public Element isTraversable(char type) {
-        /*switch (type){
-            case 'B':
-            case 'C':
-            case 'I':
-            case 'R':
-                return this;
-            default:
-                return this;
-        }*/
         return this;
     }
 
     @Override
     public void evolve(long currentTime) {
-
+        System.out.println(getSymbol() + " " + isVulnerable);
         if (inSpawn) {
             leaveCavern();
         } else if (isVulnerable()) {
@@ -66,65 +56,83 @@ public abstract class Ghost extends Element {
         this.movements = new ArrayList<>();
         oldElement = new Cavern(level);
         inSpawn = true;
+        isVulnerable = false;
         level.setElementPosition(this, level.findCavern());
+        if(oldElement instanceof Ghost ghost){
+            level.setElementPosition(ghost, level.findCavern());
+        }
 
     }
 
-    public void leaveCavern() {
-        Level.Position exitPosition = level.getPortalPosition();
 
+    protected boolean moveTo(Level.Position position) {
 
         Level.Position myPosition = level.getPositionOf(this);
         int myRow = myPosition.y();
         int myColumn = myPosition.x();
 
-        int portalRow = exitPosition.y();
-        int portalCol = exitPosition.x();
+        int elementRow = position.y();
+        int elementCol = position.x();
 
-        if (myRow == portalRow) {
+        if (myRow == elementRow) {
 
-            if (myColumn < portalCol) {
+            if (myColumn < elementCol) {
                 direction = KEYPRESS.RIGHT;
-            } else if (myColumn > portalCol) {
+            } else if (myColumn > elementCol) {
                 direction = KEYPRESS.LEFT;
             } else {
-                inSpawn = false;
+                return true;
             }
-        } else if (myColumn == portalCol) {
+        } else if (myColumn == elementCol) {
 
-            if (myRow < portalRow) {
+            if (myRow < elementRow) {
                 direction = KEYPRESS.DOWN;
-            } else if (myRow > portalRow) {
+            } else if (myRow > elementRow) {
                 direction = KEYPRESS.UP;
             } else {
-                inSpawn = false;
+                return true;
             }
         } else {
 
-            if (myColumn < portalCol) {
+            if (myColumn < elementCol) {
                 direction = KEYPRESS.RIGHT;
             } else {
                 direction = KEYPRESS.LEFT;
             }
         }
 
-        moveTowardsExit();
+        moveTowardsDirection(this.direction);
+        return false;
     }
 
-    private void moveTowardsExit() {
-        Level.Position myPosition = level.getPositionOf(this);
-        Level.Position neighborPosition = level.getNeighborPosition(myPosition, direction);
+    protected void leaveCavern() {
+        if (moveTo(level.getPortalPosition())) {
+            inSpawn = false;
+        }
+    }
+
+    protected boolean moveTowardsDirection(KEYPRESS direction) {
+
+        Level.Position myPos = level.getPositionOf(this);
+        Level.Position neighborPosition = level.getNeighborPosition(myPos, direction);
         Element neighbor = (Element) level.getElement(neighborPosition);
 
-        if (neighbor != null && neighbor.isTraversable(symbol) != null) {
-            addMove(myPosition.y(), myPosition.x());
-            level.setElementPosition(this, neighborPosition);
-            oldElement = neighbor.isTraversable(this.getSymbol());
+        if (neighbor != null) {
+            checkForPacman();
+
+            if (neighbor.isTraversable(symbol) != null) {
+                addMove(myPos.y(), myPos.x());
+                level.setElementPosition(this, neighborPosition);
+                oldElement = neighbor.isTraversable(this.getSymbol());
+                return true;
+            }
         }
+        return false;
     }
 
     protected void run() {
         int lastPos = movements.size() - 1;
+
 
         if (lastPos >= 0) {
             Element neighbor = (Element) level.getElement(movements.get(lastPos));
@@ -132,6 +140,8 @@ public abstract class Ghost extends Element {
                 return;
             }
             Element element = neighbor.isTraversable(this.getSymbol());
+
+            checkForPacman();
 
             if (element != null) {
                 level.setElementPosition(this, movements.get(lastPos));
@@ -145,50 +155,42 @@ public abstract class Ghost extends Element {
         inSpawn = true;
     }
 
-    protected boolean checkForPacman(Level.Position neighborPos, Element neighbor) {
+    protected boolean checkForPacman() {
+        /*Level.Position myPos = level.getPositionOf(this);
+        Level.Position neighborPosition = level.getNeighborPosition(myPos, direction);
+        Element neighbor = (Element) level.getElement(neighborPosition);
 
         if (neighbor instanceof Pacman) {
-                if (!this.isVulnerable()) {
-                level.setElementPosition(this, neighborPos);
-                level.killPacman();
-                return true;
-            }
-        }
+            if (this.isVulnerable()) {
+                //todo verificar se o old element é um ghost
 
+                this.dies();
+                level.setElementPosition(neighbor, myPos);
+                return true;
+            }else {
+                level.setElementPosition(this, neighborPosition);
+                level.killPacman();
+            }
+        }*/
         return false;
     }
 
-    void follow() {
-        Level.Position myPos = level.getPositionOf(this);
-        Level.Position neighborPosition = level.getNeighborPosition(myPos, this.direction);
-        Element neighbor = (Element) level.getElement(neighborPosition);
+    protected void follow() {
+        KEYPRESS newDirection = this.direction;
 
-        if(checkForPacman(neighborPosition,neighbor)){
-            return;
-        }
+        if (!moveTowardsDirection(newDirection)) {
+            newDirection = getRandomDirection();
 
-        if (neighbor == null || neighbor.isTraversable(this.getSymbol()) == null) {
-            KEYPRESS newDirection = getRandomDirection();
-            neighborPosition = level.getNeighborPosition(myPos, newDirection);
-            neighbor = (Element) level.getElement(neighborPosition);
+            if (!moveTowardsDirection(newDirection)) {
+                newDirection = getOppositeDirection(newDirection);
 
-            if (neighbor != null && neighbor.isTraversable(this.getSymbol()) != null) {
-                this.direction = newDirection;
-            } else {
-                // Go back if unable to turn either way
-                this.direction = getOppositeDirection(this.direction);
-                neighborPosition = level.getNeighborPosition(myPos, this.direction);
-                neighbor = (Element) level.getElement(neighborPosition);
-
-                if (neighbor == null || neighbor.isTraversable(this.getSymbol()) == null) {
-                    return; // Unable to go back, stop moving
+                if (!moveTowardsDirection(newDirection)) {
+                    newDirection = getOppositeDirection(this.direction);
                 }
             }
         }
 
-        level.setElementPosition(this, neighborPosition);
-        oldElement = neighbor.isTraversable(this.getSymbol());
-        addMove(myPos.y(), myPos.x());
+        this.direction = newDirection;
     }
 
     protected KEYPRESS getRandomDirection() {

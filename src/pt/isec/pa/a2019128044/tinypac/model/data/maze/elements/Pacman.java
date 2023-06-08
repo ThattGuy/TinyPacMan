@@ -27,6 +27,9 @@ public class Pacman extends Element {
                     level.setElementPosition(this, neighborPosition);
                     return;
                 }
+                else{
+
+                }
             }
 
 

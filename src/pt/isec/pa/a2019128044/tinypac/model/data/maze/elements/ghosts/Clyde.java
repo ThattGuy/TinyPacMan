@@ -13,7 +13,7 @@ public class Clyde extends Ghost {
     }
 
     @Override
-    void follow() {
+    protected void follow() {
         if (level.isPacmanVisible(this)) {
             chasePacman();
         } else {
@@ -25,27 +25,12 @@ public class Clyde extends Ghost {
         Level.Position myPos = level.getPositionOf(this);
         Level.Position pacmanPos = level.getPacmanPos();
 
-
         KEYPRESS pacmanDir = getNextDirectionTowardsPacman(myPos, pacmanPos);
-
         if (pacmanDir != null) {
             this.direction = pacmanDir;
         }
 
-        Level.Position neighborPosition = level.getNeighborPosition(myPos, this.direction);
-        Element neighbor = (Element) level.getElement(neighborPosition);
-
-        if(checkForPacman(neighborPosition,neighbor)){
-            return;
-        }
-
-        if(neighbor !=null){
-            if (neighbor.isTraversable(this.getSymbol()) != null) {
-                level.setElementPosition(this, neighborPosition);
-                oldElement = neighbor.isTraversable(this.getSymbol());
-                addMove(myPos.y(), myPos.x());
-            }
-        }
+        moveTowardsDirection(this.direction);
     }
 
     private void normalMovement() {
