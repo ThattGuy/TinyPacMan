@@ -20,24 +20,25 @@ public class Pacman extends Element {
             return;
         }
 
-            if(neighbor instanceof Ghost) {
-                Ghost ghost = (Ghost) neighbor;
-                if (ghost.isVulnerable()) {
-                    ghost.dies();
-                    level.setElementPosition(this, neighborPosition);
-                    return;
-                }
-                else{
-
-                }
+        Element replacementElem = null;
+        if(neighbor instanceof Ghost ghost) {
+            if (ghost.isVulnerable()) {
+                level.respawnGhost(ghost.getSymbol());
+                replacementElem = ghost.getOldElement();
             }
+            else {
+                level.killPacman();
+                return;
+            }
+        }
 
+        if(replacementElem == null) {
+            replacementElem = neighbor.isTraversable(this.getSymbol());
+        }
 
-        Element element = neighbor.isTraversable(this.getSymbol());
-
-        if(element != null){
+        if(replacementElem != null){
             level.setElementPosition(this,neighborPosition);
-            oldElement = element;
+            oldElement = replacementElem;
         }
     }
 }

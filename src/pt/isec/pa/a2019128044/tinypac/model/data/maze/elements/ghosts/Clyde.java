@@ -25,16 +25,39 @@ public class Clyde extends Ghost {
         Level.Position myPos = level.getPositionOf(this);
         Level.Position pacmanPos = level.getPacmanPos();
 
+        if(checkForPacman()){
+            return;
+        }
+
         KEYPRESS pacmanDir = getNextDirectionTowardsPacman(myPos, pacmanPos);
         if (pacmanDir != null) {
             this.direction = pacmanDir;
         }
 
+
         moveTowardsDirection(this.direction);
     }
 
     private void normalMovement() {
-        super.follow();
+        KEYPRESS newDirection = this.direction;
+
+        if(checkForPacman()){
+            return;
+        }
+
+        if (!moveTowardsDirection(newDirection)) {
+            newDirection = getRandomDirection();
+
+            if (!moveTowardsDirection(newDirection)) {
+                newDirection = getOppositeDirection(newDirection);
+
+                if (!moveTowardsDirection(newDirection)) {
+                    newDirection = getOppositeDirection(this.direction);
+                }
+            }
+        }
+
+        this.direction = newDirection;
     }
 
     private KEYPRESS getNextDirectionTowardsPacman(Level.Position ghostPos, Level.Position pacmanPos) {

@@ -49,22 +49,6 @@ public abstract class Ghost extends Element {
             follow();
         }
     }
-
-    public void dies() {
-
-        this.setVulnerability(false);
-        this.movements = new ArrayList<>();
-        oldElement = new Cavern(level);
-        inSpawn = true;
-        isVulnerable = false;
-        level.setElementPosition(this, level.findCavern());
-        if(oldElement instanceof Ghost ghost){
-            level.setElementPosition(ghost, level.findCavern());
-        }
-
-    }
-
-
     protected boolean moveTo(Level.Position position) {
 
         Level.Position myPosition = level.getPositionOf(this);
@@ -102,6 +86,7 @@ public abstract class Ghost extends Element {
         }
 
         moveTowardsDirection(this.direction);
+
         return false;
     }
 
@@ -118,7 +103,6 @@ public abstract class Ghost extends Element {
         Element neighbor = (Element) level.getElement(neighborPosition);
 
         if (neighbor != null) {
-            checkForPacman();
 
             if (neighbor.isTraversable(symbol) != null) {
                 addMove(myPos.y(), myPos.x());
@@ -133,15 +117,24 @@ public abstract class Ghost extends Element {
     protected void run() {
         int lastPos = movements.size() - 1;
 
-
         if (lastPos >= 0) {
             Element neighbor = (Element) level.getElement(movements.get(lastPos));
             if (neighbor == null) {
                 return;
             }
-            Element element = neighbor.isTraversable(this.getSymbol());
 
-            checkForPacman();
+            if (neighbor instanceof Pacman) {
+                if (oldElement instanceof Ghost oldGhost) {
+                    this.oldElement = oldGhost.getOldElement();
+                    level.respawnGhost(oldGhost.getSymbol());
+                }
+                level.respawnGhost(this.getSymbol());
+                level.killElement(this);
+
+                return;
+            }
+
+            Element element = neighbor.isTraversable(this.getSymbol());
 
             if (element != null) {
                 level.setElementPosition(this, movements.get(lastPos));
@@ -156,41 +149,20 @@ public abstract class Ghost extends Element {
     }
 
     protected boolean checkForPacman() {
-        /*Level.Position myPos = level.getPositionOf(this);
+        Level.Position myPos = level.getPositionOf(this);
         Level.Position neighborPosition = level.getNeighborPosition(myPos, direction);
         Element neighbor = (Element) level.getElement(neighborPosition);
 
         if (neighbor instanceof Pacman) {
-            if (this.isVulnerable()) {
-                //todo verificar se o old element é um ghost
+            level.killPacman();
+            return true;
+        }
 
-                this.dies();
-                level.setElementPosition(neighbor, myPos);
-                return true;
-            }else {
-                level.setElementPosition(this, neighborPosition);
-                level.killPacman();
-            }
-        }*/
         return false;
     }
 
     protected void follow() {
-        KEYPRESS newDirection = this.direction;
 
-        if (!moveTowardsDirection(newDirection)) {
-            newDirection = getRandomDirection();
-
-            if (!moveTowardsDirection(newDirection)) {
-                newDirection = getOppositeDirection(newDirection);
-
-                if (!moveTowardsDirection(newDirection)) {
-                    newDirection = getOppositeDirection(this.direction);
-                }
-            }
-        }
-
-        this.direction = newDirection;
     }
 
     protected KEYPRESS getRandomDirection() {

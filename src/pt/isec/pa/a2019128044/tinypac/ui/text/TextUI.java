@@ -45,10 +45,10 @@ public class TextUI implements IGameEngineEvolve {
                     case WARP -> TextColor.ANSI.GREEN;
                     case SMALLBALL -> TextColor.ANSI.YELLOW;
                     case FRUITSPAWN -> TextColor.ANSI.RED;
-                    case PACMANSPAWN -> TextColor.ANSI.BLACK;
+                    case PACMANSPAWN -> TextColor.ANSI.BLUE;
                     case POWERUP -> TextColor.ANSI.YELLOW_BRIGHT;
                     case PORTAL -> TextColor.ANSI.BLUE_BRIGHT;
-                    case CAVERN -> TextColor.ANSI.BLACK;
+                    case CAVERN -> TextColor.ANSI.BLUE;
                     case BLINKY -> TextColor.ANSI.RED_BRIGHT;
                     case CLYDE -> TextColor.ANSI.RED;
                     case INKY -> TextColor.ANSI.CYAN;

@@ -163,10 +163,11 @@ public class GameData {
 
         if(!level.isPacmanAlive()){
             if(playerLives > 0){
-                level.removeGhosts();
+                level.removeLiveElements();
                 level.spawnLiveElements();
                 playerLives--;
             }
+            System.out.println("foste de piça");
             return;
         }
 
@@ -179,10 +180,13 @@ public class GameData {
 
         points = level.getPoints();
 
-        if(!level.isPacmanAlive() && playerLives > 0){
-            level.removeGhosts();
-            level.spawnLiveElements();
-            playerLives--;
+        if(!level.isPacmanAlive()){
+            if(playerLives > 0){
+                level.removeLiveElements();
+                level.spawnLiveElements();
+                playerLives--;
+            }
+            return;
         }
 
         level.evolveAll(currentTime);

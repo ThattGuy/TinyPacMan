@@ -18,6 +18,7 @@ public class Level {
     boolean powerUp;
     boolean pacmanAlive;
 
+
     public record Position(int y, int x) {}
 
     public Level(int height, int width) {
@@ -115,6 +116,9 @@ public class Level {
             for (int x = 0; x < width; x++) {
                 if (maze.get(y, x) instanceof Ghost ghost) {
                     ghost.setVulnerability(value);
+                    if(ghost.getOldElement() instanceof Ghost oldGhost){
+                        oldGhost.setVulnerability(value);
+                    }
                 }
             }
         }
@@ -274,8 +278,6 @@ public class Level {
         if(nextPosition == null)
             return;
 
-        Element neighbor = (Element) getElement(nextPosition);
-
         Position elementPos = getPositionOf(element);
 
         maze.set(nextPosition.y,nextPosition.x,element);
@@ -313,24 +315,77 @@ public class Level {
         this.points += points;
     }
 
-    public void removeGhosts(){
+    public void respawnGhost(char type){
+
+        Position cavern = findCavern();
+
+        switch (type) {
+            case 'B' -> maze.set(cavern.y, cavern.x, new Blinky(this));
+            case 'C' -> maze.set(cavern.y, cavern.x, new Clyde(this));
+            case 'I' -> maze.set(cavern.y, cavern.x, new Inky(this));
+            case 'R' -> maze.set(cavern.y, cavern.x, new Pinky(this));
+        }
+    }
+
+    public void removeLiveElements(){
 
         Element oldElement;
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (maze.get(y, x) instanceof Ghost ghost) {
-                    if(ghost.getOldElement() instanceof Ghost ghost2){
-                        oldElement = ghost2.getOldElement();
+                    if(ghost.getOldElement() instanceof Ghost oldGhost){
+                        oldElement = oldGhost.getOldElement();
                         maze.set(y,x,oldElement);
                         continue;
                     }
                     oldElement = ghost.getOldElement();
                     maze.set(y,x,oldElement);
                 }
+                if(maze.get(y, x) instanceof Pacman pacman){
+                    oldElement = pacman.getOldElement();
+                    maze.set(y,x,oldElement);
+                }
             }
         }
 
     }
+
+    public void killElement (Element element){
+        if(element == null)
+            return;
+
+        Position elementPos = getPositionOf(element);
+
+        if(elementPos != null){
+            maze.set(elementPos.y,elementPos.x, element.getOldElement());
+        }
+
+    }
+
+
+    public Position getCorner(String corner){
+        switch (corner){
+            case "TopLeft" -> {
+                return new Position(0,0);
+            }
+            case "TopRight" -> {
+                return new Position(0,width - 1);
+            }
+            case "BottonLeft" -> {
+                return new Position(height - 1, 0);
+            }
+            case "BottomRight" -> {
+                return new Position(height - 1, width -1);
+            }
+
+        }
+        return null;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
 
 }
