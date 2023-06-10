@@ -40,7 +40,9 @@ public abstract class Ghost extends Element {
 
     @Override
     public void evolve(long currentTime) {
-        System.out.println(getSymbol() + " " + isVulnerable);
+        if(oldElement.getSymbol() == 'y'){
+            inSpawn = true;
+        }
         if (inSpawn) {
             leaveCavern();
         } else if (isVulnerable()) {
@@ -167,15 +169,23 @@ public abstract class Ghost extends Element {
 
     protected KEYPRESS getRandomDirection() {
         Random random = new Random();
+        int randomIndex = random.nextInt(4);
 
-        if (this.direction == KEYPRESS.UP || this.direction == KEYPRESS.DOWN) {
-            int randomIndex = random.nextInt(2);
-            return (randomIndex == 0) ? KEYPRESS.RIGHT : KEYPRESS.LEFT;
-        } else {
-            int randomIndex = random.nextInt(2);
-            return (randomIndex == 0) ? KEYPRESS.UP : KEYPRESS.DOWN;
+        switch (randomIndex) {
+            case 0:
+                return KEYPRESS.UP;
+            case 1:
+                return KEYPRESS.DOWN;
+            case 2:
+                return KEYPRESS.LEFT;
+            case 3:
+                return KEYPRESS.RIGHT;
+            default:
+                return KEYPRESS.UP; // Default case, can be adjusted to suit your needs
         }
     }
+
+
 
     protected KEYPRESS getOppositeDirection(KEYPRESS direction) {
         if (direction == KEYPRESS.UP) {
@@ -187,6 +197,31 @@ public abstract class Ghost extends Element {
         } else {
             return KEYPRESS.LEFT;
         }
+    }
+
+    protected KEYPRESS getSideDirection(KEYPRESS direction) {
+        if (direction == KEYPRESS.UP) {
+            return KEYPRESS.RIGHT;
+        } else if (direction == KEYPRESS.DOWN) {
+            return KEYPRESS.RIGHT;
+        } else if (direction == KEYPRESS.LEFT) {
+            return KEYPRESS.UP;
+        } else {
+            return KEYPRESS.UP;
+        }
+    }
+
+    protected KEYPRESS getRandomSideDirection(KEYPRESS direction){
+        Random random = new Random();
+        int randomIndex = random.nextInt(2);
+
+        KEYPRESS sideDir = getSideDirection(direction);
+
+        if(randomIndex == 0){
+            return getOppositeDirection(sideDir);
+        }
+
+        return sideDir;
     }
 
     public void setVulnerability(boolean value) {

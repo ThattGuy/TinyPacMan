@@ -167,7 +167,6 @@ public class GameData {
                 level.spawnLiveElements();
                 playerLives--;
             }
-            System.out.println("foste de piça");
             return;
         }
 

@@ -18,6 +18,7 @@ public class Level {
     boolean powerUp;
     boolean pacmanAlive;
 
+
     public record Position(int y, int x) {}
 
     public Level(int height, int width) {
@@ -386,11 +387,17 @@ public class Level {
         return width;
     }
 
+    public int getHeight() {
+        return height;
+    }
+
     public int getDistanceBetweenPositions(Position myPos, Position targetCornerPos) {
         int deltaX = Math.abs(myPos.x() - targetCornerPos.x());
         int deltaY = Math.abs(myPos.y() - targetCornerPos.y());
         return (int) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
     }
+
+
 
 
 }

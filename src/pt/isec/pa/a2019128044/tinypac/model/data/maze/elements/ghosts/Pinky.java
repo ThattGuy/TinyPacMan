@@ -6,12 +6,15 @@ import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.Element;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Pinky extends Ghost {
 
     private List<Level.Position> corners;
     private int currentCornerIndex;
     private int targetDistance;
+
+    private KEYPRESS lastDir;
 
     public Pinky(Level level) {
         super('R', level);
@@ -27,62 +30,15 @@ public class Pinky extends Ghost {
 
     @Override
     protected void follow() {
-        if(checkForPacman()){
+        if (checkForPacman()) {
             return;
         }
-        if (inCrossRoads()) {
-            switch (currentCornerIndex) {
-                case 0: // TopRight corner
-                    if (direction != KEYPRESS.UP) {
-                        direction = KEYPRESS.UP;
-                    }
-                    if (!moveTowardsDirection(direction)) {
-                        direction = KEYPRESS.RIGHT;
-                        if (!moveTowardsDirection(direction)) {
-                            direction = KEYPRESS.LEFT;
-                            moveTowardsDirection(direction);
-                        }
-                    }
-                    break;
-                case 1: // BottomRight corner
-                    if (direction != KEYPRESS.DOWN) {
-                        direction = KEYPRESS.DOWN;
-                    }
-                    if (!moveTowardsDirection(direction)) {
-                        direction = KEYPRESS.RIGHT;
-                        if (!moveTowardsDirection(direction)) {
-                            direction = KEYPRESS.LEFT;
-                            moveTowardsDirection(direction);
-                        }
-                    }
-                    break;
-                case 2: // TopLeft corner
-                    if (!moveTowardsDirection(direction)) {
-                        direction = KEYPRESS.LEFT;
-                        if (!moveTowardsDirection(direction)) {
-                            direction = KEYPRESS.RIGHT;
-                            moveTowardsDirection(direction);
-                        }
-                        if (direction != KEYPRESS.UP) {
-                            direction = KEYPRESS.UP;
-                        }
-                    }
-                    break;
-                case 3: // BottomLeft corner
-                    if (direction != KEYPRESS.DOWN) {
-                        direction = KEYPRESS.DOWN;
-                    }
-                    if (!moveTowardsDirection(direction)) {
-                        direction = KEYPRESS.RIGHT;
-                        if (!moveTowardsDirection(direction)) {
-                            direction = KEYPRESS.RIGHT;
-                            moveTowardsDirection(direction);
-                        }
-                    }
-                    break;
-            }
 
-            // Check if Pinky is close enough to the target corner
+        if (inIntersection()) {
+            direction = getDirectionTowardsCorner(level.getPositionOf(this), corners.get(currentCornerIndex));
+            if(!moveTowardsDirection(direction))
+                move();
+
             Level.Position myPos = level.getPositionOf(this);
             Level.Position targetCornerPos = corners.get(currentCornerIndex);
             int distanceToTarget = level.getDistanceBetweenPositions(myPos, targetCornerPos);
@@ -91,11 +47,65 @@ public class Pinky extends Ghost {
                 currentCornerIndex = (currentCornerIndex + 1) % corners.size();
             }
         } else {
-            moveTowardsDirection(direction);
+            move();
         }
     }
 
-    private boolean inCrossRoads() {
+
+
+    private void move(){
+        KEYPRESS nextDir = direction;
+        if (!moveTowardsDirection(nextDir)) {
+            nextDir = getRandomSideDirection(direction);
+
+            if (!moveTowardsDirection(nextDir)) {
+                nextDir = getRandomSideDirection(direction);
+
+                if (!moveTowardsDirection(nextDir)) {
+                    nextDir = getOppositeDirection(nextDir);
+
+                    if (!moveTowardsDirection(nextDir)) {
+                        nextDir = getOppositeDirection(direction);
+                        moveTowardsDirection(nextDir);
+                    }
+                }
+            }
+        }
+        direction = nextDir;
+    }
+
+    private KEYPRESS getDirectionTowardsCorner(Level.Position position, Level.Position corner) {
+
+        Random random = new Random();
+        int randomIndex = random.nextInt(2);
+
+        switch (currentCornerIndex){
+            case 0:
+                if(randomIndex == 0 ){
+                    return KEYPRESS.UP;
+                }
+                return KEYPRESS.RIGHT;
+            case 1:
+                if(randomIndex == 0 ){
+                    return KEYPRESS.DOWN;
+                }
+                return KEYPRESS.RIGHT;
+            case 2:
+                if(randomIndex == 0 ){
+                    return KEYPRESS.UP;
+                }
+                return KEYPRESS.LEFT;
+            case 3:
+                if(randomIndex == 0 ){
+                    return KEYPRESS.DOWN;
+                }
+                return KEYPRESS.LEFT;
+        }
+
+        return null;
+    }
+
+    private boolean inIntersection() {
         Level.Position myPos = level.getPositionOf(this);
         Level.Position neighborSideOnePos = level.getNeighborPosition(myPos, getSideDirection(this.direction));
         Element neighborSideOne = (Element) level.getElement(neighborSideOnePos);
@@ -108,15 +118,5 @@ public class Pinky extends Ghost {
         return false;
     }
 
-    private KEYPRESS getSideDirection(KEYPRESS direction) {
-        if (direction == KEYPRESS.UP) {
-            return KEYPRESS.RIGHT;
-        } else if (direction == KEYPRESS.DOWN) {
-            return KEYPRESS.RIGHT;
-        } else if (direction == KEYPRESS.LEFT) {
-            return KEYPRESS.UP;
-        } else {
-            return KEYPRESS.UP;
-        }
-    }
+
 }

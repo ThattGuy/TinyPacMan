@@ -39,25 +39,21 @@ public class Clyde extends Ghost {
     }
 
     private void normalMovement() {
-        KEYPRESS newDirection = this.direction;
-
-        if(checkForPacman()){
-            return;
-        }
-
-        if (!moveTowardsDirection(newDirection)) {
-            newDirection = getRandomDirection();
+        KEYPRESS newDirection = null;
+        if (!moveTowardsDirection(this.direction)) {
+            newDirection = getRandomSideDirection(this.direction);
 
             if (!moveTowardsDirection(newDirection)) {
-                newDirection = getOppositeDirection(newDirection);
-
+                this.direction = getOppositeDirection(newDirection);
                 if (!moveTowardsDirection(newDirection)) {
-                    newDirection = getOppositeDirection(this.direction);
+                    return; // Unable to move in any direction, stop moving
                 }
             }
-        }
 
-        this.direction = newDirection;
+        }
+        if (newDirection != null) {
+            this.direction = newDirection;
+        }
     }
 
     private KEYPRESS getNextDirectionTowardsPacman(Level.Position ghostPos, Level.Position pacmanPos) {
@@ -74,5 +70,7 @@ public class Clyde extends Ghost {
     protected void run() {
         super.run();
     }
+
+
 
 }

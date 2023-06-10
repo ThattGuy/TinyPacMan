@@ -13,32 +13,23 @@ public class Blinky extends Ghost {
 
     @Override
     public void follow() {
-        Level.Position myPos = level.getPositionOf(this);
-        Level.Position neighborPosition = level.getNeighborPosition(myPos, this.direction);
-        Element neighbor = (Element) level.getElement(neighborPosition);
 
-        if (neighbor == null || neighbor.isTraversable(this.getSymbol()) == null) {
-            KEYPRESS newDirection = getRandomDirection();
-            neighborPosition = level.getNeighborPosition(myPos, newDirection);
-            neighbor = (Element) level.getElement(neighborPosition);
+        KEYPRESS newDirection = null;
+        if (!moveTowardsDirection(this.direction)) {
+            newDirection = getRandomSideDirection(this.direction);
 
-            if (neighbor != null && neighbor.isTraversable(this.getSymbol()) != null) {
-                this.direction = newDirection;
-            } else {
-                // Go back if unable to turn either way
-                this.direction = getOppositeDirection(this.direction);
-                neighborPosition = level.getNeighborPosition(myPos, this.direction);
-                neighbor = (Element) level.getElement(neighborPosition);
-
-                if (neighbor == null || neighbor.isTraversable(this.getSymbol()) == null) {
-                    return; // Unable to go back, stop moving
+            if (!moveTowardsDirection(newDirection)) {
+                this.direction = getOppositeDirection(newDirection);
+                if (!moveTowardsDirection(newDirection)) {
+                    return; // Unable to move in any direction, stop moving
                 }
             }
+
+        }
+        if (newDirection != null) {
+            this.direction = newDirection;
         }
 
-        level.setElementPosition(this, neighborPosition);
-        oldElement = neighbor.isTraversable(this.getSymbol());
     }
-
 
 }
