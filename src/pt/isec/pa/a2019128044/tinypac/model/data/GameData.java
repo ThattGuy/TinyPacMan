@@ -131,7 +131,6 @@ public class GameData {
     public void setCurrentLevel(int currentLevel) {
         if (currentLevel >= FIRSTLEVEL && currentLevel <= MAXLEVEL){
             this.currentLevel.append("Level").append(currentLevel).append("." + "txt");
-
         }
     }
 
@@ -179,21 +178,26 @@ public class GameData {
 
         points = level.getPoints();
 
-        if(!level.isPacmanAlive()){
-            if(playerLives > 0){
-                level.removeLiveElements();
-                level.spawnLiveElements();
-                playerLives--;
-            }
-            return;
-        }
-
         level.evolveAll(currentTime);
 
-        System.out.printf("points" + getPoints());
     }
 
     public void setGhostsVulnerability(boolean value) {
         level.setGhostsVulnerability(value);
     }
+
+    public boolean isPacmanAlive() {
+        return level.isPacmanAlive();
+    }
+
+    public int getLives() {
+        return playerLives;
+    }
+
+    public void restartLevel() {
+        level.removeLiveElements();
+        level.spawnLiveElements();
+        playerLives--;
+    }
+
 }

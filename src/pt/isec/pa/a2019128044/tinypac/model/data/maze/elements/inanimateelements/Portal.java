@@ -18,7 +18,6 @@ public class Portal extends Element {
 
     @Override
     public Element isTraversable(char type) {
-        //todo o ghost ja tenha saido do spawn não o deixar passar otv a nao ser q esteja vuln
         if(type == 'P'){
             return null;
         }

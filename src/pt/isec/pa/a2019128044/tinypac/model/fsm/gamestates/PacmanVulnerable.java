@@ -14,9 +14,16 @@ public class PacmanVulnerable  extends GameStateAdapter {
 
     @Override
     public boolean evolve(long currentTime) {
-        data.evolveAll(currentTime);
-        System.out.println("points: " + data.getPoints());
 
+        if(!data.isPacmanAlive()){
+            if(data.getLives() == 0){
+                changeState(GameState.GAMEOVER,this.getState());
+            }
+            data.restartLevel();
+            changeState(GameState.PACMAN_VULNERABLE,this.getState());
+        }
+
+        data.evolveAll(currentTime);
         if (data.atePowerUp()){
             changeState(GameState.GHOSTS_VULNERABLE,this.getState());
         }

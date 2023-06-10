@@ -18,6 +18,14 @@ public class GhostsVulnerable extends GameStateAdapter {
             stateTimer = currentTime;
         }
 
+        if(!data.isPacmanAlive()){
+            if(data.getLives() == 0){
+                changeState(GameState.GAMEOVER,this.getState());
+            }
+            data.restartLevel();
+            changeState(GameState.PACMAN_VULNERABLE,this.getState());
+        }
+
         data.evolveAll(currentTime);
 
         if (currentTime - stateTimer >= 10000000000L) {
@@ -27,6 +35,7 @@ public class GhostsVulnerable extends GameStateAdapter {
         }
         return true;
     }
+
     @Override
     public boolean pressKey(KEYPRESS keypress) {
 

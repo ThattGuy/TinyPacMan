@@ -40,15 +40,16 @@ public abstract class Ghost extends Element {
 
     @Override
     public void evolve(long currentTime) {
-        if(oldElement.getSymbol() == 'y'){
-            inSpawn = true;
-        }
+
         if (inSpawn) {
             leaveCavern();
         } else if (isVulnerable()) {
             run();
         } else {
             follow();
+            if(oldElement.getSymbol() == 'y'){
+                inSpawn = true;
+            }
         }
     }
     protected boolean moveTo(Level.Position position) {
