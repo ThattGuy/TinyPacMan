@@ -14,6 +14,10 @@ public class Blinky extends Ghost {
     @Override
     public void follow() {
 
+        if(checkForPacman()){
+            return;
+        }
+
         KEYPRESS newDirection = null;
         if (!moveTowardsDirection(this.direction)) {
             newDirection = getRandomSideDirection(this.direction);

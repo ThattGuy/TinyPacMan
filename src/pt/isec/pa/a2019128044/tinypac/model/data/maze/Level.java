@@ -7,6 +7,9 @@ import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.Pacman;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.ghosts.*;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Level {
     private int height, width;
     private Maze maze;
@@ -14,10 +17,10 @@ public class Level {
     private KEYPRESS nextDirection;
     int points;
     Position portalPosition;
-    Position fruitZonePosition;
+
+    List<Position> warpPosition;
     boolean powerUp;
     boolean pacmanAlive;
-
 
     public record Position(int y, int x) {}
 
@@ -27,6 +30,7 @@ public class Level {
         this.maze = new Maze(height, width);
         points = 0;
         powerUp = false;
+        warpPosition = new ArrayList<>();
     }
 
     public void addElement(Element element, int y, int x) {
@@ -99,6 +103,10 @@ public class Level {
         portalPosition = new Position(y,x);
     }
 
+    public void setWarpPos(int row, int col) {
+        warpPosition.add(new Position(row, col));
+    }
+
     public Position getPortalPosition() {
         return portalPosition;
     }
@@ -122,14 +130,6 @@ public class Level {
                 }
             }
         }
-    }
-
-    public void setFruitZonePos(int row, int col) {
-        fruitZonePosition = new Position(row,col);
-    }
-
-    public Position getFruitZonePosition(){
-        return fruitZonePosition;
     }
 
     public Position getNeighborPosition(Position currentPosition, KEYPRESS KEYPRESS) {
@@ -280,12 +280,41 @@ public class Level {
 
         Position elementPos = getPositionOf(element);
 
+        if(element.getSymbol() == 'P'){
+            if(checkIfSamePosition(nextPosition,warpPosition.get(0))){
+                maze.set(warpPosition.get(1).y,warpPosition.get(1).x,element);
+                if(elementPos != null){
+                    maze.set(elementPos.y,elementPos.x, element.getOldElement());
+                }
+                return;
+            }
+            if(checkIfSamePosition(nextPosition,warpPosition.get(1))){
+                maze.set(warpPosition.get(0).y,warpPosition.get(0).x,element);
+                if(elementPos != null){
+                    maze.set(elementPos.y,elementPos.x, element.getOldElement());
+                }
+                return;
+            }
+
+        }
+
+
         maze.set(nextPosition.y,nextPosition.x,element);
 
         if(elementPos != null){
             maze.set(elementPos.y,elementPos.x, element.getOldElement());
         }
 
+    }
+
+    private boolean checkIfSamePosition(Position pos1, Position pos2){
+
+        if(pos1.x == pos2.x){
+            if(pos1.y == pos2.y){
+                return true;
+            }
+        }
+        return false;
     }
 
     public Position findCavern(){

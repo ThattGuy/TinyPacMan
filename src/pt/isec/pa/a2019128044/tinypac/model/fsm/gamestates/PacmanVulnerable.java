@@ -19,6 +19,7 @@ public class PacmanVulnerable  extends GameStateAdapter {
             if(data.getLives() == 0){
                 changeState(GameState.GAMEOVER,this.getState());
             }
+            //todo fix gameover once lives == 0
             data.restartLevel();
             changeState(GameState.PACMAN_VULNERABLE,this.getState());
         }

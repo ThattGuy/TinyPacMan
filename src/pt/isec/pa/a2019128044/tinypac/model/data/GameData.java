@@ -19,6 +19,7 @@ public class GameData {
     private StringBuilder currentLevel;
     private Level level;
     private int levelNumber;
+    //todo change level
     int points;
     int playerLives;
 
@@ -109,7 +110,10 @@ public class GameData {
         Elements elements = Elements.getElement(symbol);
         switch (elements){
             case WALL -> element = new Wall(level);
-            case WARP-> element = new Warp(level);
+            case WARP-> {
+                element = new Warp(level);
+                level.setWarpPos(row,col);
+            }
             case SMALLBALL -> element = new SmallBall(level);
             case FRUITSPAWN ->element = new FruitZone(level);
             case PACMANSPAWN-> element = new PacmanSpawn(level);
