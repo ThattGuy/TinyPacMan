@@ -82,8 +82,6 @@ public class TextUI implements IGameEngineEvolve {
     public void evolve(IGameEngine gameEngine, long currentTime) {
         System.out.printf("*Tick*\n");
 
-        //todo fix holdkey
-
         try {
             show();
             KeyStroke keyStroke = screen.pollInput();

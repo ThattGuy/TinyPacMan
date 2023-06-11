@@ -18,8 +18,6 @@ public abstract class GameStateAdapter implements IGameState {
         context.changeState(newState.createState(context,data,lastState));
     }
 
-    //todo pause e unpause nos estados que usam
-
     @Override
     public boolean pressKey(KEYPRESS keypress) {
         return false;

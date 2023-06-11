@@ -127,10 +127,17 @@ public abstract class Ghost extends Element {
             }
 
             if (neighbor instanceof Pacman) {
-                if (oldElement instanceof Ghost oldGhost) {
-                    this.oldElement = oldGhost.getOldElement();
-                    level.respawnGhost(oldGhost.getSymbol());
+
+                Element element = this.getOldElement();
+                while (element instanceof Ghost innerGhost) {
+                    if (innerGhost.isVulnerable()){
+                        element = innerGhost.getOldElement();
+                        this.setOldElement(element);
+                        level.respawnGhost(innerGhost.getSymbol());
+                    }else
+                        level.killPacman();
                 }
+
                 level.respawnGhost(this.getSymbol());
                 level.killElement(this);
 

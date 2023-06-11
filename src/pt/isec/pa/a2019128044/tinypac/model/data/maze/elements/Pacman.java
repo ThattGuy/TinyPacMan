@@ -5,6 +5,7 @@ import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.ghosts.Ghost;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.*;
 
 public class Pacman extends Element {
+
     public Pacman(Level level) {
         super('P', level);
         oldElement = new PacmanSpawn(level);
@@ -21,12 +22,22 @@ public class Pacman extends Element {
         }
 
         Element replacementElem = null;
+
         if(neighbor instanceof Ghost ghost) {
             if (ghost.isVulnerable()) {
-                level.respawnGhost(ghost.getSymbol());
+                Element element = ghost.getOldElement();
+                while (element instanceof Ghost innerGhost) {
+                    if (innerGhost.isVulnerable()){
+                        element = innerGhost.getOldElement();
+                        ghost.setOldElement(element);
+                        level.respawnGhost(innerGhost.getSymbol());
+                    }else
+                        level.killPacman();
+                }
+
                 replacementElem = ghost.getOldElement();
-            }
-            else {
+                level.respawnGhost(ghost.getSymbol());
+            } else {
                 level.killPacman();
                 return;
             }

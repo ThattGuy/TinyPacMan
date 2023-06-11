@@ -35,7 +35,7 @@ public class Pinky extends Ghost {
         }
 
         if (inIntersection()) {
-            direction = getDirectionTowardsCorner(level.getPositionOf(this), corners.get(currentCornerIndex));
+            direction = getDirectionTowardsCorner();
             if(!moveTowardsDirection(direction))
                 move();
 
@@ -74,7 +74,7 @@ public class Pinky extends Ghost {
         direction = nextDir;
     }
 
-    private KEYPRESS getDirectionTowardsCorner(Level.Position position, Level.Position corner) {
+    private KEYPRESS getDirectionTowardsCorner() {
 
         Random random = new Random();
         int randomIndex = random.nextInt(2);

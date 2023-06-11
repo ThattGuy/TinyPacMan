@@ -6,7 +6,7 @@ import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.Result;
 
 public class FruitZone extends Element {
 
-    //TODO GARANTIR QUE APENAS EXISTE UMA ZONA DESTAS; Garantir que apenas é criada uma fruta caso n exista
+    //TODO GARANTIR QUE APENAS EXISTE UMA ZONA DESTAS;
     boolean hasFruit;
 
     int numberOfFruits;
@@ -24,8 +24,9 @@ public class FruitZone extends Element {
 
     @Override
     public void evolve(long currentTime) {
-        if(level.getPoints()%20 == 0){
+        if(level.getPoints()%20 == 0 && !hasFruit){
             hasFruit = true;
+            numberOfFruits ++;
         }
     }
 

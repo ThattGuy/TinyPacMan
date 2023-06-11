@@ -17,10 +17,11 @@ public class Level {
     private KEYPRESS nextDirection;
     int points;
     Position portalPosition;
-
     List<Position> warpPosition;
     boolean powerUp;
     boolean pacmanAlive;
+
+    int ghostsEaten;
 
     public record Position(int y, int x) {}
 
@@ -31,6 +32,7 @@ public class Level {
         points = 0;
         powerUp = false;
         warpPosition = new ArrayList<>();
+        ghostsEaten = 1;
     }
 
     public void addElement(Element element, int y, int x) {
@@ -119,18 +121,6 @@ public class Level {
         return powerUp;
     }
 
-    public void setGhostsVulnerability(boolean value) {
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                if (maze.get(y, x) instanceof Ghost ghost) {
-                    ghost.setVulnerability(value);
-                    if(ghost.getOldElement() instanceof Ghost oldGhost){
-                        oldGhost.setVulnerability(value);
-                    }
-                }
-            }
-        }
-    }
 
     public Position getNeighborPosition(Position currentPosition, KEYPRESS KEYPRESS) {
         if(currentPosition == null) {
@@ -344,17 +334,6 @@ public class Level {
         this.points += points;
     }
 
-    public void respawnGhost(char type){
-
-        Position cavern = findCavern();
-
-        switch (type) {
-            case 'B' -> maze.set(cavern.y, cavern.x, new Blinky(this));
-            case 'C' -> maze.set(cavern.y, cavern.x, new Clyde(this));
-            case 'I' -> maze.set(cavern.y, cavern.x, new Inky(this));
-            case 'R' -> maze.set(cavern.y, cavern.x, new Pinky(this));
-        }
-    }
 
     public void removeLiveElements(){
 
@@ -379,6 +358,43 @@ public class Level {
         }
 
     }
+
+    public void setGhostsVulnerability(boolean value) {
+        if(!value){
+            ghostsEaten = 0;
+        }
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (maze.get(y, x) instanceof Ghost ghost) {
+                    ghost.setVulnerability(value);
+                    if(ghost.getOldElement() instanceof Ghost oldGhost){
+                        oldGhost.setVulnerability(value);
+                    }
+                }
+            }
+        }
+    }
+
+
+    public void respawnGhost(char type){
+
+        Position cavern = findCavern();
+
+        switch (type) {
+            case 'B' -> maze.set(cavern.y, cavern.x, new Blinky(this));
+            case 'C' -> maze.set(cavern.y, cavern.x, new Clyde(this));
+            case 'I' -> maze.set(cavern.y, cavern.x, new Inky(this));
+            case 'R' -> maze.set(cavern.y, cavern.x, new Pinky(this));
+        }
+
+        if(ghostsEaten <= 4){
+            ghostsEaten++;
+        }
+
+        points += (ghostsEaten * 50);
+    }
+
 
     public void killElement (Element element){
         if(element == null)
@@ -416,17 +432,9 @@ public class Level {
         return width;
     }
 
-    public int getHeight() {
-        return height;
-    }
-
     public int getDistanceBetweenPositions(Position myPos, Position targetCornerPos) {
         int deltaX = Math.abs(myPos.x() - targetCornerPos.x());
         int deltaY = Math.abs(myPos.y() - targetCornerPos.y());
         return (int) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
     }
-
-
-
-
 }
