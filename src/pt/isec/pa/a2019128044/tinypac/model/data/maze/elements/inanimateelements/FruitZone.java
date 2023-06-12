@@ -18,11 +18,6 @@ public class FruitZone extends Element {
     }
 
     @Override
-    public char getSymbol() {
-        return symbol;
-    }
-
-    @Override
     public void evolve(long currentTime) {
         if(level.getPoints()%20 == 0 && !hasFruit){
             hasFruit = true;
@@ -37,6 +32,14 @@ public class FruitZone extends Element {
             hasFruit = false;
         }
         return this;
+    }
+
+    @Override
+    public char getSymbol() {
+        if(hasFruit){
+            return 'f';
+        }
+        return symbol;
     }
 
 }

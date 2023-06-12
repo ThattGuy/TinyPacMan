@@ -232,6 +232,14 @@ public abstract class Ghost extends Element {
         return sideDir;
     }
 
+    @Override
+    public char getSymbol() {
+        if(isVulnerable){
+            return 'v';
+        }
+        return symbol;
+    }
+
     public void setVulnerability(boolean value) {
         isVulnerable = value;
     }

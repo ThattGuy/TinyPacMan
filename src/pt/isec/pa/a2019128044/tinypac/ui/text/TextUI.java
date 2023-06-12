@@ -55,6 +55,7 @@ public class TextUI implements IGameEngineEvolve {
                     case PINKY -> TextColor.ANSI.MAGENTA;
                     case PACMAN -> TextColor.ANSI.YELLOW;
                     case EMPTY -> TextColor.ANSI.BLACK;
+                    default -> TextColor.ANSI.WHITE_BRIGHT;
                 };
                 TextColor bc = switch (elements) {
                     case WALL -> TextColor.ANSI.BLUE;
@@ -71,6 +72,7 @@ public class TextUI implements IGameEngineEvolve {
                     case PINKY -> TextColor.ANSI.MAGENTA_BRIGHT;
                     case PACMAN -> TextColor.ANSI.YELLOW_BRIGHT;
                     case EMPTY -> TextColor.ANSI.BLACK;
+                    default -> TextColor.ANSI.WHITE_BRIGHT;
                 };
                 screen.setCharacter(x, y, TextCharacter.fromCharacter(level[y][x], tc, bc)[0]);
             }

@@ -14,6 +14,8 @@ public enum Elements {
     INKY('I'),
     PINKY('R'),
     PACMAN('P'),
+    GHOST('v'),
+    FRUIT('f'),
     EMPTY(' ');
 
     private final char value;
@@ -57,6 +59,10 @@ public enum Elements {
                 return Elements.PACMAN;
             case ' ':
                 return Elements.EMPTY;
+            case 'v':
+                return Elements.GHOST;
+            case 'f':
+                return Elements.FRUIT;
             default:
                 throw new IllegalArgumentException("Invalid element value: " + value);
         }

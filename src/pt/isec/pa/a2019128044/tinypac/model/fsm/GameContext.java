@@ -9,9 +9,18 @@ public class GameContext implements IGameEngineEvolve {
     private GameData data;
     private IGameState state;
 
+    private static GameContext SINGLETON;
+
     public GameContext() {
         data = new GameData();
         state = GameState.INITIAL.createState(this, data, null);
+    }
+
+    public static GameContext getContextSingleton() {
+        if(SINGLETON == null) {
+            SINGLETON  = new GameContext();
+        }
+        return SINGLETON;
     }
 
     public char[][] getLevel(){

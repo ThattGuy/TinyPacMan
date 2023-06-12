@@ -1,8 +1,10 @@
 package pt.isec.pa.a2019128044.tinypac.ui.gui.uistates;
 
-import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import pt.isec.pa.a2019128044.tinypac.model.fsm.GameManager;
@@ -17,10 +19,15 @@ public class MainMenuUI extends BorderPane {
 
         createViews();
         registerHandlers();
-        update();
     }
 
     private void createViews() {
+        Image image = new Image("pt/isec/pa/a2019128044/tinypac/ui/gui/resources/images/PacmanIcon.png");
+
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(100);
+        imageView.setPreserveRatio(true);
+
         btnStart = new Button("Start");
         btnStart.setMinWidth(200);
         btnStart.setMinHeight(30);
@@ -33,30 +40,36 @@ public class MainMenuUI extends BorderPane {
         btnExit.setMinWidth(200);
         btnExit.setMinHeight(30);
 
-        VBox vbox = new VBox(btnStart, btnTop5, btnExit);
+        VBox vbox = new VBox(imageView, btnStart, btnTop5, btnExit);
         vbox.setAlignment(Pos.CENTER);
         vbox.setSpacing(10);
+        vbox.setMargin(btnStart, new Insets(10, 0, 0, 0));
+        vbox.setMargin(btnTop5, new Insets(10, 0, 0, 0));
+        vbox.setMargin(btnExit, new Insets(10, 0, 0, 0));
+
+        double buttonHeightPercentage = 0.05; // Adjust this value to control the button height
+        btnStart.prefHeightProperty().bind(this.heightProperty().multiply(buttonHeightPercentage));
+        btnTop5.prefHeightProperty().bind(this.heightProperty().multiply(buttonHeightPercentage));
+        btnExit.prefHeightProperty().bind(this.heightProperty().multiply(buttonHeightPercentage));
+
+        double buttonWidthPercentage = 0.25;
+        btnStart.minWidthProperty().bind(vbox.widthProperty().multiply(buttonWidthPercentage));
+        btnTop5.minWidthProperty().bind(vbox.widthProperty().multiply(buttonWidthPercentage));
+        btnExit.minWidthProperty().bind(vbox.widthProperty().multiply(buttonWidthPercentage));
 
         this.setCenter(vbox);
     }
 
     private void registerHandlers() {
-        gameManager.addPropertyChangeListener(evt -> {
-            update();
-        });
         btnStart.setOnAction(event -> {
-            // Handle the Start button click event here
+            gameManager.start();
+            this.setVisible(false);
         });
         btnTop5.setOnAction(event -> {
-            // Handle the Top 5 button click event here
+            this.setVisible(false);
         });
         btnExit.setOnAction(event -> {
-            Platform.exit();
+            System.exit(0);
         });
     }
-
-    private void update() {
-        this.setVisible(true);
-    }
-
 }

@@ -2,8 +2,10 @@ package pt.isec.pa.a2019128044.tinypac.ui.gui;
 
 import javafx.scene.layout.*;
 import pt.isec.pa.a2019128044.tinypac.model.fsm.GameManager;
+import pt.isec.pa.a2019128044.tinypac.model.fsm.GameState;
 import pt.isec.pa.a2019128044.tinypac.ui.gui.resources.CSSManager;
 import pt.isec.pa.a2019128044.tinypac.ui.gui.resources.ImageManager;
+import pt.isec.pa.a2019128044.tinypac.ui.gui.uistates.GamePlayUI;
 import pt.isec.pa.a2019128044.tinypac.ui.gui.uistates.MainMenuUI;
 
 public class RootPane extends BorderPane {
@@ -21,8 +23,9 @@ public class RootPane extends BorderPane {
         CSSManager.applyCSS(this,"styles.css");
 
         StackPane stackPane = new StackPane(
+                new GamePlayUI(gameManager),
                 new MainMenuUI(gameManager)
-        ); // mencionar a possibilidade de apenas ir criando quando muda de estado
+        );
         stackPane.setBackground(
                 new Background(
                         new BackgroundImage(
@@ -33,6 +36,7 @@ public class RootPane extends BorderPane {
                         )
                 )
         );
+
         this.setCenter(stackPane);
 
 
@@ -42,6 +46,11 @@ public class RootPane extends BorderPane {
     }
 
     private void update() {
+        if (gameManager.getState() == GameState.GAMEOVER || gameManager.getState() == GameState.PAUSE ) {
+            this.setVisible(false);
+            return;
+        }
+        this.setVisible(true);
     }
 }
 

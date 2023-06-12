@@ -19,7 +19,6 @@ public class PacmanVulnerable  extends GameStateAdapter {
             if(data.getLives() <= 0){
                 changeState(GameState.GAMEOVER,this.getState());
             }
-            //TODO PONTOS FANTASMAS
             data.restartLevel();
             changeState(GameState.PACMAN_VULNERABLE,this.getState());
         }

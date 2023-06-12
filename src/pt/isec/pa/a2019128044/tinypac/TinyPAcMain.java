@@ -20,15 +20,15 @@ public class TinyPAcMain {
     }
     public static void main(String[] args) throws IOException {
 
+        IGameEngine gameEngine = new GameEngine();
+        GameContext context = GameContext.getContextSingleton();
+        //TextUI ui = new TextUI(context);
+        gameEngine.registerClient(context);
+        //gameEngine.registerClient(ui);
+        gameEngine.start(200);
+
         Application.launch(MainJFX.class,args);
 
-        /*IGameEngine gameEngine = new GameEngine();
-        GameContext context = new GameContext();
-        TextUI ui = new TextUI(context);
-
-        gameEngine.registerClient(context);
-        gameEngine.registerClient(ui);
-        gameEngine.start(200);
-        gameEngine.waitForTheEnd();*/
+        gameEngine.waitForTheEnd();
     }
 }

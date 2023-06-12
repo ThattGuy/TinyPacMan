@@ -7,13 +7,14 @@ import pt.isec.pa.a2019128044.tinypac.model.data.KEYPRESS;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-public class GameManager {
+public class GameManager implements IGameEngineEvolve{
 
     private GameContext fsm;
     private PropertyChangeSupport pcs;
 
+
     public GameManager() {
-        fsm = new GameContext();
+        fsm = GameContext.getContextSingleton();
         pcs = new PropertyChangeSupport(this);
     }
 
@@ -21,20 +22,24 @@ public class GameManager {
         pcs.addPropertyChangeListener(listener);
     }
 
-    public void pressKey(KEYPRESS keypress) {
-        //boolean ret = fsm.pressKey(keypress);
-        //pcs.firePropertyChange(null, null, null);
-        //return ret;
+    public void start() {
+        pcs.firePropertyChange(null,null,null);
     }
 
-    public void evolve(long currentTime) {
-        //boolean ret = fsm.evolve(currentTime);
-        //pcs.firePropertyChange(null, null, null);
-        //return ret;
+    public void pressKey(KEYPRESS keypress) {
+        fsm.pressKey(keypress);
     }
 
     public GameState getState() {
         return fsm.getState();
     }
 
+    @Override
+    public void evolve(IGameEngine gameEngine, long currentTime) {
+        pcs.firePropertyChange(null, null, null);
+    }
+
+    public char[][] getMaze(){
+        return fsm.getLevel();
+    }
 }
