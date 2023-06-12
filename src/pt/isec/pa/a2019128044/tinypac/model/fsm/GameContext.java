@@ -32,4 +32,8 @@ public class GameContext implements IGameEngineEvolve {
         state.pressKey(KEYPRESS);
     }
 
+    public GameState getState() {
+        return state.getState();
+    }
+
 }
