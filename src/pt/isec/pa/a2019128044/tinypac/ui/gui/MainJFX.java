@@ -16,6 +16,7 @@ import java.util.Optional;
 public class MainJFX extends Application {
      GameManager gameManager;
 
+
     @Override
     public void init() throws Exception {
         super.init();
@@ -24,14 +25,14 @@ public class MainJFX extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        newStageForTesting(stage,"Tiny Pacman");
+        newStage(stage,"Tiny Pacman");
     }
 
 
-    private void newStageForTesting(Stage stage, String title) {
+    private void newStage(Stage stage, String title) {
         RootPane root = new RootPane(gameManager);
 
-        Scene scene = new Scene(root,700,400);
+        Scene scene = new Scene(root,1100,500);
 
         stage.setOnCloseRequest(e -> {
             e.consume();

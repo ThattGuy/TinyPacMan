@@ -13,6 +13,7 @@ public class Pause extends GameStateAdapter {
     public Pause(GameContext context, GameData data, GameState lastState) {
         super(context, data);
         this.lastState = lastState;
+        System.out.println("Pause State");
     }
     @Override
     public boolean pressKey(KEYPRESS keypress) {

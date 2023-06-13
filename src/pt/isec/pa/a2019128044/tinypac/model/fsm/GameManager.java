@@ -28,6 +28,7 @@ public class GameManager{
 
     public void pressKey(KEYPRESS keypress) {
         fsm.pressKey(keypress);
+        pcs.firePropertyChange(null,null,null);
     }
 
     public GameState getState() {

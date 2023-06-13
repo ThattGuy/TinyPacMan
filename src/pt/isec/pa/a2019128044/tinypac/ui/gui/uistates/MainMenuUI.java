@@ -25,10 +25,16 @@ public class MainMenuUI extends BorderPane {
         Image logo = new Image("pt/isec/pa/a2019128044/tinypac/ui/gui/resources/images/logo.png");
 
         ImageView imageView = new ImageView(logo);
-        imageView.fitWidthProperty().bind(this.widthProperty().multiply(0.3));
+        imageView.fitWidthProperty().bind(this.widthProperty().multiply(0.5));
         imageView.setPreserveRatio(true);
 
-        btnStart = new Button("Start");
+        Image start = new Image("pt/isec/pa/a2019128044/tinypac/ui/gui/resources/images/start.png");
+        ImageView starV = new ImageView(start);
+        starV.fitWidthProperty().bind(this.widthProperty().multiply(0.05));
+        starV.setPreserveRatio(true);
+
+        btnStart = new Button();
+        btnStart.setGraphic(starV);
         btnStart.setMinWidth(200);
         btnStart.setMinHeight(30);
 
@@ -36,7 +42,12 @@ public class MainMenuUI extends BorderPane {
         btnTop5.setMinWidth(200);
         btnTop5.setMinHeight(30);
 
-        btnExit = new Button("Exit");
+        Image exit = new Image("pt/isec/pa/a2019128044/tinypac/ui/gui/resources/images/exit.png");
+        ImageView exitV = new ImageView(exit);
+        exitV.fitWidthProperty().bind(this.widthProperty().multiply(0.05));
+        exitV.setPreserveRatio(true);
+        btnExit = new Button();
+        btnExit.setGraphic(exitV);
         btnExit.setMinWidth(200);
         btnExit.setMinHeight(30);
 

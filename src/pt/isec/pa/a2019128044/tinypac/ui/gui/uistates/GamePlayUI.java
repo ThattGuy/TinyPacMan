@@ -202,9 +202,7 @@ public class GamePlayUI extends BorderPane {
 
 
     private void registerHandlers() {
-        gameManager.addPropertyChangeListener(evt -> {
-            update();
-        });
+        gameManager.addPropertyChangeListener(evt -> { update(); });
 
         this.setFocusTraversable(true);
         this.setOnKeyPressed((key) -> {
@@ -229,13 +227,10 @@ public class GamePlayUI extends BorderPane {
     private void update() {
         if (gameManager.getState() == GameState.PAUSE || gameManager.getState() == GameState.GAMEOVER) {
             this.setVisible(false);
+            return;
         }
 
         setVisible(true);
-    }
-
-    public void evolve() {
-
     }
 
 }

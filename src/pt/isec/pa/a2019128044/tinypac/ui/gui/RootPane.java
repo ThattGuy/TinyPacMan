@@ -7,6 +7,7 @@ import pt.isec.pa.a2019128044.tinypac.ui.gui.resources.CSSManager;
 import pt.isec.pa.a2019128044.tinypac.ui.gui.resources.ImageManager;
 import pt.isec.pa.a2019128044.tinypac.ui.gui.uistates.GamePlayUI;
 import pt.isec.pa.a2019128044.tinypac.ui.gui.uistates.MainMenuUI;
+import pt.isec.pa.a2019128044.tinypac.ui.gui.uistates.PauseUI;
 
 public class RootPane extends BorderPane {
     GameManager gameManager;
@@ -24,7 +25,8 @@ public class RootPane extends BorderPane {
 
         StackPane stackPane = new StackPane(
                 new GamePlayUI(gameManager),
-                new MainMenuUI(gameManager)
+                new MainMenuUI(gameManager),
+                new PauseUI(gameManager)
         );
         stackPane.setBackground(
                 new Background(
@@ -46,11 +48,6 @@ public class RootPane extends BorderPane {
     }
 
     private void update() {
-        if (gameManager.getState() == GameState.GAMEOVER || gameManager.getState() == GameState.PAUSE ) {
-            this.setVisible(false);
-            return;
-        }
-        this.setVisible(true);
     }
 }
 
