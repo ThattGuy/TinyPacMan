@@ -13,19 +13,20 @@ import java.io.IOException;
 public class TinyPAcMain {
 
     public static GameManager gameManager;
-
+    private static final IGameEngine gameEngine;
 
     static {
+        gameEngine = new GameEngine();
         gameManager = new GameManager();
     }
     public static void main(String[] args) throws IOException {
 
-        IGameEngine gameEngine = new GameEngine();
         GameContext context = GameContext.getContextSingleton();
+        gameEngine.registerClient(context);
+        gameEngine.start(200);
         //TextUI ui = new TextUI(context);
         gameEngine.registerClient(context);
         //gameEngine.registerClient(ui);
-        gameEngine.start(200);
 
         Application.launch(MainJFX.class,args);
 

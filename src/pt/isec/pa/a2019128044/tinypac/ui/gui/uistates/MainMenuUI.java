@@ -22,10 +22,10 @@ public class MainMenuUI extends BorderPane {
     }
 
     private void createViews() {
-        Image image = new Image("pt/isec/pa/a2019128044/tinypac/ui/gui/resources/images/PacmanIcon.png");
+        Image logo = new Image("pt/isec/pa/a2019128044/tinypac/ui/gui/resources/images/logo.png");
 
-        ImageView imageView = new ImageView(image);
-        imageView.setFitWidth(100);
+        ImageView imageView = new ImageView(logo);
+        imageView.fitWidthProperty().bind(this.widthProperty().multiply(0.3));
         imageView.setPreserveRatio(true);
 
         btnStart = new Button("Start");

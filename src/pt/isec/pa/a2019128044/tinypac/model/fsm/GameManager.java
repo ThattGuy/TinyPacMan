@@ -7,7 +7,7 @@ import pt.isec.pa.a2019128044.tinypac.model.data.KEYPRESS;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-public class GameManager implements IGameEngineEvolve{
+public class GameManager{
 
     private GameContext fsm;
     private PropertyChangeSupport pcs;
@@ -34,8 +34,7 @@ public class GameManager implements IGameEngineEvolve{
         return fsm.getState();
     }
 
-    @Override
-    public void evolve(IGameEngine gameEngine, long currentTime) {
+    public void evolve(long currentTime) {
         pcs.firePropertyChange(null, null, null);
     }
 

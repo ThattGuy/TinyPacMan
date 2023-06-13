@@ -17,12 +17,17 @@
     -fx-background-color: #E5E500;
 }
 
-
 .root {
     -fx-background-color: black;
 }
 
 .menu-button {
     -fx-font-size: 16px;
+}
+
+.level{
+    -fx-alignment: center;
+    -fx-scale-x: 100%;
+    -fx-scale-y: 100%;
 }
 

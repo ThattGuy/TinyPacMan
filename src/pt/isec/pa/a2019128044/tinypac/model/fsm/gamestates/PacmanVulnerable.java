@@ -20,7 +20,7 @@ public class PacmanVulnerable  extends GameStateAdapter {
                 changeState(GameState.GAMEOVER,this.getState());
             }
             data.restartLevel();
-            changeState(GameState.PACMAN_VULNERABLE,this.getState());
+            changeState(GameState.WARMUP,this.getState());
         }
 
         data.evolveAll(currentTime);
