@@ -1,5 +1,8 @@
 package pt.isec.pa.a2019128044.tinypac.ui.gui;
 
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import pt.isec.pa.a2019128044.tinypac.model.fsm.GameManager;
 import pt.isec.pa.a2019128044.tinypac.model.fsm.GameState;
@@ -24,8 +27,8 @@ public class RootPane extends BorderPane {
         CSSManager.applyCSS(this,"styles.css");
 
         StackPane stackPane = new StackPane(
-                new GamePlayUI(gameManager),
                 new MainMenuUI(gameManager),
+                new GamePlayUI(gameManager),
                 new PauseUI(gameManager)
         );
         stackPane.setBackground(
@@ -39,9 +42,18 @@ public class RootPane extends BorderPane {
                 )
         );
 
+        Label watermark = new Label("Developed by: Tiago Garcia Quintas, 2019128044");
+        watermark.getStyleClass().add("watermark");
+        StackPane.setAlignment(watermark, Pos.BOTTOM_RIGHT);
+        stackPane.getChildren().add(watermark);
+
+        ImageView watermarkImage = new ImageView(ImageManager.getImage("isec.png"));
+        watermarkImage.setPreserveRatio(true);
+        watermarkImage.setFitWidth(25);
+        StackPane.setAlignment(watermarkImage, Pos.BOTTOM_LEFT);
+        stackPane.getChildren().add(watermarkImage);
+
         this.setCenter(stackPane);
-
-
     }
 
     private void registerHandlers() {

@@ -8,6 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import pt.isec.pa.a2019128044.tinypac.model.fsm.GameManager;
+import pt.isec.pa.a2019128044.tinypac.ui.gui.resources.ImageManager;
 
 public class MainMenuUI extends BorderPane {
 
@@ -22,15 +23,13 @@ public class MainMenuUI extends BorderPane {
     }
 
     private void createViews() {
-        Image logo = new Image("pt/isec/pa/a2019128044/tinypac/ui/gui/resources/images/logo.png");
 
-        ImageView imageView = new ImageView(logo);
+        ImageView imageView = new ImageView(ImageManager.getImage("logo.png"));
         imageView.fitWidthProperty().bind(this.widthProperty().multiply(0.5));
         imageView.setPreserveRatio(true);
 
-        Image start = new Image("pt/isec/pa/a2019128044/tinypac/ui/gui/resources/images/start.png");
-        ImageView starV = new ImageView(start);
-        starV.fitWidthProperty().bind(this.widthProperty().multiply(0.05));
+        ImageView starV = new ImageView(ImageManager.getImage("start.png"));
+        starV.fitWidthProperty().bind(this.widthProperty().multiply(0.07));
         starV.setPreserveRatio(true);
 
         btnStart = new Button();
@@ -38,12 +37,15 @@ public class MainMenuUI extends BorderPane {
         btnStart.setMinWidth(200);
         btnStart.setMinHeight(30);
 
-        btnTop5 = new Button("Top 5");
+        ImageView topFV = new ImageView(ImageManager.getImage("topfive.png"));
+        topFV.fitWidthProperty().bind(this.widthProperty().multiply(0.1));
+        topFV.setPreserveRatio(true);
+        btnTop5 = new Button();
+        btnTop5.setGraphic(topFV);
         btnTop5.setMinWidth(200);
         btnTop5.setMinHeight(30);
 
-        Image exit = new Image("pt/isec/pa/a2019128044/tinypac/ui/gui/resources/images/exit.png");
-        ImageView exitV = new ImageView(exit);
+        ImageView exitV = new ImageView(ImageManager.getImage("exit.png"));
         exitV.fitWidthProperty().bind(this.widthProperty().multiply(0.05));
         exitV.setPreserveRatio(true);
         btnExit = new Button();

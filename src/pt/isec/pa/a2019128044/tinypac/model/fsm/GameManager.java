@@ -1,7 +1,6 @@
 package pt.isec.pa.a2019128044.tinypac.model.fsm;
 
 import pt.isec.pa.a2019128044.tinypac.gameengine.IGameEngine;
-import pt.isec.pa.a2019128044.tinypac.gameengine.IGameEngineEvolve;
 import pt.isec.pa.a2019128044.tinypac.model.data.KEYPRESS;
 
 import java.beans.PropertyChangeListener;
@@ -11,11 +10,12 @@ public class GameManager{
 
     private GameContext fsm;
     private PropertyChangeSupport pcs;
-
-
-    public GameManager() {
-        fsm = GameContext.getContextSingleton();
+    public GameManager(IGameEngine gameEngine) {
         pcs = new PropertyChangeSupport(this);
+        fsm = new GameContext();
+        gameEngine.registerClient(fsm);
+
+
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -35,11 +35,14 @@ public class GameManager{
         return fsm.getState();
     }
 
-    public void evolve(long currentTime) {
+    public void evolve() {
         pcs.firePropertyChange(null, null, null);
     }
 
     public char[][] getMaze(){
-        return fsm.getLevel();
+        if(fsm != null){
+            return fsm.getLevel();
+        }
+        return null;
     }
 }

@@ -11,6 +11,7 @@ import javafx.scene.layout.VBox;
 import pt.isec.pa.a2019128044.tinypac.model.data.KEYPRESS;
 import pt.isec.pa.a2019128044.tinypac.model.fsm.GameManager;
 import pt.isec.pa.a2019128044.tinypac.model.fsm.GameState;
+import pt.isec.pa.a2019128044.tinypac.ui.gui.resources.ImageManager;
 
 public class PauseUI extends BorderPane {
 
@@ -26,21 +27,32 @@ public class PauseUI extends BorderPane {
     }
 
     private void createViews() {
-        Image logo = new Image("pt/isec/pa/a2019128044/tinypac/ui/gui/resources/images/logo.png");
-
-        ImageView imageView = new ImageView(logo);
+        ImageView imageView = new ImageView(ImageManager.getImage("logo.png"));
         imageView.fitWidthProperty().bind(this.widthProperty().multiply(0.3));
         imageView.setPreserveRatio(true);
 
-        btnResume = new Button("Resume");
+        ImageView starV = new ImageView(ImageManager.getImage("resume.png"));
+        starV.fitWidthProperty().bind(this.widthProperty().multiply(0.1));
+        starV.setPreserveRatio(true);
+
+        btnResume = new Button();
+        btnResume.setGraphic(starV);
         btnResume.setMinWidth(200);
         btnResume.setMinHeight(30);
 
-        btnTop5 = new Button("Top 5");
+        ImageView topFV = new ImageView(ImageManager.getImage("topfive.png"));
+        topFV.fitWidthProperty().bind(this.widthProperty().multiply(0.1));
+        topFV.setPreserveRatio(true);
+        btnTop5 = new Button();
+        btnTop5.setGraphic(topFV);
         btnTop5.setMinWidth(200);
         btnTop5.setMinHeight(30);
 
-        btnExit = new Button("Exit");
+        ImageView exitV = new ImageView(ImageManager.getImage("exit.png"));
+        exitV.fitWidthProperty().bind(this.widthProperty().multiply(0.05));
+        exitV.setPreserveRatio(true);
+        btnExit = new Button();
+        btnExit.setGraphic(exitV);
         btnExit.setMinWidth(200);
         btnExit.setMinHeight(30);
 
@@ -51,7 +63,7 @@ public class PauseUI extends BorderPane {
         vbox.setMargin(btnTop5, new Insets(10, 0, 0, 0));
         vbox.setMargin(btnExit, new Insets(10, 0, 0, 0));
 
-        double buttonHeightPercentage = 0.05; // Adjust this value to control the button height
+        double buttonHeightPercentage = 0.05;
         btnResume.prefHeightProperty().bind(this.heightProperty().multiply(buttonHeightPercentage));
         btnTop5.prefHeightProperty().bind(this.heightProperty().multiply(buttonHeightPercentage));
         btnExit.prefHeightProperty().bind(this.heightProperty().multiply(buttonHeightPercentage));
@@ -69,7 +81,7 @@ public class PauseUI extends BorderPane {
         gameManager.addPropertyChangeListener(evt -> { update(); });
 
         btnResume.setOnAction(event -> {
-            gameManager.start();
+            gameManager.pressKey(KEYPRESS.ESC);
             this.setVisible(false);
         });
         btnTop5.setOnAction(event -> {
