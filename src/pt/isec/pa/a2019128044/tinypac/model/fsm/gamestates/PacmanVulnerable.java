@@ -37,9 +37,9 @@ public class PacmanVulnerable  extends GameStateAdapter {
         if(keypress == KEYPRESS.ESC){
             changeState(GameState.PAUSE,this.getState());
         }else{
-            data.setDirection(keypress);
+            return data.setDirection(keypress);
         }
-        return true;
+        return false;
     }
     @Override
     public GameState getState() {

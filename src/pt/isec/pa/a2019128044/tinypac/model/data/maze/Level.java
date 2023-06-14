@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Level {
-    private int height, width;
-    private Maze maze;
+    private final int height, width;
+    private final Maze maze;
     private KEYPRESS keypress;
     private KEYPRESS nextDirection;
     int points;
@@ -20,10 +20,11 @@ public class Level {
     List<Position> warpPosition;
     boolean powerUp;
     boolean pacmanAlive;
-
     int ghostsEaten;
-
-    public record Position(int y, int x) {}
+    int balls;
+    int ghostVulnerable;
+    public record Position(int y, int x) {
+    }
 
     public Level(int height, int width) {
         this.height = height;
@@ -33,6 +34,27 @@ public class Level {
         powerUp = false;
         warpPosition = new ArrayList<>();
         ghostsEaten = 1;
+        ghostVulnerable = 0;
+    }
+
+    private int getNumberOfBalls() {
+        int numberBalls = 0;
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (maze.get(i, j).getSymbol() == 'o' || maze.get(i, j).getSymbol() == 'O') {
+                    numberBalls++;
+                }
+            }
+        }
+        return numberBalls;
+    }
+
+    public int getBalls() {
+        return balls;
+    }
+
+    public void removeBall() {
+        balls--;
     }
 
     public void addElement(Element element, int y, int x) {
@@ -56,12 +78,14 @@ public class Level {
                 }
 
                 if (maze.get(i, j).getSymbol() == Elements.PACMANSPAWN.getValue() && !pacmanExists) {
-                    maze.set(i,j, new Pacman(this));
+                    maze.set(i, j, new Pacman(this));
                     pacmanAlive = true;
                 }
             }
 
         }
+
+        balls = getNumberOfBalls();
     }
 
     public char[][] getLevel() {
@@ -72,7 +96,7 @@ public class Level {
         Position pacmanPos = getPacmanPos();
         checkNextKey();
 
-        if(maze.get(pacmanPos.y(), pacmanPos.x()) instanceof Element element){
+        if (maze.get(pacmanPos.y(), pacmanPos.x()) instanceof Element element) {
             element.evolve(currentTime);
         }
     }
@@ -84,7 +108,7 @@ public class Level {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (maze.get(y, x) instanceof Element element) {
-                    if(!element.hasEvolved()){
+                    if (!element.hasEvolved()) {
                         element.setEvolved(true);
                         element.evolve(currentTime);
                     }
@@ -101,8 +125,8 @@ public class Level {
         }
     }
 
-    public void setPortalPos(int y, int x){
-        portalPosition = new Position(y,x);
+    public void setPortalPos(int y, int x) {
+        portalPosition = new Position(y, x);
     }
 
     public void setWarpPos(int row, int col) {
@@ -114,7 +138,30 @@ public class Level {
     }
 
     public void setPowerUp(boolean powerUp) {
+        if(powerUp){
+            if(ghostsInSpawn()){
+                return;
+            }
+        }
+
         this.powerUp = powerUp;
+    }
+
+    private boolean ghostsInSpawn() {
+        int count = 0;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (maze.get(y, x) instanceof Ghost ghost) {
+                    if (ghost.getOldElement().getSymbol() == 'y'){
+                        count++;
+                    }
+                }
+            }
+        }
+        if(count >= 4){
+            return true;
+        }
+        return false;
     }
 
     public boolean atePowerUp() {
@@ -123,30 +170,23 @@ public class Level {
 
 
     public Position getNeighborPosition(Position currentPosition, KEYPRESS KEYPRESS) {
-        if(currentPosition == null) {
+        if (currentPosition == null) {
             return null;
         }
-        if(KEYPRESS == null) {
+        if (KEYPRESS == null) {
             return null;
         }
+
         int newX = currentPosition.x;
         int newY = currentPosition.y;
-        switch (KEYPRESS){
-            case UP:
-                newY -= 1;
-                break;
-            case DOWN:
-                newY += 1;
-                break;
-            case LEFT:
-                newX -= 1;
-                break;
-            case RIGHT:
-                newX += 1;
-                break;
-        };
+        switch (KEYPRESS) {
+            case UP -> newY -= 1;
+            case DOWN -> newY += 1;
+            case LEFT -> newX -= 1;
+            case RIGHT -> newX += 1;
+        }
 
-        if(newX < 0 || newX >= width || newY < 0 || newY >= height) {
+        if (newX < 0 || newX >= width || newY < 0 || newY >= height) {
             return null;
         }
 
@@ -154,18 +194,18 @@ public class Level {
     }
 
     public Position getPositionOf(Element element) {
-        for(int y = 0; y < height;y++)
-            for(int x = 0;x < width; x++)
-                if (maze.get(y,x) == element)
-                    return new Position(y,x);
+        for (int y = 0; y < height; y++)
+            for (int x = 0; x < width; x++)
+                if (maze.get(y, x) == element)
+                    return new Position(y, x);
         return null;
     }
 
-    public Position getPacmanPos(){
+    public Position getPacmanPos() {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (maze.get(y, x) instanceof Pacman) {
-                    return new Position(y,x);
+                    return new Position(y, x);
                 }
             }
         }
@@ -231,23 +271,24 @@ public class Level {
         return false;
     }
 
-    public void setDirection(KEYPRESS keypress) {
+    public boolean setDirection(KEYPRESS keypress) {
 
-        Position neightbor = getNeighborPosition(getPacmanPos(),keypress);
+        Position neightbor = getNeighborPosition(getPacmanPos(), keypress);
 
         nextDirection = keypress;
 
-        if(getElement(neightbor) instanceof Wall || getElement(neightbor) instanceof Portal || getElement(neightbor) instanceof Warp){
-            return;
+        if (getElement(neightbor) instanceof Wall || getElement(neightbor) instanceof Portal || getElement(neightbor) instanceof Warp) {
+            return false;
         }
 
         this.keypress = keypress;
+        return true;
     }
 
     private void checkNextKey() {
-        Position neightbor = getNeighborPosition(getPacmanPos(),nextDirection);
+        Position neightbor = getNeighborPosition(getPacmanPos(), nextDirection);
 
-        if(!(getElement(neightbor) instanceof Wall || getElement(neightbor) instanceof Portal || getElement(neightbor) instanceof Warp)){
+        if (!(getElement(neightbor) instanceof Wall || getElement(neightbor) instanceof Portal || getElement(neightbor) instanceof Warp)) {
             keypress = nextDirection;
         }
     }
@@ -256,32 +297,33 @@ public class Level {
         return keypress;
     }
 
-    public  IMazeElement getElement(Position position){
-        if(position == null){
+    public IMazeElement getElement(Position position) {
+        if (position == null) {
             return null;
         }
 
         return maze.get(position.y, position.x);
     }
 
-    public void setElementPosition(Element element, Position nextPosition){
-        if(nextPosition == null)
+    public void setElementPosition(Element element, Position nextPosition) {
+        if (nextPosition == null)
             return;
 
         Position elementPos = getPositionOf(element);
 
-        if(element.getSymbol() == 'P'){
-            if(checkIfSamePosition(nextPosition,warpPosition.get(0))){
-                maze.set(warpPosition.get(1).y,warpPosition.get(1).x,element);
-                if(elementPos != null){
-                    maze.set(elementPos.y,elementPos.x, element.getOldElement());
+        if (element.getSymbol() == 'P') {
+
+            if (checkIfSamePosition(nextPosition, warpPosition.get(0))) {
+                maze.set(warpPosition.get(1).y, warpPosition.get(1).x, element);
+                if (elementPos != null) {
+                    maze.set(elementPos.y, elementPos.x, element.getOldElement());
                 }
                 return;
             }
-            if(checkIfSamePosition(nextPosition,warpPosition.get(1))){
-                maze.set(warpPosition.get(0).y,warpPosition.get(0).x,element);
-                if(elementPos != null){
-                    maze.set(elementPos.y,elementPos.x, element.getOldElement());
+            if (checkIfSamePosition(nextPosition, warpPosition.get(1))) {
+                maze.set(warpPosition.get(0).y, warpPosition.get(0).x, element);
+                if (elementPos != null) {
+                    maze.set(elementPos.y, elementPos.x, element.getOldElement());
                 }
                 return;
             }
@@ -289,36 +331,34 @@ public class Level {
         }
 
 
-        maze.set(nextPosition.y,nextPosition.x,element);
+        maze.set(nextPosition.y, nextPosition.x, element);
 
-        if(elementPos != null){
-            maze.set(elementPos.y,elementPos.x, element.getOldElement());
+        if (elementPos != null) {
+            maze.set(elementPos.y, elementPos.x, element.getOldElement());
         }
 
     }
 
-    private boolean checkIfSamePosition(Position pos1, Position pos2){
+    private boolean checkIfSamePosition(Position pos1, Position pos2) {
 
-        if(pos1.x == pos2.x){
-            if(pos1.y == pos2.y){
-                return true;
-            }
+        if (pos1.x == pos2.x) {
+            return pos1.y == pos2.y;
         }
         return false;
     }
 
-    public Position findCavern(){
+    public Position findCavern() {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (maze.get(y, x) instanceof Cavern) {
-                    return new Position(y,x);
+                    return new Position(y, x);
                 }
             }
         }
         return null;
     }
 
-    public boolean isPacmanAlive(){
+    public boolean isPacmanAlive() {
         return pacmanAlive;
     }
 
@@ -326,7 +366,7 @@ public class Level {
         pacmanAlive = false;
     }
 
-    public int getPoints(){
+    public int getPoints() {
         return points;
     }
 
@@ -335,24 +375,25 @@ public class Level {
     }
 
 
-    public void removeLiveElements(){
+    public void removeLiveElements() {
 
         Element oldElement;
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (maze.get(y, x) instanceof Ghost ghost) {
-                    if(ghost.getOldElement() instanceof Ghost oldGhost){
-                        oldElement = oldGhost.getOldElement();
-                        maze.set(y,x,oldElement);
-                        continue;
+
+                    Element element = ghost.getOldElement();
+                    while (element instanceof Ghost innerGhost) {
+                        element = innerGhost.getOldElement();
+                        ghost.setOldElement(element);
                     }
                     oldElement = ghost.getOldElement();
-                    maze.set(y,x,oldElement);
+                    maze.set(y, x, oldElement);
                 }
-                if(maze.get(y, x) instanceof Pacman pacman){
+                if (maze.get(y, x) instanceof Pacman pacman) {
                     oldElement = pacman.getOldElement();
-                    maze.set(y,x,oldElement);
+                    maze.set(y, x, oldElement);
                 }
             }
         }
@@ -360,7 +401,7 @@ public class Level {
     }
 
     public void setGhostsVulnerability(boolean value) {
-        if(!value){
+        if (!value) {
             ghostsEaten = 0;
         }
 
@@ -368,16 +409,20 @@ public class Level {
             for (int x = 0; x < width; x++) {
                 if (maze.get(y, x) instanceof Ghost ghost) {
                     ghost.setVulnerability(value);
-                    if(ghost.getOldElement() instanceof Ghost oldGhost){
+                    if (ghost.getOldElement() instanceof Ghost oldGhost) {
                         oldGhost.setVulnerability(value);
+                        if(value){
+                            ghostVulnerable++;
+                        }else {
+                            ghostVulnerable--;
+                        }
                     }
                 }
             }
         }
     }
 
-
-    public void respawnGhost(char type){
+    public void respawnGhost(char type) {
 
         Position cavern = findCavern();
 
@@ -388,7 +433,7 @@ public class Level {
             case 'R' -> maze.set(cavern.y, cavern.x, new Pinky(this));
         }
 
-        if(ghostsEaten <= 4){
+        if (ghostsEaten <= 4) {
             ghostsEaten++;
         }
 
@@ -396,32 +441,32 @@ public class Level {
     }
 
 
-    public void killElement (Element element){
-        if(element == null)
+    public void killElement(Element element) {
+        if (element == null)
             return;
 
         Position elementPos = getPositionOf(element);
 
-        if(elementPos != null){
-            maze.set(elementPos.y,elementPos.x, element.getOldElement());
+        if (elementPos != null) {
+            maze.set(elementPos.y, elementPos.x, element.getOldElement());
         }
 
     }
 
 
-    public Position getCorner(String corner){
-        switch (corner){
+    public Position getCorner(String corner) {
+        switch (corner) {
             case "TopLeft" -> {
-                return new Position(0,0);
+                return new Position(0, 0);
             }
             case "TopRight" -> {
-                return new Position(0,width - 1);
+                return new Position(0, width - 1);
             }
             case "BottonLeft" -> {
                 return new Position(height - 1, 0);
             }
             case "BottomRight" -> {
-                return new Position(height - 1, width -1);
+                return new Position(height - 1, width - 1);
             }
 
         }
@@ -430,6 +475,20 @@ public class Level {
 
     public int getWidth() {
         return width;
+    }
+
+    public boolean checkGhostsVulnerability() {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (maze.get(y, x) instanceof Ghost ghost) {
+                    if(ghost.isVulnerable()){
+                        return true;
+                    }
+                }
+            }
+        }
+        setPowerUp(false);
+        return false;
     }
 
     public int getDistanceBetweenPositions(Position myPos, Position targetCornerPos) {

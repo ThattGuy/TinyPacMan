@@ -18,10 +18,10 @@ public class Initial extends GameStateAdapter {
         if(keypress == KEYPRESS.ESC){
             changeState(GameState.PAUSE,this.getState());
         }else{
-            data.setDirection(keypress);
             changeState(GameState.WARMUP,this.getState());
+            return data.setDirection(keypress);
         }
-        return true;
+        return false;
     }
 
     @Override

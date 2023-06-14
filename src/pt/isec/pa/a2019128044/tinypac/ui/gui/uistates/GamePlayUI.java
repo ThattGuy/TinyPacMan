@@ -1,20 +1,14 @@
 package pt.isec.pa.a2019128044.tinypac.ui.gui.uistates;
 
-import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
-import javafx.geometry.Insets;
+import javafx.animation.AnimationTimer;
+import javafx.animation.TranslateTransition;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
+import javafx.util.Duration;
 import pt.isec.pa.a2019128044.tinypac.model.data.KEYPRESS;
 import pt.isec.pa.a2019128044.tinypac.model.fsm.GameManager;
 import pt.isec.pa.a2019128044.tinypac.model.fsm.GameState;
@@ -29,21 +23,27 @@ public class GamePlayUI extends BorderPane {
     double wallOffset = (oneBlockSize - wallSpaceWidth) / 2;
     Color wallInnerColor = Color.BLACK;
 
+    private static final double FRAME_RATE = 60.0;
+    private static final double INTERVAL = 1.0 / FRAME_RATE; // Time interval between frames
+
+    private long lastUpdateTime = 0; // Time of the last frame update
+
+    boolean start;
+
     char[][] map;
 
     public GamePlayUI(GameManager gameManager) {
         this.gameManager = gameManager;
-        map = gameManager.getMaze();
-
         registerHandlers();
         createViews();
-
+        update();
         setVisible(false);
     }
 
     private void createViews() {
         Pane level = new Pane();
 
+        map = gameManager.getMaze();
         BackgroundFill backgroundFill = new BackgroundFill(Color.BLACK, null, null);
         Background background = new Background(backgroundFill);
         level.setBackground(background);
@@ -175,9 +175,10 @@ public class GamePlayUI extends BorderPane {
                 }
 
                 if (map[i][j] == 'f') {
+                    //todo fix fruit spawn
                     ImageView imageView = new ImageView(ImageManager.getImage("fruit.png"));
-                    imageView.setFitWidth((double) oneBlockSize / 4.5);
-                    imageView.setFitHeight((double) oneBlockSize / 4.5);
+                    imageView.setFitWidth(oneBlockSize );
+                    imageView.setFitHeight(oneBlockSize);
                     imageView.setX(j * oneBlockSize + (oneBlockSize - imageView.getFitWidth()) / 2);
                     imageView.setY(i * oneBlockSize + (oneBlockSize - imageView.getFitHeight()) / 2);
                     imageView.setPreserveRatio(true);
@@ -205,7 +206,19 @@ public class GamePlayUI extends BorderPane {
 
 
     private void registerHandlers() {
-        gameManager.addPropertyChangeListener(evt -> { update(); });
+
+        gameManager.addPropertyChangeListener(evt -> {
+            if(evt.getPropertyName().equals("start")){
+                start = true;
+                return;
+            }
+
+
+
+            if(evt.getPropertyName().equals("keypress") && evt.getNewValue() != null) {
+                KEYPRESS keypress = (KEYPRESS) evt.getNewValue();
+            }
+        });
 
         this.setFocusTraversable(true);
         this.setOnKeyPressed((key) -> {
@@ -225,20 +238,38 @@ public class GamePlayUI extends BorderPane {
                 gameManager.pressKey(KEYPRESS.ESC);
             }
         });
+
+        AnimationTimer animationTimer = new AnimationTimer() {
+            @Override
+            public void handle(long currentTime) {
+                // Calculate the elapsed time since the last frame
+                double elapsedTime = (currentTime - lastUpdateTime) / 1_000_000_000.0; // Convert nanoseconds to seconds
+
+                // Check if enough time has passed to execute the method
+                if (elapsedTime >= INTERVAL) {
+                    // Call your method here
+                    if(start) {
+                        update();
+                    }
+
+                    // Update the last update time
+                    lastUpdateTime = currentTime;
+                }
+            }
+        };
+
+        // Start the animation timer
+        animationTimer.start();
     }
 
     private void update() {
-        createViews();
-
         if (gameManager.getState() == GameState.PAUSE || gameManager.getState() == GameState.GAMEOVER) {
             this.setVisible(false);
             return;
         }
 
         setVisible(true);
-
-
-
+        createViews();
     }
 
 }

@@ -10,11 +10,6 @@ public class PacmanSpawn extends Element {
     }
 
     @Override
-    public char getSymbol() {
-        return symbol;
-    }
-
-    @Override
     public Element isTraversable(char type) {
         return this;
     }

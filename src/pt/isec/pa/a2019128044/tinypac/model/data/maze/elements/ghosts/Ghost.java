@@ -120,6 +120,10 @@ public abstract class Ghost extends Element {
     protected void run() {
         int lastPos = movements.size() - 1;
 
+        if(this.oldElement.getSymbol() == 'y'){
+            isVulnerable = false;
+        }
+
         if (lastPos >= 0) {
             Element neighbor = (Element) level.getElement(movements.get(lastPos));
             if (neighbor == null) {
@@ -133,12 +137,12 @@ public abstract class Ghost extends Element {
                     if (innerGhost.isVulnerable()){
                         element = innerGhost.getOldElement();
                         this.setOldElement(element);
-                        level.respawnGhost(innerGhost.getSymbol());
+                        level.respawnGhost(innerGhost.symbol);
                     }else
                         level.killPacman();
                 }
 
-                level.respawnGhost(this.getSymbol());
+                level.respawnGhost(this.symbol);
                 level.killElement(this);
 
                 return;
@@ -174,26 +178,6 @@ public abstract class Ghost extends Element {
     protected void follow() {
 
     }
-
-    protected KEYPRESS getRandomDirection() {
-        Random random = new Random();
-        int randomIndex = random.nextInt(4);
-
-        switch (randomIndex) {
-            case 0:
-                return KEYPRESS.UP;
-            case 1:
-                return KEYPRESS.DOWN;
-            case 2:
-                return KEYPRESS.LEFT;
-            case 3:
-                return KEYPRESS.RIGHT;
-            default:
-                return KEYPRESS.UP; // Default case, can be adjusted to suit your needs
-        }
-    }
-
-
 
     protected KEYPRESS getOppositeDirection(KEYPRESS direction) {
         if (direction == KEYPRESS.UP) {

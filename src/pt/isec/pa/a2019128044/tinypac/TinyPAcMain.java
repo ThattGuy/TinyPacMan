@@ -23,7 +23,7 @@ public class TinyPAcMain {
     public static void main(String[] args) throws IOException {
 
         //gameEngine.registerClient(ev -> gameManager.evolve());
-        //TextUI ui = new TextUI(context);
+        //TextUI ui = new TextUI(new GameContext());
         //gameEngine.registerClient(ui);
 
         Application.launch(MainJFX.class,args);

@@ -2,7 +2,6 @@ package pt.isec.pa.a2019128044.tinypac.model.fsm;
 
 import pt.isec.pa.a2019128044.tinypac.model.data.GameData;
 import pt.isec.pa.a2019128044.tinypac.model.fsm.gamestates.*;
-import pt.isec.pa.a2019128044.tinypac.model.fsm.gamestates.*;
 
 public enum GameState {
     INITIAL, WARMUP, PACMAN_VULNERABLE, GHOSTS_VULNERABLE, GAMEOVER, PAUSE;

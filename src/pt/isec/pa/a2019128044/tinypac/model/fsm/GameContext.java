@@ -28,8 +28,8 @@ public class GameContext implements IGameEngineEvolve {
            gameEngine.stop();
     }
 
-    public void pressKey(KEYPRESS KEYPRESS)  {
-        state.pressKey(KEYPRESS);
+    public boolean pressKey(KEYPRESS KEYPRESS)  {
+        return state.pressKey(KEYPRESS);
     }
 
     public GameState getState() {

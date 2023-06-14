@@ -132,9 +132,11 @@ public class GameData {
         return points;
     }
 
-    public void setCurrentLevel(int currentLevel) {
-        if (currentLevel >= FIRSTLEVEL && currentLevel <= MAXLEVEL){
+    public void changeLevel() {
+        if (levelNumber >= FIRSTLEVEL && levelNumber <= MAXLEVEL){
+            levelNumber++;
             this.currentLevel.append("Level").append(currentLevel).append("." + "txt");
+
         }
     }
 
@@ -154,8 +156,8 @@ public class GameData {
         level.setPowerUp(value);
     }
 
-    public void setDirection(KEYPRESS KEYPRESS) {
-        level.setDirection(KEYPRESS);
+    public boolean setDirection(KEYPRESS KEYPRESS) {
+        return level.setDirection(KEYPRESS);
     }
 
     public void movePacman(long currentTime) {
@@ -163,15 +165,6 @@ public class GameData {
             return;
 
         points += level.getPoints();
-
-        if(!level.isPacmanAlive()){
-            if(playerLives > 0){
-                level.removeLiveElements();
-                level.spawnLiveElements();
-                playerLives--;
-            }
-            return;
-        }
 
         level.movePacman(currentTime);
     }
@@ -204,4 +197,11 @@ public class GameData {
         playerLives--;
     }
 
+    public int getBalls() {
+        return level.getBalls();
+    }
+
+    public boolean checkGhostsVulnerability() {
+        return level.checkGhostsVulnerability();
+    }
 }

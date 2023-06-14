@@ -10,11 +10,9 @@ import java.util.Random;
 
 public class Inky extends Ghost {
 
-    private List<Level.Position> corners;
+    private final List<Level.Position> corners;
     private int currentCornerIndex;
-    private int targetDistance;
-
-    private KEYPRESS lastDir;
+    private final int targetDistance;
 
     public Inky(Level level) {
         super('I', level);
@@ -36,7 +34,7 @@ public class Inky extends Ghost {
         }
 
         if (inIntersection()) {
-            direction = getDirectionTowardsCorner(level.getPositionOf(this), corners.get(currentCornerIndex));
+            direction = getDirectionTowardsCorner();
             if(!moveTowardsDirection(direction))
                 move();
 
@@ -75,33 +73,36 @@ public class Inky extends Ghost {
         direction = nextDir;
     }
 
-    private KEYPRESS getDirectionTowardsCorner(Level.Position position, Level.Position corner) {
+    private KEYPRESS getDirectionTowardsCorner() {
 
         Random random = new Random();
         int randomIndex = random.nextInt(2);
 
-        switch (currentCornerIndex){
-
-            case 0:
-                if(randomIndex == 0 ){
+        switch (currentCornerIndex) {
+            case 0 -> {
+                if (randomIndex == 0) {
                     return KEYPRESS.DOWN;
                 }
                 return KEYPRESS.RIGHT;
-            case 1:
-                if(randomIndex == 0 ){
+            }
+            case 1 -> {
+                if (randomIndex == 0) {
                     return KEYPRESS.DOWN;
                 }
                 return KEYPRESS.LEFT;
-            case 2:
-                if(randomIndex == 0 ){
+            }
+            case 2 -> {
+                if (randomIndex == 0) {
                     return KEYPRESS.UP;
                 }
                 return KEYPRESS.RIGHT;
-            case 3:
-                if(randomIndex == 0 ){
+            }
+            case 3 -> {
+                if (randomIndex == 0) {
                     return KEYPRESS.UP;
                 }
                 return KEYPRESS.LEFT;
+            }
         }
 
         return null;
@@ -114,10 +115,7 @@ public class Inky extends Ghost {
         Level.Position neighborSideTwoPos = level.getNeighborPosition(myPos, getOppositeDirection(getSideDirection(this.direction)));
         Element neighborSideTwo = (Element) level.getElement(neighborSideTwoPos);
 
-        if (neighborSideOne.isTraversable(this.getSymbol()) != null || neighborSideTwo.isTraversable(this.getSymbol()) != null) {
-            return true;
-        }
-        return false;
+        return neighborSideOne.isTraversable(this.getSymbol()) != null || neighborSideTwo.isTraversable(this.getSymbol()) != null;
     }
 
 

@@ -21,6 +21,10 @@ public class Pacman extends Element {
             return;
         }
 
+        if(neighbor.getSymbol() == 'o' || neighbor.getSymbol() == 'O'){
+            level.removeBall();
+        }
+
         Element replacementElem = null;
 
         if(neighbor instanceof Ghost ghost) {
@@ -30,13 +34,13 @@ public class Pacman extends Element {
                     if (innerGhost.isVulnerable()){
                         element = innerGhost.getOldElement();
                         ghost.setOldElement(element);
-                        level.respawnGhost(innerGhost.getSymbol());
-                    }else
+                        level.respawnGhost(innerGhost.symbol);
+                    } else
                         level.killPacman();
                 }
 
                 replacementElem = ghost.getOldElement();
-                level.respawnGhost(ghost.getSymbol());
+                level.respawnGhost(ghost.symbol);
             } else {
                 level.killPacman();
                 return;
@@ -44,7 +48,7 @@ public class Pacman extends Element {
         }
 
         if(replacementElem == null) {
-            replacementElem = neighbor.isTraversable(this.getSymbol());
+            replacementElem = neighbor.isTraversable(this.symbol);
         }
 
         if(replacementElem != null){

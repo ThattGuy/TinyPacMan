@@ -1,6 +1,5 @@
 package pt.isec.pa.a2019128044.tinypac.model.data.maze.elements;
 
-import javafx.scene.image.Image;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.IMazeElement;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.Level;
 
@@ -40,10 +39,6 @@ public abstract class Element implements IMazeElement {
 
     public void setOldElement(Element oldElement) {
         this.oldElement = oldElement;
-    }
-
-    public String getImage(){
-        return "Element";
     }
 
     @Override

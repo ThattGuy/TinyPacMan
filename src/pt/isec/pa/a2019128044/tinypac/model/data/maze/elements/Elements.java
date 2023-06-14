@@ -30,41 +30,24 @@ public enum Elements {
 
 
     public static Elements getElement(char value) {
-        switch (value) {
-            case 'x':
-                return Elements.WALL;
-            case 'W':
-                return Elements.WARP;
-            case 'o':
-                return Elements.SMALLBALL;
-            case 'F':
-                return Elements.FRUITSPAWN;
-            case 'M':
-                return Elements.PACMANSPAWN;
-            case 'O':
-                return Elements.POWERUP;
-            case 'Y':
-                return Elements.PORTAL;
-            case 'y':
-                return Elements.CAVERN;
-            case 'B':
-                return Elements.BLINKY;
-            case 'C':
-                return Elements.CLYDE;
-            case 'I':
-                return Elements.INKY;
-            case 'R':
-                return Elements.PINKY;
-            case 'P':
-                return Elements.PACMAN;
-            case ' ':
-                return Elements.EMPTY;
-            case 'v':
-                return Elements.GHOST;
-            case 'f':
-                return Elements.FRUIT;
-            default:
-                throw new IllegalArgumentException("Invalid element value: " + value);
-        }
+        return switch (value) {
+            case 'x' -> Elements.WALL;
+            case 'W' -> Elements.WARP;
+            case 'o' -> Elements.SMALLBALL;
+            case 'F' -> Elements.FRUITSPAWN;
+            case 'M' -> Elements.PACMANSPAWN;
+            case 'O' -> Elements.POWERUP;
+            case 'Y' -> Elements.PORTAL;
+            case 'y' -> Elements.CAVERN;
+            case 'B' -> Elements.BLINKY;
+            case 'C' -> Elements.CLYDE;
+            case 'I' -> Elements.INKY;
+            case 'R' -> Elements.PINKY;
+            case 'P' -> Elements.PACMAN;
+            case ' ' -> Elements.EMPTY;
+            case 'v' -> Elements.GHOST;
+            case 'f' -> Elements.FRUIT;
+            default -> throw new IllegalArgumentException("Invalid element value: " + value);
+        };
     }
 }

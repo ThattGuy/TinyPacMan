@@ -10,6 +10,7 @@ public class GhostsVulnerable extends GameStateAdapter {
     public GhostsVulnerable(GameContext context, GameData data) {
         super(context, data);
         data.setGhostsVulnerability(true);
+        System.out.println("ghostVulnerable");
     }
 
     @Override
@@ -17,6 +18,11 @@ public class GhostsVulnerable extends GameStateAdapter {
         if(stateTimer == 0){
             stateTimer = currentTime;
         }
+
+        /*if(data.getBalls() == 0){
+            data.changeLevel();
+            changeState(GameState.INITIAL,this.getState());
+        }*/
 
         if(!data.isPacmanAlive()){
             if(data.getLives() == 0){
@@ -33,6 +39,11 @@ public class GhostsVulnerable extends GameStateAdapter {
                 data.setGhostsVulnerability(false);
                 changeState(GameState.PACMAN_VULNERABLE,this.getState());
         }
+
+        if(!data.checkGhostsVulnerability()){
+            //todo fix eat power up whe in spawn
+            changeState(GameState.PACMAN_VULNERABLE,this.getState());
+        }
         return true;
     }
 
@@ -42,9 +53,9 @@ public class GhostsVulnerable extends GameStateAdapter {
         if(keypress == KEYPRESS.ESC){
             changeState(GameState.PAUSE,this.getState());
         }else{
-            data.setDirection(keypress);
+            return data.setDirection(keypress);
         }
-        return true;
+        return false;
     }
     @Override
     public GameState getState() {

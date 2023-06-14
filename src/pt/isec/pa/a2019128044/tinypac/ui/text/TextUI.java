@@ -41,37 +41,28 @@ public class TextUI implements IGameEngineEvolve {
 
                 Elements elements = Elements.getElement(level[y][x]);
                 TextColor tc = switch (elements) {
-                    case WALL -> TextColor.ANSI.BLUE;
+                    case WALL, PACMANSPAWN, CAVERN -> TextColor.ANSI.BLUE;
                     case WARP -> TextColor.ANSI.GREEN;
-                    case SMALLBALL -> TextColor.ANSI.YELLOW;
-                    case FRUITSPAWN -> TextColor.ANSI.RED;
-                    case PACMANSPAWN -> TextColor.ANSI.BLUE;
+                    case SMALLBALL, PACMAN -> TextColor.ANSI.YELLOW;
+                    case FRUITSPAWN, CLYDE -> TextColor.ANSI.RED;
                     case POWERUP -> TextColor.ANSI.YELLOW_BRIGHT;
                     case PORTAL -> TextColor.ANSI.BLUE_BRIGHT;
-                    case CAVERN -> TextColor.ANSI.BLUE;
                     case BLINKY -> TextColor.ANSI.RED_BRIGHT;
-                    case CLYDE -> TextColor.ANSI.RED;
                     case INKY -> TextColor.ANSI.CYAN;
                     case PINKY -> TextColor.ANSI.MAGENTA;
-                    case PACMAN -> TextColor.ANSI.YELLOW;
                     case EMPTY -> TextColor.ANSI.BLACK;
                     default -> TextColor.ANSI.WHITE_BRIGHT;
                 };
                 TextColor bc = switch (elements) {
                     case WALL -> TextColor.ANSI.BLUE;
                     case WARP -> TextColor.ANSI.GREEN;
-                    case SMALLBALL -> TextColor.ANSI.BLACK;
-                    case FRUITSPAWN -> TextColor.ANSI.RED;
-                    case PACMANSPAWN -> TextColor.ANSI.BLACK;
-                    case POWERUP -> TextColor.ANSI.BLACK;
+                    case SMALLBALL, PACMANSPAWN, POWERUP, CAVERN, EMPTY -> TextColor.ANSI.BLACK;
+                    case FRUITSPAWN, BLINKY -> TextColor.ANSI.RED;
                     case PORTAL -> TextColor.ANSI.BLUE_BRIGHT;
-                    case CAVERN -> TextColor.ANSI.BLACK;
-                    case BLINKY -> TextColor.ANSI.RED;
                     case CLYDE -> TextColor.ANSI.RED_BRIGHT;
                     case INKY -> TextColor.ANSI.CYAN_BRIGHT;
                     case PINKY -> TextColor.ANSI.MAGENTA_BRIGHT;
                     case PACMAN -> TextColor.ANSI.YELLOW_BRIGHT;
-                    case EMPTY -> TextColor.ANSI.BLACK;
                     default -> TextColor.ANSI.WHITE_BRIGHT;
                 };
                 screen.setCharacter(x, y, TextCharacter.fromCharacter(level[y][x], tc, bc)[0]);
@@ -82,7 +73,7 @@ public class TextUI implements IGameEngineEvolve {
 
     @Override
     public void evolve(IGameEngine gameEngine, long currentTime) {
-        System.out.printf("*Tick*\n");
+        System.out.println("*Tick*");
 
         try {
             show();
