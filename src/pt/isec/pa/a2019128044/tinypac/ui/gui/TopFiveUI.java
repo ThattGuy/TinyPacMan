@@ -1,4 +1,4 @@
-package pt.isec.pa.a2019128044.tinypac.ui.gui.uistates;
+package pt.isec.pa.a2019128044.tinypac.ui.gui;
 
 import javafx.scene.layout.BorderPane;
 import pt.isec.pa.a2019128044.tinypac.model.fsm.GameManager;

@@ -31,3 +31,9 @@
     -fx-scale-y: 100%;
 }
 
+.info{
+    -fx-background-color: yellow;
+    -fx-text-fill: blue;
+    -fx-font-size: 16px;
+}
+

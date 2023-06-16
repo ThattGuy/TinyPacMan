@@ -16,7 +16,7 @@ import java.util.Scanner;
 public class GameData {
     private final int FIRSTLEVEL = 1;
     private final int MAXLEVEL = 20;
-    private StringBuilder currentLevel;
+    private volatile static String currentLevel;
     private Level level;
     private int levelNumber;
     //todo change level
@@ -35,8 +35,8 @@ public class GameData {
     }};
 
     public GameData() {
-        currentLevel = new StringBuilder();
-        currentLevel.append("files/Level").append(String.format("%02d", FIRSTLEVEL)).append(".txt");
+        setLevelNumber(FIRSTLEVEL);
+        currentLevel = "files/Level" + String.format("%02d", getLevelNumber()) + ".txt";
         createLevel();
         if(level == null){
             return;
@@ -50,7 +50,7 @@ public class GameData {
         FileReader fileReader = null;
 
         try {
-            File file = new File(currentLevel.toString());
+            File file = new File(currentLevel);
             if (!file.exists()) {
                 return;
             }
@@ -69,7 +69,7 @@ public class GameData {
                 }
             }
 
-            level = new Level(numRows, numCols);
+              level = new Level(numRows, numCols);
 
             scanner.close();
             fileReader = new FileReader(file);
@@ -106,6 +106,8 @@ public class GameData {
     }
 
     private Element createElement(char symbol, int  row, int col){
+
+        //todo garantir a existencia
         Element element = null;
         Elements elements = Elements.getElement(symbol);
         switch (elements){
@@ -133,15 +135,21 @@ public class GameData {
     }
 
     public void changeLevel() {
-        if (levelNumber >= FIRSTLEVEL && levelNumber <= MAXLEVEL){
-            levelNumber++;
-            this.currentLevel.append("Level").append(currentLevel).append("." + "txt");
-
+        int currentLevelNumber = getLevelNumber();
+        if (currentLevelNumber >= FIRSTLEVEL && currentLevelNumber <= MAXLEVEL){
+            currentLevel = "files/Level" + '0' + (getLevelNumber() + 1) + ".txt";
+            setLevelNumber(currentLevelNumber + 1);
+            createLevel();
+            level.spawnLiveElements();
         }
     }
 
     public int getLevelNumber() {
         return levelNumber;
+    }
+
+    public void setLevelNumber(int newLevelNumber) {
+        levelNumber = newLevelNumber;
     }
 
     public char[][] getLevel(){
@@ -174,9 +182,7 @@ public class GameData {
             return;
 
         points = level.getPoints();
-
         level.evolveAll(currentTime);
-
     }
 
     public void setGhostsVulnerability(boolean value) {
@@ -198,7 +204,11 @@ public class GameData {
     }
 
     public int getBalls() {
-        return level.getBalls();
+        if(level != null){
+            return level.getBalls();
+        }
+
+        return -1;
     }
 
     public boolean checkGhostsVulnerability() {

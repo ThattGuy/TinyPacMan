@@ -1,14 +1,15 @@
 package pt.isec.pa.a2019128044.tinypac.ui.gui;
 
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import pt.isec.pa.a2019128044.tinypac.model.data.KEYPRESS;
 import pt.isec.pa.a2019128044.tinypac.model.fsm.GameManager;
 import pt.isec.pa.a2019128044.tinypac.ui.gui.resources.CSSManager;
 import pt.isec.pa.a2019128044.tinypac.ui.gui.resources.ImageManager;
 import pt.isec.pa.a2019128044.tinypac.ui.gui.uistates.GamePlayUI;
-import pt.isec.pa.a2019128044.tinypac.ui.gui.uistates.MainMenuUI;
 import pt.isec.pa.a2019128044.tinypac.ui.gui.uistates.PauseUI;
 
 public class RootPane extends BorderPane {
@@ -19,7 +20,6 @@ public class RootPane extends BorderPane {
 
         createViews();
         registerHandlers();
-        update();
     }
 
     private void createViews() {
@@ -56,9 +56,17 @@ public class RootPane extends BorderPane {
     }
 
     private void registerHandlers() {
+        gameManager.addPropertyChangeListener(evt -> {
+            if (evt.getPropertyName().equals("start")) {
+                update();
+            }
+        });
     }
 
     private void update() {
+        this.setRight(
+                new InfoUI(gameManager)
+        );
     }
 }
 

@@ -36,4 +36,11 @@ public class GameContext implements IGameEngineEvolve {
         return state.getState();
     }
 
+    public int getLives() {
+        return data.getLives();
+    }
+
+    public int getPoints() {
+        return data.getPoints();
+    }
 }

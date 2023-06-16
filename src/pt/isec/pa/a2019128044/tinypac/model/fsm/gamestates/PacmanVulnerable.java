@@ -18,15 +18,25 @@ public class PacmanVulnerable  extends GameStateAdapter {
         if(!data.isPacmanAlive()){
             if(data.getLives() <= 0){
                 changeState(GameState.GAMEOVER,this.getState());
+                return true;
             }
             data.restartLevel();
             changeState(GameState.WARMUP,this.getState());
+            return true;
         }
 
         data.evolveAll(currentTime);
         if (data.atePowerUp()){
             changeState(GameState.GHOSTS_VULNERABLE,this.getState());
+            return true;
         }
+
+        /*if(data.getBalls() <= 280 && data.getBalls() != -1){
+            //todo perguntar ao professor
+            data.changeLevel();
+            changeState(GameState.INITIAL,this.getState());
+            return true;
+        }*/
 
         return true;
     }

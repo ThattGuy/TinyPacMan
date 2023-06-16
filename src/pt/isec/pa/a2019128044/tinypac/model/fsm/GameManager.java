@@ -15,7 +15,6 @@ public class GameManager {
         fsm = new GameContext();
         gameEngine.registerClient(fsm);
         gameEngine.registerClient((g,t) -> this.evolve(t));
-
     }
 
     /***
@@ -54,5 +53,13 @@ public class GameManager {
             return fsm.getLevel();
         }
         return null;
+    }
+
+    public int getLives() {
+        return fsm.getLives();
+    }
+
+    public int getPoints() {
+        return fsm.getPoints();
     }
 }
