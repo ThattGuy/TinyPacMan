@@ -5,7 +5,7 @@ import pt.isec.pa.a2019128044.tinypac.gameengine.IGameEngineEvolve;
 import pt.isec.pa.a2019128044.tinypac.model.data.KEYPRESS;
 import pt.isec.pa.a2019128044.tinypac.model.data.GameData;
 
-public class GameContext implements IGameEngineEvolve {
+public class GameContext{
     private GameData data;
     private IGameState state;
 
@@ -22,10 +22,9 @@ public class GameContext implements IGameEngineEvolve {
         this.state = newState;
     }
 
-    @Override
-    public void evolve(IGameEngine gameEngine, long currentTime) {
-        if(!state.evolve(currentTime))
-           gameEngine.stop();
+
+    public void evolve(long currentTime) {
+        state.evolve(currentTime);
     }
 
     public boolean pressKey(KEYPRESS KEYPRESS)  {

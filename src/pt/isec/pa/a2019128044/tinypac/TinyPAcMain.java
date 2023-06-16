@@ -18,7 +18,7 @@ public class TinyPAcMain {
     static {
         gameEngine = new GameEngine();
         gameManager = new GameManager(gameEngine);
-        gameEngine.start(200);
+        gameEngine.start(2000);
     }
     public static void main(String[] args) throws IOException {
 

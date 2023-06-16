@@ -14,7 +14,7 @@ public class PacmanVulnerable  extends GameStateAdapter {
 
     @Override
     public boolean evolve(long currentTime) {
-
+        System.out.println("entrei");
         if(!data.isPacmanAlive()){
             if(data.getLives() <= 0){
                 changeState(GameState.GAMEOVER,this.getState());
@@ -31,13 +31,14 @@ public class PacmanVulnerable  extends GameStateAdapter {
             return true;
         }
 
-        /*if(data.getBalls() <= 280 && data.getBalls() != -1){
+        if(data.getBalls() <= 280 && data.getBalls() != -1){
             //todo perguntar ao professor
             data.changeLevel();
             changeState(GameState.INITIAL,this.getState());
+            System.out.println("saiu");
             return true;
-        }*/
-
+        }
+        System.out.println(".");
         return true;
     }
 

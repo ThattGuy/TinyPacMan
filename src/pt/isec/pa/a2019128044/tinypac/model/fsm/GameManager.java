@@ -1,29 +1,22 @@
 package pt.isec.pa.a2019128044.tinypac.model.fsm;
 
 import pt.isec.pa.a2019128044.tinypac.gameengine.IGameEngine;
+import pt.isec.pa.a2019128044.tinypac.gameengine.IGameEngineEvolve;
 import pt.isec.pa.a2019128044.tinypac.model.data.KEYPRESS;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-public class GameManager {
+public class GameManager implements IGameEngineEvolve {
 
     private GameContext fsm;
     private PropertyChangeSupport pcs;
     public GameManager(IGameEngine gameEngine) {
         pcs = new PropertyChangeSupport(this);
         fsm = new GameContext();
-        gameEngine.registerClient(fsm);
-        gameEngine.registerClient((g,t) -> this.evolve(t));
+        //gameEngine.registerClient(fsm);
+        gameEngine.registerClient(this);
     }
-
-    /***
-     *
-     * PCS -> Retorna eventos ao listener
-     * Nome do evento
-     * Valor antigo
-     * Valor novo
-     */
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         pcs.addPropertyChangeListener(listener);
@@ -44,8 +37,11 @@ public class GameManager {
         return fsm.getState();
     }
 
-    public void evolve(long time) {
-        pcs.firePropertyChange("evolve", null, time);
+    @Override
+    public void evolve(IGameEngine engine,long currentTime) {
+        System.out.print("#");
+        fsm.evolve(currentTime);
+        pcs.firePropertyChange("evolve", null, null);
     }
 
     public char[][] getMaze(){

@@ -217,7 +217,7 @@ public class GamePlayUI extends BorderPane {
 
 
     private void registerHandlers() {
-
+        // gameManager.addPropertyChangeListener("evolve", ....);
         gameManager.addPropertyChangeListener(evt -> {
             if (evt.getPropertyName().equals("evolve") && start) {
                 Platform.runLater(this::update);
@@ -254,7 +254,8 @@ public class GamePlayUI extends BorderPane {
         });
 
 
-        AnimationTimer animationTimer = new AnimationTimer() {
+        //todo perguntar ao professor se posso usar
+        /*AnimationTimer animationTimer = new AnimationTimer() {
             @Override
             public void handle(long currentTime) {
                 double elapsedTime = (currentTime - lastUpdateTime) / 1_000_000_000.0; // Convert nanoseconds to seconds
@@ -268,8 +269,7 @@ public class GamePlayUI extends BorderPane {
             }
         };
 
-        // Start the animation timer
-        animationTimer.start();
+        animationTimer.start();*/
     }
 
     private void update() {
@@ -281,6 +281,7 @@ public class GamePlayUI extends BorderPane {
             //todo fix this
             createViews();
         }
+
         setVisible(true);
 
         map = gameManager.getMaze();
