@@ -144,6 +144,10 @@ public class GamePlayUI extends BorderPane {
                     mapView.add(imageView);
                     level.getChildren().add(mapView.get(map[0].length * i + j));
                 }
+                if (map[i][j] == 'F') {
+                    mapView.add(new ImageView());
+                    level.getChildren().add(mapView.get(map[0].length * i + j));
+                }
 
                 if (map[i][j] == 'P') {
                     String pacmanPic = getPacmanDirImageName(i,j);
@@ -250,27 +254,22 @@ public class GamePlayUI extends BorderPane {
         });
 
 
-        /*AnimationTimer animationTimer = new AnimationTimer() {
+        AnimationTimer animationTimer = new AnimationTimer() {
             @Override
             public void handle(long currentTime) {
-                // Calculate the elapsed time since the last frame
                 double elapsedTime = (currentTime - lastUpdateTime) / 1_000_000_000.0; // Convert nanoseconds to seconds
 
-                // Check if enough time has passed to execute the method
                 if (elapsedTime >= INTERVAL) {
-                    // Call your method here
                     if(start) {
                         update();
                     }
-
-                    // Update the last update time
                     lastUpdateTime = currentTime;
                 }
             }
         };
 
         // Start the animation timer
-        animationTimer.start();*/
+        animationTimer.start();
     }
 
     private void update() {
@@ -303,6 +302,7 @@ public class GamePlayUI extends BorderPane {
                     case 'I' -> setFormatedImage(image,"inky.png",j,i);
                     case 'B' -> setFormatedImage(image,"blinky.png",j,i);
                     case 'R' -> setFormatedImage(image,"pinky.png",j,i);
+                    case 'v' -> setFormatedImage(image,"blueghost.gif",j,i);
                     case 'O' -> {
                         setFormatedImage(image,"ball.png",j,i);
                         image.setFitWidth((double) oneBlockSize / 1.7);
@@ -319,12 +319,13 @@ public class GamePlayUI extends BorderPane {
                         image.setY(i * oneBlockSize + (oneBlockSize - mapView.get(rowLength * i + j).getFitHeight()) / 2);
                         image.setPreserveRatio(true);
                     }
-                    case ' ', 'M', 'y' -> mapView.get(rowLength * i + j).setImage(null);
+                    case ' ', 'M', 'y', 'F'-> mapView.get(rowLength * i + j).setImage(null);
+                    case 'f' -> setFormatedImage(image,"fruit.png",j,i);
 
                 }
             }
         }
-        
+
     }
 
 

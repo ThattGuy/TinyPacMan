@@ -35,6 +35,7 @@ public class InfoUI extends VBox{
         lbOut.setAlignment(Pos.CENTER);
         lbOut.setMinWidth(100);
 
+
         vb = new VBox();
         vb.setAlignment(Pos.CENTER);
 
@@ -46,7 +47,7 @@ public class InfoUI extends VBox{
     }
 
     private void update() {
-        if(gameManager.getState() == GameState.PAUSE || gameManager.getState() == GameState.GAMEOVER){
+        if (gameManager.getState() == GameState.PAUSE || gameManager.getState() == GameState.GAMEOVER) {
             setVisible(false);
             return;
         }
@@ -57,8 +58,6 @@ public class InfoUI extends VBox{
         hb.setPadding(new Insets(5));
 
         int lives = gameManager.getLives();
-
-
         for (int i = 0; i < lives; i++) {
             ImageView imageView = new ImageView(ImageManager.getImage("heart.png"));
             imageView.setFitHeight(25);
@@ -68,6 +67,11 @@ public class InfoUI extends VBox{
 
         vb.getChildren().clear();
         vb.getChildren().add(hb);
+
+        int points = gameManager.getPoints();
+        Label pointsLabel = new Label("Points: " + points);
+        pointsLabel.setTextFill(Color.YELLOW);
+        vb.getChildren().add(pointsLabel);
     }
 
 }

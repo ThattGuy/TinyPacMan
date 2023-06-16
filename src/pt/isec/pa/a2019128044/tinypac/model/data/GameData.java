@@ -172,7 +172,7 @@ public class GameData {
         if(level == null)
             return;
 
-        points += level.getPoints();
+        points = level.getPoints();
 
         level.movePacman(currentTime);
     }
