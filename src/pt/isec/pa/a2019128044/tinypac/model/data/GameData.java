@@ -140,6 +140,7 @@ public class GameData {
             currentLevel = "files/Level" + '0' + (getLevelNumber() + 1) + ".txt";
             setLevelNumber(currentLevelNumber + 1);
             createLevel();
+            //todo if cant cahnge keep the same level
             level.spawnLiveElements();
         }
     }
@@ -172,6 +173,7 @@ public class GameData {
         if(level == null)
             return;
 
+        //todo fix points
         points = level.getPoints();
 
         level.movePacman(currentTime);

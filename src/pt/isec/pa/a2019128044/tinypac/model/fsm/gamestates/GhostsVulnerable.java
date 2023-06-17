@@ -18,19 +18,11 @@ public class GhostsVulnerable extends GameStateAdapter {
         if(stateTimer == 0){
             stateTimer = currentTime;
         }
-
         /*if(data.getBalls() == 0){
             data.changeLevel();
             changeState(GameState.INITIAL,this.getState());
         }*/
 
-        if(!data.isPacmanAlive()){
-            if(data.getLives() == 0){
-                changeState(GameState.GAMEOVER,this.getState());
-            }
-            data.restartLevel();
-            changeState(GameState.WARMUP,this.getState());
-        }
 
         data.evolveAll(currentTime);
 
@@ -41,9 +33,17 @@ public class GhostsVulnerable extends GameStateAdapter {
         }
 
         if(!data.checkGhostsVulnerability()){
-            //todo fix eat power up whe in spawn
             changeState(GameState.PACMAN_VULNERABLE,this.getState());
         }
+
+        if(!data.isPacmanAlive()){
+            if(data.getLives() == 0){
+                changeState(GameState.GAMEOVER,this.getState());
+            }
+            data.restartLevel();
+            changeState(GameState.WARMUP,this.getState());
+        }
+
         return true;
     }
 

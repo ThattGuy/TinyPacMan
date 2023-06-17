@@ -11,7 +11,10 @@ public class GameManager implements IGameEngineEvolve {
 
     private GameContext fsm;
     private PropertyChangeSupport pcs;
+
+    IGameEngine gameEngine;
     public GameManager(IGameEngine gameEngine) {
+        this.gameEngine = gameEngine;
         pcs = new PropertyChangeSupport(this);
         fsm = new GameContext();
         //gameEngine.registerClient(fsm);
@@ -23,6 +26,7 @@ public class GameManager implements IGameEngineEvolve {
     }
 
     public void start() {
+        gameEngine.start(200);
         pcs.firePropertyChange("start",false,true);
     }
 
@@ -38,7 +42,7 @@ public class GameManager implements IGameEngineEvolve {
     }
 
     @Override
-    public void evolve(IGameEngine engine,long currentTime) {
+    public synchronized  void evolve(IGameEngine engine,long currentTime) {
         System.out.print("#");
         fsm.evolve(currentTime);
         pcs.firePropertyChange("evolve", null, null);
