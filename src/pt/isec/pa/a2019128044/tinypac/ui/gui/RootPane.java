@@ -9,6 +9,7 @@ import pt.isec.pa.a2019128044.tinypac.model.data.KEYPRESS;
 import pt.isec.pa.a2019128044.tinypac.model.fsm.GameManager;
 import pt.isec.pa.a2019128044.tinypac.ui.gui.resources.CSSManager;
 import pt.isec.pa.a2019128044.tinypac.ui.gui.resources.ImageManager;
+import pt.isec.pa.a2019128044.tinypac.ui.gui.uistates.GameOverUI;
 import pt.isec.pa.a2019128044.tinypac.ui.gui.uistates.GamePlayUI;
 import pt.isec.pa.a2019128044.tinypac.ui.gui.uistates.PauseUI;
 
@@ -28,7 +29,8 @@ public class RootPane extends BorderPane {
         StackPane stackPane = new StackPane(
                 new MainMenuUI(gameManager),
                 new GamePlayUI(gameManager),
-                new PauseUI(gameManager)
+                new PauseUI(gameManager),
+                new GameOverUI(gameManager)
         );
         stackPane.setBackground(
                 new Background(
@@ -56,10 +58,8 @@ public class RootPane extends BorderPane {
     }
 
     private void registerHandlers() {
-        gameManager.addPropertyChangeListener(evt -> {
-            if (evt.getPropertyName().equals("start")) {
-                update();
-            }
+        gameManager.addPropertyChangeListener(GameManager.START, evt -> {
+            update();
         });
     }
 

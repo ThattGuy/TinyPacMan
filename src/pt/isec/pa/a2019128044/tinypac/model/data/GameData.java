@@ -5,23 +5,19 @@ import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.Element;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.Elements;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.*;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class GameData {
-    private final int FIRSTLEVEL = 1;
-    private final int MAXLEVEL = 20;
+public class GameData implements Serializable {
+    public final int FIRSTLEVEL = 1;
+    public final int MAXLEVEL = 20;
     private volatile static String currentLevel;
     private Level level;
     private int levelNumber;
-    //todo change level
-    int points;
-    int playerLives;
+    private int points;
+    private int playerLives;
 
     static final Map<Character, Class<? extends Element>> elements = new HashMap<>() {{
         put('y', Cavern.class);
@@ -46,13 +42,13 @@ public class GameData {
         playerLives = 3;
     }
 
-    private void createLevel() {
+    private boolean createLevel() {
         FileReader fileReader = null;
 
         try {
             File file = new File(currentLevel);
             if (!file.exists()) {
-                return;
+                return false;
             }
 
             fileReader = new FileReader(file);
@@ -103,6 +99,8 @@ public class GameData {
                 }
             }
         }
+
+        return true;
     }
 
     private Element createElement(char symbol, int  row, int col){
@@ -131,16 +129,20 @@ public class GameData {
     }
 
     public int getPoints(){
-        return points;
+        return points + level.getPoints();
     }
 
     public void changeLevel() {
+        points += level.getPoints();
         int currentLevelNumber = getLevelNumber();
         if (currentLevelNumber >= FIRSTLEVEL && currentLevelNumber <= MAXLEVEL){
             currentLevel = "files/Level" + '0' + (getLevelNumber() + 1) + ".txt";
             setLevelNumber(currentLevelNumber + 1);
-            createLevel();
-            //todo if cant cahnge keep the same level
+            if(!createLevel()){
+                currentLevel = "files/Level" + '0' + (getLevelNumber() - 1) + ".txt";
+                setLevelNumber(currentLevelNumber - 1);
+                createLevel();
+            }
             level.spawnLiveElements();
         }
     }
@@ -173,9 +175,6 @@ public class GameData {
         if(level == null)
             return;
 
-        //todo fix points
-        points = level.getPoints();
-
         level.movePacman(currentTime);
     }
 
@@ -183,7 +182,6 @@ public class GameData {
         if(level == null)
             return;
 
-        points = level.getPoints();
         level.evolveAll(currentTime);
     }
 

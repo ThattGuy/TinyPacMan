@@ -48,7 +48,7 @@ public class MainJFX extends Application {
 
         stage.setScene(scene);
         stage.setTitle("Tiny Pacman");
-        stage.setMinWidth(1000);
+        stage.setMinWidth(800);
         stage.setMinHeight(670);
         Image icon = new Image("pt/isec/pa/a2019128044/tinypac/ui/gui/resources/images/PacmanIcon.png");
         stage.getIcons().add(icon);

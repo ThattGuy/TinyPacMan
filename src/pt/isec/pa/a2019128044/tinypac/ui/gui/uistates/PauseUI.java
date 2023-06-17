@@ -84,10 +84,9 @@ public class PauseUI extends BorderPane {
             this.setVisible(false);
         });
         btnSave.setOnAction(event -> {
-            this.setVisible(false);
+            gameManager.serialize();
         });
         btnExit.setOnAction(event -> {
-            //todo voltar menu
             System.exit(0);
         });
 

@@ -5,13 +5,23 @@ import pt.isec.pa.a2019128044.tinypac.gameengine.IGameEngineEvolve;
 import pt.isec.pa.a2019128044.tinypac.model.data.KEYPRESS;
 import pt.isec.pa.a2019128044.tinypac.model.data.GameData;
 
-public class GameContext{
-    private GameData data;
-    private IGameState state;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
+
+public class GameContext implements Serializable {
+    private final GameData data;
+    private transient IGameState state;
 
     public GameContext() {
         data = new GameData();
         state = GameState.INITIAL.createState(this, data, null);
+    }
+
+    private void readObject(ObjectInputStream in)
+            throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        state = GameState.PACMAN_VULNERABLE.createState(this, data, null);
     }
 
     public char[][] getLevel(){
@@ -23,8 +33,8 @@ public class GameContext{
     }
 
 
-    public void evolve(long currentTime) {
-        state.evolve(currentTime);
+    public boolean evolve(long currentTime) {
+        return state.evolve(currentTime);
     }
 
     public boolean pressKey(KEYPRESS KEYPRESS)  {

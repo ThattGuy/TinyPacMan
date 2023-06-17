@@ -6,7 +6,9 @@ import pt.isec.pa.a2019128044.tinypac.model.fsm.GameContext;
 import pt.isec.pa.a2019128044.tinypac.model.fsm.GameState;
 import pt.isec.pa.a2019128044.tinypac.model.fsm.GameStateAdapter;
 
-public class Warmup  extends GameStateAdapter {
+import java.io.Serializable;
+
+public class Warmup  extends GameStateAdapter implements Serializable {
 
     public Warmup(GameContext context, GameData data) {
         super(context, data);
@@ -18,6 +20,11 @@ public class Warmup  extends GameStateAdapter {
 
         if(stateTimer == 0){
             stateTimer = currentTime;
+        }
+
+        if(data.getLevelNumber() == data.MAXLEVEL){
+            changeState(GameState.GAMEOVER,this.getState());
+            return true;
         }
         
         long warmUpTime = 5000000000L; // 5 segundos

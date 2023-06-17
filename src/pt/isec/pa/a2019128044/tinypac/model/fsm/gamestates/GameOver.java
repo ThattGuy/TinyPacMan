@@ -5,10 +5,11 @@ import pt.isec.pa.a2019128044.tinypac.model.fsm.GameContext;
 import pt.isec.pa.a2019128044.tinypac.model.fsm.GameState;
 import pt.isec.pa.a2019128044.tinypac.model.fsm.GameStateAdapter;
 
-public class GameOver extends GameStateAdapter{
+import java.io.Serializable;
+
+public class GameOver extends GameStateAdapter implements Serializable {
     public GameOver(GameContext context, GameData data) {
         super(context, data);
-        System.exit(0);
     }
 
     @Override

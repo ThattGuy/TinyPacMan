@@ -6,7 +6,9 @@ import pt.isec.pa.a2019128044.tinypac.model.fsm.GameContext;
 import pt.isec.pa.a2019128044.tinypac.model.fsm.GameState;
 import pt.isec.pa.a2019128044.tinypac.model.fsm.GameStateAdapter;
 
-public class Pause extends GameStateAdapter {
+import java.io.Serializable;
+
+public class Pause extends GameStateAdapter implements Serializable {
 
     GameState lastState;
 

@@ -217,21 +217,14 @@ public class GamePlayUI extends BorderPane {
 
 
     private void registerHandlers() {
-        // gameManager.addPropertyChangeListener("evolve", ....);
-        gameManager.addPropertyChangeListener(evt -> {
-            if (evt.getPropertyName().equals("evolve") && start) {
-                Platform.runLater(this::update);
-                return;
-            }
 
-            if (evt.getPropertyName().equals("start")) {
-                start = true;
-                return;
-            }
 
-            if (evt.getPropertyName().equals("keypress") && evt.getNewValue() != null) {
-                pacmanDir = (KEYPRESS) evt.getNewValue();
-            }
+        gameManager.addPropertyChangeListener(GameManager.EVOLVE, evt -> {
+            Platform.runLater(this::update);
+        });
+
+        gameManager.addPropertyChangeListener(GameManager.START, evt -> {
+            setVisible(true);
         });
 
         this.setFocusTraversable(true);
@@ -254,7 +247,6 @@ public class GamePlayUI extends BorderPane {
         });
 
 
-        //todo perguntar ao professor se posso usar
         /*AnimationTimer animationTimer = new AnimationTimer() {
             @Override
             public void handle(long currentTime) {
@@ -277,7 +269,7 @@ public class GamePlayUI extends BorderPane {
             this.setVisible(false);
             return;
         }
-        if(gameManager.getState() == GameState.INITIAL && start){
+        if(gameManager.getState() == GameState.INITIAL){
             //todo fix this
             createViews();
         }
@@ -326,7 +318,6 @@ public class GamePlayUI extends BorderPane {
                 }
             }
         }
-
     }
 
 

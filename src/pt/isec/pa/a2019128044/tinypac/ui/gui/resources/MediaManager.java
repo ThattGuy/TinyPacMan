@@ -1,2 +1,42 @@
-package pt.isec.pa.a2019128044.tinypac.ui.gui.resources;public class MediaManager {
+package pt.isec.pa.a2019128044.tinypac.ui.gui.resources;
+
+import javafx.scene.media.Media;
+
+import java.io.InputStream;
+import java.util.HashMap;
+
+public class MediaManager {
+    /*private MediaManager() { }
+
+    private static final HashMap<String, Media> mediaFiles = new HashMap<>();
+
+    public static Media getMedia(String filename) {
+        Media media = mediaFiles.get(filename);
+        if (media == null) {
+            try (InputStream is = MediaManager.class.getResourceAsStream("media/" + filename)) {
+                media = new Media(is);
+                mediaFiles.put(filename, media);
+            } catch (Exception e) {
+                return null;
+            }
+        }
+        return media;
+    }
+
+    public static Media getExternalMedia(String filename) {
+        Media media = mediaFiles.get(filename);
+        if (media == null) {
+            try {
+                media = new Media(filename);
+                mediaFiles.put(filename, media);
+            } catch (Exception e) {
+                return null;
+            }
+        }
+        return media;
+    }
+
+    public static void purgeMedia(String filename) {
+        mediaFiles.remove(filename);
+    }*/
 }

@@ -6,7 +6,9 @@ import pt.isec.pa.a2019128044.tinypac.model.fsm.GameContext;
 import pt.isec.pa.a2019128044.tinypac.model.fsm.GameState;
 import pt.isec.pa.a2019128044.tinypac.model.fsm.GameStateAdapter;
 
-public class PacmanVulnerable  extends GameStateAdapter {
+import java.io.Serializable;
+
+public class PacmanVulnerable  extends GameStateAdapter implements Serializable {
     int simultaneio = 0;
     public PacmanVulnerable(GameContext context, GameData data) {
         super(context, data);
@@ -15,7 +17,6 @@ public class PacmanVulnerable  extends GameStateAdapter {
 
     @Override
     public  boolean evolve(long currentTime) {
-        System.out.println("entrei");
         ++simultaneio;
         if (simultaneio>1)
             System.out.printf("SIMULTANEIO %d\n", simultaneio);
@@ -23,13 +24,11 @@ public class PacmanVulnerable  extends GameStateAdapter {
         if(!data.isPacmanAlive()){
             if(data.getLives() <= 0){
                 changeState(GameState.GAMEOVER,this.getState());
-                System.out.println("saiu is dead");
                 --simultaneio;
                 return true;
             }
             data.restartLevel();
             changeState(GameState.WARMUP,this.getState());
-            System.out.println("saiu restart level");
             --simultaneio;
             return true;
         }
@@ -37,21 +36,19 @@ public class PacmanVulnerable  extends GameStateAdapter {
         data.evolveAll(currentTime);
         if (data.atePowerUp()){
             changeState(GameState.GHOSTS_VULNERABLE,this.getState());
-            System.out.println("saiu para power up");
             --simultaneio;
             return true;
         }
 
-        if(data.getBalls() <= 0 && data.getBalls() != -1){
+        if(data.getBalls() <= 280 && data.getBalls() != -1){
             //todo perguntar ao professor
             data.changeLevel();
             changeState(GameState.INITIAL,this.getState());
-            System.out.println("saiu mudou nivel");
+
             --simultaneio;
             return true;
         }
 
-        System.out.println(".");
         --simultaneio;
         return true;
     }

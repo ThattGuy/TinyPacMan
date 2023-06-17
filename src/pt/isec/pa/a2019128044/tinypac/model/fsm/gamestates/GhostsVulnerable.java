@@ -6,7 +6,9 @@ import pt.isec.pa.a2019128044.tinypac.model.fsm.GameContext;
 import pt.isec.pa.a2019128044.tinypac.model.fsm.GameState;
 import pt.isec.pa.a2019128044.tinypac.model.fsm.GameStateAdapter;
 
-public class GhostsVulnerable extends GameStateAdapter {
+import java.io.Serializable;
+
+public class GhostsVulnerable extends GameStateAdapter implements Serializable {
     public GhostsVulnerable(GameContext context, GameData data) {
         super(context, data);
         data.setGhostsVulnerability(true);
@@ -18,10 +20,16 @@ public class GhostsVulnerable extends GameStateAdapter {
         if(stateTimer == 0){
             stateTimer = currentTime;
         }
-        /*if(data.getBalls() == 0){
-            data.changeLevel();
-            changeState(GameState.INITIAL,this.getState());
-        }*/
+
+        if(!data.isPacmanAlive()){
+            if(data.getLives() == 0){
+                changeState(GameState.GAMEOVER,this.getState());
+                return true;
+            }
+            data.restartLevel();
+            changeState(GameState.WARMUP,this.getState());
+            return true;
+        }
 
 
         data.evolveAll(currentTime);
@@ -36,12 +44,12 @@ public class GhostsVulnerable extends GameStateAdapter {
             changeState(GameState.PACMAN_VULNERABLE,this.getState());
         }
 
-        if(!data.isPacmanAlive()){
-            if(data.getLives() == 0){
-                changeState(GameState.GAMEOVER,this.getState());
-            }
-            data.restartLevel();
-            changeState(GameState.WARMUP,this.getState());
+
+        if(data.getBalls() <= 0 && data.getBalls() != -1){
+            data.changeLevel();
+            changeState(GameState.INITIAL,this.getState());
+
+            return true;
         }
 
         return true;

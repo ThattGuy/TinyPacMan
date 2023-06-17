@@ -3,7 +3,9 @@ package pt.isec.pa.a2019128044.tinypac.model.data.maze.elements;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.IMazeElement;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.Level;
 
-public abstract class Element implements IMazeElement {
+import java.io.Serializable;
+
+public abstract class Element implements IMazeElement, Serializable {
 
     protected final char symbol;
     protected Level level;

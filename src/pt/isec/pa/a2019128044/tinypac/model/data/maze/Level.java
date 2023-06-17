@@ -7,10 +7,11 @@ import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.Pacman;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.ghosts.*;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.inanimateelements.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Level {
+public class Level implements Serializable {
     private final int height, width;
     private final Maze maze;
     private KEYPRESS keypress;
@@ -23,7 +24,7 @@ public class Level {
     int ghostsEaten;
     int balls;
     int ghostVulnerable;
-    public record Position(int y, int x) {
+    public record Position(int y, int x) implements Serializable {
     }
 
     public Level(int height, int width) {

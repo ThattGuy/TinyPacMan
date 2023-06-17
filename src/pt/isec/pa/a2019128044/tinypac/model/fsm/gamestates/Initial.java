@@ -6,7 +6,9 @@ import pt.isec.pa.a2019128044.tinypac.model.fsm.GameContext;
 import pt.isec.pa.a2019128044.tinypac.model.fsm.GameState;
 import pt.isec.pa.a2019128044.tinypac.model.fsm.GameStateAdapter;
 
-public class Initial extends GameStateAdapter {
+import java.io.Serializable;
+
+public class Initial extends GameStateAdapter implements Serializable {
     public Initial(GameContext context, GameData data) {
         super(context, data);
         System.out.println("Initial State");
