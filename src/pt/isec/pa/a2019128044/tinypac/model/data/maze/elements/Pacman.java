@@ -11,8 +11,15 @@ public class Pacman extends Element {
         oldElement = new PacmanSpawn(level);
     }
 
+    /***
+     * move o pacman
+     * verifica se pode-se mover através do metodos tranversable da casa para que se quer mover
+     * caso encontre um fantasma e o mesmo não esteja vulnerável morre,
+     * caso esteja vulnerável o fantasma morre
+     *
+     */
     @Override
-    public void evolve(long currentTime) {
+    public void evolve() {
 
         Level.Position myPos = level.getPositionOf(this);
         Level.Position neighborPosition = level.getNeighborPosition(myPos, level.getDirection());

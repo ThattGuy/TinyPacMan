@@ -23,6 +23,11 @@ public class RootPane extends BorderPane {
         registerHandlers();
     }
 
+    /**
+     * cria todos os panes necessários
+     * carrega o ficheiro css
+     * cria o backgroud
+     */
     private void createViews() {
         CSSManager.applyCSS(this,"styles.css");
 
@@ -58,12 +63,18 @@ public class RootPane extends BorderPane {
         this.setCenter(stackPane);
     }
 
+    /**
+     * regista o handler START
+     */
     private void registerHandlers() {
         gameManager.addPropertyChangeListener(GameManager.START, evt -> {
             update();
         });
     }
 
+    /**
+     * assim que o evento START acontece é criado a InfoUI
+     */
     private void update() {
         this.setRight(
                 new InfoUI(gameManager)

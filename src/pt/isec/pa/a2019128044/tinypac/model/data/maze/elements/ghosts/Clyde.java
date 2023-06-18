@@ -9,6 +9,10 @@ public class Clyde extends Ghost {
         super('C', level);
     }
 
+    /**
+     * caso o pacman seja visivel chama o metodo chasepacman
+     * caso nao seja chama o metodo normalMovement
+     */
     @Override
     protected void follow() {
         if (level.isPacmanVisible(this)) {
@@ -18,6 +22,9 @@ public class Clyde extends Ghost {
         }
     }
 
+    /**
+     * caso veja o pacman move-se em diração a ele
+     */
     private void chasePacman() {
         Level.Position myPos = level.getPositionOf(this);
         Level.Position pacmanPos = level.getPacmanPos();
@@ -35,6 +42,10 @@ public class Clyde extends Ghost {
         moveTowardsDirection(this.direction);
     }
 
+    /**
+     * cada vez que encontra uma parede muda para uma direção aleatória
+     * caso nao consgiga volta para tras
+     */
     private void normalMovement() {
         KEYPRESS newDirection = null;
         if (!moveTowardsDirection(this.direction)) {
@@ -43,7 +54,7 @@ public class Clyde extends Ghost {
             if (!moveTowardsDirection(newDirection)) {
                 this.direction = getOppositeDirection(newDirection);
                 if (!moveTowardsDirection(newDirection)) {
-                    return; // Unable to move in any direction, stop moving
+                    return;
                 }
             }
 

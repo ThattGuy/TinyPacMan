@@ -12,11 +12,23 @@ public class Pause extends GameStateAdapter implements Serializable {
 
     GameState lastState;
 
+    /**
+     * contrutor Pause
+     * @param context contexto
+     * @param data dados jogo
+     * @param lastState ultimo estado
+     */
     public Pause(GameContext context, GameData data, GameState lastState) {
         super(context, data);
         this.lastState = lastState;
         System.out.println("Pause State");
     }
+
+
+    /**
+     * caso keypress seja ESC transita para o estado anterior
+     * @param keypress recla que representa a direção
+     */
     @Override
     public boolean pressKey(KEYPRESS keypress) {
         if(keypress == KEYPRESS.ESC){

@@ -28,6 +28,11 @@ public class MainJFX extends Application {
     }
 
 
+    /**
+     * Cria a cena principal
+     * @param stage recebe o stage da cena
+     * ajusta o tamanho da janela
+     */
     private void newStage(Stage stage) {
         RootPane root = new RootPane(gameManager);
 

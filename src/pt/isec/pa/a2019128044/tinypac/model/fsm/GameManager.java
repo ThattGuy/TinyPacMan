@@ -20,11 +20,19 @@ public class GameManager implements IGameEngineEvolve {
     private PropertyChangeSupport pcs;
 
     public static final String START = "_start_";
-    public static final String RESTART = "_restart_";
     public static final String HASDATA = "_hasdata_";
     public static final String EVOLVE = "_evolve_";
 
     IGameEngine gameEngine;
+
+    /**
+     * construtor do gameManager
+     * cria o contexto da fsm
+     * cria um PropertyChangeSupport
+     * regista-se como cliente do gameEngine
+     * caso exista um topFive da deserialize do mesmo
+     * @param gameEngine motor de jogo
+     */
     public GameManager(IGameEngine gameEngine) {
         this.gameEngine = gameEngine;
         pcs = new PropertyChangeSupport(this);
@@ -35,6 +43,7 @@ public class GameManager implements IGameEngineEvolve {
         }
     }
 
+
     public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
         pcs.addPropertyChangeListener(propertyName, listener);
     }
@@ -44,6 +53,10 @@ public class GameManager implements IGameEngineEvolve {
         pcs.addPropertyChangeListener(listener);
     }
 
+    /**
+     * evento start, caso exista um jogo guardado dispara a propertychange HASDATA
+     * De seguida o START
+     */
     public void start() {
         if(Files.exists(Paths.get("", "savedata"))) {
             pcs.firePropertyChange(HASDATA,null,null);
@@ -53,25 +66,45 @@ public class GameManager implements IGameEngineEvolve {
         pcs.firePropertyChange(START,null,null);
     }
 
+    /**
+     * evento para carregar dados do jogo guardado
+     */
     public void load(){
         deserialize();
         gameEngine.start(200);
     }
 
+    /**
+     * evento para recomeçar jogo
+     */
     public void restart() {
         fsm = new GameContext();
         pcs.firePropertyChange(null,null,null);
     }
 
+    /**
+     *
+     * @param keypress input do utilizador, envia para a fsm a tecla
+     */
     public void pressKey(KEYPRESS keypress) {
         fsm.pressKey(keypress);
         pcs.firePropertyChange(null,null,null);
     }
 
+    /**
+     *
+     * @return estado atual
+     */
     public GameState getState() {
         return fsm.getState();
     }
 
+    /**
+     * evolve chamado pelo game Engine que em seguida chama o evolve da fsm
+     * evento EVOLVE que com o valor do resultado da chamada do evolve da fsm
+     * @param engine motor
+     * @param currentTime tempo atual
+     */
     @Override
     public  void evolve(IGameEngine engine,long currentTime) {
         boolean res = fsm.evolve(currentTime);
@@ -103,6 +136,9 @@ public class GameManager implements IGameEngineEvolve {
         return TopFive.getTopFiveString();
     }
 
+    /**
+     * serialize dos dados de jogo
+     */
     public void serialize() {
         try(FileOutputStream outputStream = new FileOutputStream("savedata"); ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream)) {
             objectOutputStream.writeObject(fsm);
@@ -114,6 +150,9 @@ public class GameManager implements IGameEngineEvolve {
         }
     }
 
+    /**
+     * desirialize dos dados de jogo
+     */
     public void deserialize() {
         try(FileInputStream inputStream = new FileInputStream("savedata"); ObjectInputStream objectInputStream = new ObjectInputStream(inputStream)) {
             fsm = (GameContext) objectInputStream.readObject();
@@ -123,6 +162,9 @@ public class GameManager implements IGameEngineEvolve {
         }
     }
 
+    /**
+     * serialize top5
+     */
     public static void serializeTopFive() {
         try(FileOutputStream outputStream = new FileOutputStream("topFive"); ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream)) {
             objectOutputStream.writeObject(TopFive.getTopFive());
@@ -133,6 +175,9 @@ public class GameManager implements IGameEngineEvolve {
         }
     }
 
+    /**
+     * deserialize top5
+     */
     public void deserializeTopFive() {
         try(FileInputStream inputStream = new FileInputStream("topFive"); ObjectInputStream objectInputStream = new ObjectInputStream(inputStream)) {
             List<Player> players = (List<Player>) objectInputStream.readObject();

@@ -11,11 +11,17 @@ import java.io.Serializable;
 public class GameOver extends GameStateAdapter implements Serializable {
 
     boolean checked;
+
     public GameOver(GameContext context, GameData data) {
         super(context, data);
         checked = false;
     }
 
+    /**
+     *
+     * @param currentTime tempo atual
+     * @return caso o jogador esteja no top five retorna true
+     */
     @Override
     public boolean evolve(long currentTime) {
         if(TopFive.checkIfTopFive(data.getPoints()) && !checked){

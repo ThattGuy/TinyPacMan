@@ -9,6 +9,11 @@ public class Warp extends Element {
         super('W',level);
     }
 
+    /**
+     *
+     * @param type elemento que chama o metodo
+     * @return caso seja o pacman pode ser atravessado e  desaparece
+     */
     @Override
     public Element isTraversable(char type) {
 

@@ -93,16 +93,16 @@ public class Level implements Serializable {
         return maze.getMaze();
     }
 
-    public void movePacman(long currentTime) {
+    public void movePacman() {
         Position pacmanPos = getPacmanPos();
         checkNextKey();
 
         if (maze.get(pacmanPos.y(), pacmanPos.x()) instanceof Element element) {
-            element.evolve(currentTime);
+            element.evolve();
         }
     }
 
-    public void evolveAll(long currentTime) {
+    public void evolveAll() {
 
         checkNextKey();
 
@@ -111,7 +111,7 @@ public class Level implements Serializable {
                 if (maze.get(y, x) instanceof Element element) {
                     if (!element.hasEvolved()) {
                         element.setEvolved(true);
-                        element.evolve(currentTime);
+                        element.evolve();
                     }
                 }
             }
@@ -140,6 +140,7 @@ public class Level implements Serializable {
 
     public void setPowerUp(boolean powerUp) {
         if(powerUp){
+            ghostsEaten = 1;
             if(ghostsInSpawn()){
                 return;
             }
@@ -496,5 +497,9 @@ public class Level implements Serializable {
         int deltaX = Math.abs(myPos.x() - targetCornerPos.x());
         int deltaY = Math.abs(myPos.y() - targetCornerPos.y());
         return (int) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    }
+
+    private void resetGhostsEaten(){
+        ghostsEaten = 1;
     }
 }

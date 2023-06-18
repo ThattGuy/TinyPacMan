@@ -12,9 +12,14 @@ public class Warmup  extends GameStateAdapter implements Serializable {
 
     public Warmup(GameContext context, GameData data) {
         super(context, data);
-        System.out.println("Warmup State");
     }
 
+    /**
+     * evolve warmup
+     * caso o nivel seja o ultima transita para o estado gameover
+     * passado 5 segundos transita para o estado pacmanVulnerable
+     * @param currentTime hora atual
+     */
     @Override
     public boolean evolve(long currentTime) {
 
@@ -29,7 +34,7 @@ public class Warmup  extends GameStateAdapter implements Serializable {
         
         long warmUpTime = 5000000000L; // 5 segundos
 
-        data.movePacman(currentTime);
+        data.movePacman();
 
         if (currentTime - stateTimer >= warmUpTime) {
                 changeState(GameState.PACMAN_VULNERABLE,null);
@@ -38,6 +43,11 @@ public class Warmup  extends GameStateAdapter implements Serializable {
         return true;
     }
 
+    /**
+     * indica aos dados que se deve mudar de direção
+     * caso keypress seja ESC transita para o estado PAUSE passando lhe o nome do estado atual
+     * @param keypress recla que representa a direção
+     */
     @Override
     public boolean pressKey(KEYPRESS keypress) {
         if(keypress == KEYPRESS.ESC){

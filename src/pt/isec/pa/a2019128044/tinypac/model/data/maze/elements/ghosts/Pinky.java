@@ -26,6 +26,9 @@ public class Pinky extends Ghost {
         targetDistance = (int) (level.getWidth() * 0.2); // 10% of the maze width as target distance
     }
 
+    /**
+     * caso esteja num cruzamento move-se numa das direções da qual o permite ir para o canto desejado
+     */
     @Override
     protected void follow() {
         if (checkForPacman()) {
@@ -72,6 +75,10 @@ public class Pinky extends Ghost {
         direction = nextDir;
     }
 
+    /**
+     *
+     * @return posição para o canto desejado
+     */
     private KEYPRESS getDirectionTowardsCorner() {
 
         Random random = new Random();

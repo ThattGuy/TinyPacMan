@@ -21,6 +21,11 @@ public class MainMenuUI extends BorderPane {
     GameManager gameManager;
     Button btnStart, btnTop5, btnExit;
 
+    /**
+     *
+     * @param gameManager recebe o game manager de modo a poder tratar de eventos e acededer aos dados
+     *
+     */
     public MainMenuUI(GameManager gameManager) {
         this.gameManager = gameManager;
 
@@ -28,6 +33,9 @@ public class MainMenuUI extends BorderPane {
         registerHandlers();
     }
 
+    /**
+     * Cria os botões e imagens
+     */
     private void createViews() {
 
         ImageView imageView = new ImageView(ImageManager.getImage("logo.png"));
@@ -35,7 +43,7 @@ public class MainMenuUI extends BorderPane {
         imageView.setPreserveRatio(true);
 
         ImageView starV = new ImageView(ImageManager.getImage("start.png"));
-        starV.fitWidthProperty().bind(this.widthProperty().multiply(0.07));
+        starV.fitWidthProperty().bind(this.widthProperty().multiply(0.1));
         starV.setPreserveRatio(true);
 
         btnStart = new Button();
@@ -79,6 +87,9 @@ public class MainMenuUI extends BorderPane {
         this.setCenter(vbox);
     }
 
+    /**
+     * regista os handlers
+     */
     private void registerHandlers() {
 
         gameManager.addPropertyChangeListener(GameManager.HASDATA, evt -> {
@@ -98,6 +109,9 @@ public class MainMenuUI extends BorderPane {
     }
 
 
+    /**
+     * Pergunta ao utilizador se deseja carregar o jogo guardado
+     */
     private void loadGame(){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Load Game");

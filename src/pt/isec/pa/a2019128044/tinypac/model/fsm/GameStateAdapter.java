@@ -9,6 +9,11 @@ public abstract class GameStateAdapter implements IGameState {
     protected GameData data;
     protected long stateTimer = 0;
 
+    /**
+     * state adapter fsm
+     * @param context rece como parametro o contexto
+     * @param data recebe como paremetro os dodos do jogo
+     */
     protected GameStateAdapter(GameContext context, GameData data) {
         this.context = context;
         this.data = data;

@@ -9,6 +9,7 @@ public class PacmanSpawn extends Element {
         super('M',level);
     }
 
+
     @Override
     public Element isTraversable(char type) {
         return this;

@@ -15,10 +15,14 @@ public class TinyPAcMain {
     public static GameManager gameManager;
     private static IGameEngine gameEngine;
 
+    /**
+     * Cria o GameEngine e o GameManager
+     */
     static {
         gameEngine = new GameEngine();
         gameManager = new GameManager(gameEngine);
     }
+
     public static void main(String[] args) throws IOException {
 
         //gameEngine.registerClient(ev -> gameManager.evolve());
@@ -29,4 +33,5 @@ public class TinyPAcMain {
 
         gameEngine.waitForTheEnd();
     }
+
 }

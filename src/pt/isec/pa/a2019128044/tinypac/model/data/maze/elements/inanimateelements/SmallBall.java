@@ -9,6 +9,12 @@ public class SmallBall extends Element {
         super('o', level);
     }
 
+    /**
+     *
+     * @param type elemento que chama o metodo
+     * @return caso seja o pacman pode ser atravessado e  desaparece
+     * caso seja fantasma não desaparece
+     */
     @Override
     public Element isTraversable(char type) {
         if (type == 'P') {

@@ -29,17 +29,32 @@ public abstract class Ghost extends Element {
         return isVulnerable;
     }
 
+    /**
+     * guarda os movimentos
+     * @param y coordenada y
+     * @param x coordenada x
+     */
     public void addMove(int y, int x) {
         movements.add(new Level.Position(y, x));
     }
 
+    /**
+     * metodo para verificar se este elemento pode ser atravessado, uma vez que não pode caso o elemento a chamar o meto
+     * seja o pacman retorna este element
+     * @param type char do elemnto a chamar este metodo
+     * @return this element
+     */
     @Override
     public Element isTraversable(char type) {
         return this;
     }
 
+    /**
+     * evolve chamado pela maquina de estados
+     * consoante a localização e se o ghost está vulnerável é chamado o metodo para se mover adequado
+     */
     @Override
-    public void evolve(long currentTime) {
+    public void evolve() {
 
         if (inSpawn) {
             leaveCavern();
@@ -52,6 +67,12 @@ public abstract class Ghost extends Element {
             }
         }
     }
+
+    /**
+     * usado para se mover para uma determinada posição
+     * @param position posição atual do elemento
+     * @return true ou false caso tenha alcançada a posição
+     */
     protected boolean moveTo(Level.Position position) {
 
         Level.Position myPosition = level.getPositionOf(this);
@@ -99,6 +120,11 @@ public abstract class Ghost extends Element {
         }
     }
 
+    /**
+     * mover numa certa direção
+     * @param direction direção que se deseja mover
+     * @return caso o não se consiga mover mais retorna null
+     */
     protected boolean moveTowardsDirection(KEYPRESS direction) {
 
         Level.Position myPos = level.getPositionOf(this);
@@ -117,6 +143,9 @@ public abstract class Ghost extends Element {
         return false;
     }
 
+    /**
+     * reverter os movimentos quando vulneravel de modo a voltar à caverna
+     */
     protected void run() {
         int lastPos = movements.size() - 1;
 
@@ -162,6 +191,10 @@ public abstract class Ghost extends Element {
         inSpawn = true;
     }
 
+    /**
+     * verifica se o pacman está na posição da qual se vai mover
+     * @return true caso esteja
+     */
     protected boolean checkForPacman() {
         Level.Position myPos = level.getPositionOf(this);
         Level.Position neighborPosition = level.getNeighborPosition(myPos, direction);
@@ -178,6 +211,7 @@ public abstract class Ghost extends Element {
     protected void follow() {
 
     }
+
 
     protected KEYPRESS getOppositeDirection(KEYPRESS direction) {
         if (direction == KEYPRESS.UP) {

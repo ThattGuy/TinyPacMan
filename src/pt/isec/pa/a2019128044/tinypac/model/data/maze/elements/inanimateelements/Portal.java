@@ -10,6 +10,11 @@ public class Portal extends Element {
     }
 
 
+    /**
+     *
+     * @param type elemento que chama o metodo
+     * @return caso seja o pacman não pode ser atravessado
+     */
     @Override
     public Element isTraversable(char type) {
         if(type == 'P'){

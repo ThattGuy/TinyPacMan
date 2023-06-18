@@ -27,6 +27,9 @@ public class Inky extends Ghost {
         targetDistance = (int) (level.getWidth() * 0.2); // 10% of the maze width as target distance
     }
 
+    /**
+     * caso esteja num cruzamento move-se numa das direções da qual o permite ir para o canto desejado
+     */
     @Override
     protected void follow() {
         if (checkForPacman()) {
@@ -52,6 +55,9 @@ public class Inky extends Ghost {
 
 
 
+    /**
+     * caso esteja num cruzamento move-se numa das direções da qual o permite ir para o canto desejado
+     */
     private void move(){
         KEYPRESS nextDir = direction;
         if (!moveTowardsDirection(nextDir)) {
@@ -73,6 +79,10 @@ public class Inky extends Ghost {
         direction = nextDir;
     }
 
+    /**
+     *
+     * @return posição para o canto desejado
+     */
     private KEYPRESS getDirectionTowardsCorner() {
 
         Random random = new Random();

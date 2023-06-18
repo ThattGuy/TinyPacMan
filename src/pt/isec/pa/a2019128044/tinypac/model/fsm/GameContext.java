@@ -18,12 +18,19 @@ public class GameContext implements Serializable {
         state = GameState.INITIAL.createState(this, data, null);
     }
 
+    /**
+     *inicialização da variavel transient referente ao estado atual que toma o valor de pacman vulnerable
+     */
     private void readObject(ObjectInputStream in)
             throws IOException, ClassNotFoundException {
         in.defaultReadObject();
         state = GameState.PACMAN_VULNERABLE.createState(this, data, null);
     }
 
+    /**
+     *
+     * @return array de caracter que representa o maze do level
+     */
     public char[][] getLevel(){
         return data.getLevel();
     }
@@ -31,7 +38,6 @@ public class GameContext implements Serializable {
     void changeState(IGameState newState) {
         this.state = newState;
     }
-
 
     public boolean evolve(long currentTime) {
         return state.evolve(currentTime);
@@ -49,6 +55,10 @@ public class GameContext implements Serializable {
         return data.getLives();
     }
 
+    /**
+     *
+     * @return estado atual
+     */
     public int getPoints() {
         return data.getPoints();
     }

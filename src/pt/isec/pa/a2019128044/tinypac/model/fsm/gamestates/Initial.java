@@ -11,10 +11,14 @@ import java.io.Serializable;
 public class Initial extends GameStateAdapter implements Serializable {
     public Initial(GameContext context, GameData data) {
         super(context, data);
-        System.out.println("Initial State");
     }
 
-    @Override
+    /**
+     * indica aos dados que se deve mudar de direção
+     * caso keypress seja ESC transita para o estado PAUSE passando lhe o nome do estado atual
+     * caso keypress seja uma direcção valida, diz ao dados para mudar de direção e transita pora o estado warmup
+     * @param keypress recla que representa a direção
+     */    @Override
     public boolean pressKey(KEYPRESS keypress) {
 
         if(keypress == KEYPRESS.ESC){

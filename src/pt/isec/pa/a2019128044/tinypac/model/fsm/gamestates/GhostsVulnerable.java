@@ -12,9 +12,17 @@ public class GhostsVulnerable extends GameStateAdapter implements Serializable {
     public GhostsVulnerable(GameContext context, GameData data) {
         super(context, data);
         data.setGhostsVulnerability(true);
-        System.out.println("ghostVulnerable");
     }
 
+    /**
+     * Evolve ghost vulnerable
+     * verifica se o pacman já está morto caso esteja muda para o gameOver e caso tenho vidas recomeça o nivel
+     * caso passem 10 segundos transita para o estado PacmanVulnerable
+     * caso o nível ja não tenha bolas, transita de nível
+     * caso todos os fantasmas voltem ao spawn transita para o estado PacmanVulnerable
+     * @param currentTime hora atual
+     *
+     */
     @Override
     public boolean evolve(long currentTime) {
         if(stateTimer == 0){
@@ -32,7 +40,7 @@ public class GhostsVulnerable extends GameStateAdapter implements Serializable {
         }
 
 
-        data.evolveAll(currentTime);
+        data.evolveAll();
 
         if (currentTime - stateTimer >= 10000000000L) {
                 data.setPowerUp(false);
@@ -55,6 +63,11 @@ public class GhostsVulnerable extends GameStateAdapter implements Serializable {
         return true;
     }
 
+    /**
+     * indica aos dados que se deve mudar de direção
+     * caso keypress seja ESC transita para o estado PAUSE passando lhe o nome do estado atual
+     * @param keypress recla que representa a direção
+     */
     @Override
     public boolean pressKey(KEYPRESS keypress) {
 

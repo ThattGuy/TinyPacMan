@@ -19,17 +19,10 @@ public class GameData implements Serializable {
     private int points;
     private int playerLives;
 
-    static final Map<Character, Class<? extends Element>> elements = new HashMap<>() {{
-        put('y', Cavern.class);
-        put('F', FruitZone.class);
-        put('M', PacmanSpawn.class);
-        put('Y', Portal.class);
-        put('O', PowerUp.class);
-        put('o', SmallBall.class);
-        put('x', Wall.class);
-        put('W', Warp.class);
-    }};
-
+    /**
+     * Construtor dos dados
+     * inicializa o currentLevel, cria o level, adiciona os fantasmas e o pacman, inicia as vidas do jogador
+     */
     public GameData() {
         setLevelNumber(FIRSTLEVEL);
         currentLevel = "files/Level" + String.format("%02d", getLevelNumber()) + ".txt";
@@ -41,6 +34,11 @@ public class GameData implements Serializable {
         level.getLevel();
         playerLives = 3;
     }
+
+    /**
+     * le o ficheiro que contemo nivel, cria o nível com o numero de coluna e linhas necessário, preenche o level com os caracteres do ficheiro
+     * @return retorna true caso o ficheiro exista e a criação do level funcione, retorna false caso não consiga carregar o ficheiro ou não consiga criar o level
+     */
 
     private boolean createLevel() {
         FileReader fileReader = null;
@@ -103,6 +101,14 @@ public class GameData implements Serializable {
         return true;
     }
 
+    /**
+     * Cria os elementos do level
+     * @param symbol recebe o caracter
+     * @param row linha em que o elemento se encontra de modo para que a  class Level possa gravar a posição do PORTAL
+     * @param col  coluna em que o elemento se encontra de modo para que a  class Level possa gravar a posição do PORTAl
+     *             Optei por fazer assim em vez de estar a percorrer os elementos do level à procura da posição do portal de modo a os fantasmas poderem sair do spawn
+     * @return retorna o elemento
+     */
     private Element createElement(char symbol, int  row, int col){
 
         //todo garantir a existencia
@@ -128,10 +134,17 @@ public class GameData implements Serializable {
         return element;
     }
 
+    /**
+     *
+     * @return pontos do nível mais os pontos totais do jogador
+     */
     public int getPoints(){
         return points + level.getPoints();
     }
 
+    /**
+     * muda de nível, caso não consiga avançar para o nível seguinte recarrega o mesmo nível
+     */
     public void changeLevel() {
         points += level.getPoints();
         int currentLevelNumber = getLevelNumber();
@@ -147,44 +160,81 @@ public class GameData implements Serializable {
         }
     }
 
+    /**
+     *
+     * @return retorna numero do nível atual
+     */
     public int getLevelNumber() {
         return levelNumber;
     }
 
-    public void setLevelNumber(int newLevelNumber) {
+    /**
+     *
+     * @param newLevelNumber nível seguinte
+     */
+    private void setLevelNumber(int newLevelNumber) {
         levelNumber = newLevelNumber;
     }
 
+    /**
+     *
+     * @return retorna um array de caracters que representa os elemtnos do nível
+     *
+     */
     public char[][] getLevel(){
         return level.getLevel();
     }
 
+    /**
+     *
+     * @return retorna verdade caso o pacman tenha comido o powerUp
+     */
     public boolean atePowerUp(){
         return level.atePowerUp();
     }
 
+    /**
+     * muda valor do power up
+     * @param value true or false
+     *              usado pelo estado ghost caso o tempo do powerUp este torna-se false
+     */
     public void setPowerUp(boolean value){
         level.setPowerUp(value);
     }
 
+    /**
+     *
+     * @param KEYPRESS tecla que represanta a direção desejada
+     * @return retorna true caso a direção seja aceite
+     */
     public boolean setDirection(KEYPRESS KEYPRESS) {
         return level.setDirection(KEYPRESS);
     }
 
-    public void movePacman(long currentTime) {
+    /**
+     * indica ao level para mover apenas opacman
+     */
+    public void movePacman( ) {
         if(level == null)
             return;
 
-        level.movePacman(currentTime);
+        level.movePacman();
     }
 
-    public void evolveAll(long currentTime){
+    /**
+     * indica ao level que todos os elementos devem evoluir
+     */
+    public void evolveAll( ){
         if(level == null)
             return;
 
-        level.evolveAll(currentTime);
+        level.evolveAll();
     }
 
+    /**
+     *indica ao level para mudar a vulnerabilidade dos fantasmas
+     * @param value true, vulneravel ou false, não vulnerável
+     */
     public void setGhostsVulnerability(boolean value) {
         level.setGhostsVulnerability(value);
     }
@@ -207,7 +257,6 @@ public class GameData implements Serializable {
         if(level != null){
             return level.getBalls();
         }
-
         return -1;
     }
 

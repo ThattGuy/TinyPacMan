@@ -5,6 +5,7 @@ import pt.isec.pa.a2019128044.tinypac.model.data.maze.Level;
 
 import java.io.Serializable;
 
+
 public abstract class Element implements IMazeElement, Serializable {
 
     protected final char symbol;
@@ -19,7 +20,7 @@ public abstract class Element implements IMazeElement, Serializable {
         oldElement = null;
     }
 
-    public void evolve(long currentTime){
+    public void evolve(){
 
     };
 
@@ -31,6 +32,11 @@ public abstract class Element implements IMazeElement, Serializable {
         return evolved;
     }
 
+    /**
+     * este metodo permite com que outro elemento verifique se se pode mover para cima deste
+     * @param type elemento que chama o metodo
+     * @return
+     */
     public Element isTraversable(char type){
         return null;
     }

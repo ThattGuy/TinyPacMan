@@ -8,6 +8,10 @@ public class Blinky extends Ghost {
         super('B', level);
     }
 
+    /**
+     * cada vez que encontra uma parede muda para uma direção aleatória
+     * caso nao consgiga volta para tras
+     */
     @Override
     public void follow() {
 
@@ -22,7 +26,7 @@ public class Blinky extends Ghost {
             if (!moveTowardsDirection(newDirection)) {
                 this.direction = getOppositeDirection(newDirection);
                 if (!moveTowardsDirection(newDirection)) {
-                    return; // Unable to move in any direction, stop moving
+                    return;
                 }
             }
 

@@ -24,22 +24,15 @@ public class GamePlayUI extends BorderPane {
 
     GameManager gameManager;
     int oneBlockSize = 20;
-    int score = 0;
     double wallSpaceWidth = oneBlockSize / 1.4;
     double wallOffset = (oneBlockSize - wallSpaceWidth) / 2;
     Color wallInnerColor = Color.BLACK;
 
-    private static final double FRAME_RATE = 60.0;
-    private static final double INTERVAL = 1.0 / FRAME_RATE; // Time interval between frames
-
     private long lastUpdateTime = 0; // Time of the last frame update
-
-    boolean start;
     char[][] map;
     int prevPacmanRow;
     int prevPacmanCol;
     String oldPacmanDirPic;
-
     List<ImageView> mapView;
     Pane level;
     MediaPlayer mediaPlayer;
@@ -47,6 +40,12 @@ public class GamePlayUI extends BorderPane {
     MediaPlayer ghostSound;
     boolean playSound;
 
+    /**
+     *
+     * @param gameManager recebe o game manager de modo a poder tratar de eventos e acededer aos dados
+     *                    inicializa as variaveis necessárias para criar as imageView, e os sons
+     *
+     */
     public GamePlayUI(GameManager gameManager) {
         this.gameManager = gameManager;
 
@@ -64,6 +63,13 @@ public class GamePlayUI extends BorderPane {
         setVisible(false);
     }
 
+    /**
+     *Este metodo cria e formata as imagens
+     * @param name Nome da imagens
+     * @param j linha
+     * @param i coluna
+     * @return retorna a imageView formatada
+     */
     private ImageView getSizedImageView(String name, int j, int i) {
         ImageView imageView = new ImageView(ImageManager.getImage(name));
         imageView.setFitWidth(oneBlockSize);
@@ -74,6 +80,13 @@ public class GamePlayUI extends BorderPane {
         return imageView;
     }
 
+    /**
+     * Metodo usado para atualizar as imagens do array do imageView
+     * @param imageView Imagigeview da posição necessária
+     * @param name nome da imagem
+     * @param j coluna
+     * @param i linha
+     */
     private void setFormatedImage(ImageView imageView,String name, int j, int i) {
         imageView.setImage(ImageManager.getImage(name));
         imageView.setFitWidth(oneBlockSize);
@@ -83,6 +96,10 @@ public class GamePlayUI extends BorderPane {
         imageView.setPreserveRatio(true);
     }
 
+    /**
+     * Cria as view assim que a classe é criada, e quando o nível é mudado
+     * adiciona o numero de elentos necessário ao array de Imagevies
+     */
     private void createViews() {
         level = new Pane();
         map = gameManager.getMaze();
@@ -218,6 +235,10 @@ public class GamePlayUI extends BorderPane {
     }
 
 
+    /**
+     * Regista os handlers necessários
+     * existe um handler para o evolve, start, e para receber inputs das teclas de jogo
+     */
     private void registerHandlers() {
 
 
@@ -266,9 +287,15 @@ public class GamePlayUI extends BorderPane {
         animationTimer.start();*/
     }
 
+    /**
+     * atualiza os imageView de modo a aparecer a imagem que corresponde ao elemento do imaze,
+     * atualiza o audio e se o BorderPane se encontra visível
+     */
     private void update() {
         if (gameManager.getState() == GameState.PAUSE || gameManager.getState() == GameState.GAMEOVER) {
             playSound = true;
+            ghostSound.stop();
+            pacmanSound.stop();
             this.setVisible(false);
             return;
         }
@@ -341,6 +368,13 @@ public class GamePlayUI extends BorderPane {
     }
 
 
+    /**
+     *
+     * Toca o audio do pacman
+     * @param currentPacmanRow recebe a linha anterior que o pacman se encontravarecebe a linha anterior que o pacman se encontrava
+     * @param currentPacmanCol recebe a coluna anterior que o pacman se encontravarecebe a linha anterior que o pacman se encontrava
+     * @return Retorna o nome da imagem correta consoante a direção que o pacman se move
+     */
     private String getPacmanDirImageName(int currentPacmanRow, int currentPacmanCol) {
 
         if(gameManager.getState() == GameState.PACMAN_VULNERABLE || gameManager.getState() == GameState.WARMUP){

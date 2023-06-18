@@ -4,8 +4,6 @@ import pt.isec.pa.a2019128044.tinypac.model.data.maze.Level;
 import pt.isec.pa.a2019128044.tinypac.model.data.maze.elements.Element;
 
 public class FruitZone extends Element {
-
-    //TODO GARANTIR QUE APENAS EXISTE UMA ZONA DESTAS;
     boolean hasFruit;
 
     int numberOfFruits;
@@ -16,14 +14,22 @@ public class FruitZone extends Element {
         numberOfFruits = 1;
     }
 
+    /**
+     * a cada 20 pontos criar uma fruta
+     */
     @Override
-    public void evolve(long currentTime) {
+    public void evolve() {
         if(level.getPoints()%20 == 0 && !hasFruit){
             hasFruit = true;
             numberOfFruits ++;
         }
     }
 
+    /**
+     *
+     * @param type elemento que chama o metodo
+     * @return caso seja umg ghost pode ser atravessado no entando não desaparece
+     */
     @Override
     public Element isTraversable(char type) {
         if(type == 'P' && hasFruit){

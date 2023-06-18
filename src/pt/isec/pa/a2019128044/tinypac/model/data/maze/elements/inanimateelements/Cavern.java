@@ -8,6 +8,11 @@ public class Cavern extends Element {
         super('y',level);
     }
 
+    /**
+     *
+     * @param type elemento que chama o metodo
+     * @return caso seja o pacman não pode ser atravessado
+     */
     @Override
     public Element isTraversable(char type) {
 

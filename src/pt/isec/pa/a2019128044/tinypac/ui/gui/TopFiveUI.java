@@ -22,6 +22,11 @@ public class TopFiveUI extends BorderPane{
     GameManager gameManager;
 
     Button btnExit;
+
+    /**
+     * incializa o Pane
+     * @param gameManager recebe o gameManager
+     */
     public TopFiveUI(GameManager gameManager) {
         this.gameManager = gameManager;
 
@@ -30,6 +35,9 @@ public class TopFiveUI extends BorderPane{
         setVisible(false);
     }
 
+    /**
+     * regista os handlers
+     */
     private void registerHandlers() {
         gameManager.addPropertyChangeListener(GameManager.TOPFIVE, evt -> {
             update();
@@ -40,6 +48,9 @@ public class TopFiveUI extends BorderPane{
         });
     }
 
+    /**
+     * adiciona elementos à vbox de modo a mostrar o top5
+     */
     private void createViews() {
 
         BackgroundFill backgroundFill = new BackgroundFill(Color.BLACK, null, null);
@@ -77,6 +88,9 @@ public class TopFiveUI extends BorderPane{
 
     }
 
+    /**
+     * atualiza a visibilidade
+     */
     private void update() {
         setVisible(true);
     }
