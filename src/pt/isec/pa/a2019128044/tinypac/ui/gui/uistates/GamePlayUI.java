@@ -1,26 +1,22 @@
 package pt.isec.pa.a2019128044.tinypac.ui.gui.uistates;
 
-import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import pt.isec.pa.a2019128044.tinypac.model.data.KEYPRESS;
 import pt.isec.pa.a2019128044.tinypac.model.fsm.GameManager;
 import pt.isec.pa.a2019128044.tinypac.model.fsm.GameState;
 import pt.isec.pa.a2019128044.tinypac.ui.gui.resources.ImageManager;
+import pt.isec.pa.a2019128044.tinypac.ui.gui.resources.MediaManager;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,25 +36,31 @@ public class GamePlayUI extends BorderPane {
 
     boolean start;
     char[][] map;
-
-    KEYPRESS pacmanDir;
     int prevPacmanRow;
     int prevPacmanCol;
     String oldPacmanDirPic;
 
     List<ImageView> mapView;
     Pane level;
+    MediaPlayer mediaPlayer;
+    MediaPlayer pacmanSound;
+    MediaPlayer ghostSound;
+    boolean playSound;
 
     public GamePlayUI(GameManager gameManager) {
         this.gameManager = gameManager;
+
         mapView = new ArrayList<>();
         oldPacmanDirPic = "pacmanRight.gif";
         prevPacmanRow = -1;
         prevPacmanCol = -1;
         level = new Pane();
+        pacmanSound = new MediaPlayer(MediaManager.getMedia("eat.wav"));
+        ghostSound = new MediaPlayer(MediaManager.getMedia("ghostVulnerable.wav"));
         registerHandlers();
         createViews();
         update();
+        playSound = true;
         setVisible(false);
     }
 
@@ -266,12 +268,22 @@ public class GamePlayUI extends BorderPane {
 
     private void update() {
         if (gameManager.getState() == GameState.PAUSE || gameManager.getState() == GameState.GAMEOVER) {
+            playSound = true;
             this.setVisible(false);
             return;
         }
         if(gameManager.getState() == GameState.INITIAL){
+            if(playSound){
+                mediaPlayer = new MediaPlayer(MediaManager.getMedia("start.wav"));
+                mediaPlayer.play();
+                playSound = false;
+            }
             //todo fix this
             createViews();
+        }
+
+        if(gameManager.getState() != GameState.GHOSTS_VULNERABLE){
+            ghostSound.stop();
         }
 
         setVisible(true);
@@ -295,7 +307,14 @@ public class GamePlayUI extends BorderPane {
                     case 'I' -> setFormatedImage(image,"inky.png",j,i);
                     case 'B' -> setFormatedImage(image,"blinky.png",j,i);
                     case 'R' -> setFormatedImage(image,"pinky.png",j,i);
-                    case 'v' -> setFormatedImage(image,"blueghost.gif",j,i);
+                    case 'v' ->{
+                        setFormatedImage(image,"blueghost.gif",j,i);
+                        ghostSound.setOnEndOfMedia(() -> {
+                            ghostSound.seek(ghostSound.getStartTime());
+                            ghostSound.play();
+                        });
+                        ghostSound.play();
+                    }
                     case 'O' -> {
                         setFormatedImage(image,"ball.png",j,i);
                         image.setFitWidth((double) oneBlockSize / 1.7);
@@ -318,10 +337,20 @@ public class GamePlayUI extends BorderPane {
                 }
             }
         }
+
     }
 
 
     private String getPacmanDirImageName(int currentPacmanRow, int currentPacmanCol) {
+
+        if(gameManager.getState() == GameState.PACMAN_VULNERABLE || gameManager.getState() == GameState.WARMUP){
+            pacmanSound.setOnEndOfMedia(() -> {
+                pacmanSound.seek(pacmanSound.getStartTime());
+                pacmanSound.play();
+            });
+
+            pacmanSound.play();
+        }
 
         if (prevPacmanRow != -1 && prevPacmanCol != -1) {
             int rowDiff = prevPacmanRow - currentPacmanRow;

@@ -6,15 +6,15 @@ import java.io.InputStream;
 import java.util.HashMap;
 
 public class MediaManager {
-    /*private MediaManager() { }
+    private MediaManager() { }
 
     private static final HashMap<String, Media> mediaFiles = new HashMap<>();
 
     public static Media getMedia(String filename) {
         Media media = mediaFiles.get(filename);
         if (media == null) {
-            try (InputStream is = MediaManager.class.getResourceAsStream("media/" + filename)) {
-                media = new Media(is);
+            try {
+                media = new Media(MediaManager.class.getResource("media/" + filename).toString());
                 mediaFiles.put(filename, media);
             } catch (Exception e) {
                 return null;
@@ -38,5 +38,5 @@ public class MediaManager {
 
     public static void purgeMedia(String filename) {
         mediaFiles.remove(filename);
-    }*/
+    }
 }

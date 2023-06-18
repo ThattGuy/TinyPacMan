@@ -30,6 +30,9 @@ public class GameManager implements IGameEngineEvolve {
         pcs = new PropertyChangeSupport(this);
         fsm = new GameContext();
         gameEngine.registerClient(this);
+        if(Files.exists(Paths.get("", "topFive"))) {
+            deserializeTopFive();
+        }
     }
 
     public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
@@ -138,7 +141,6 @@ public class GameManager implements IGameEngineEvolve {
 
     public static final String TOPFIVE = "_topfive_";
     public void topFive(){
-        deserializeTopFive();
         pcs.firePropertyChange(TOPFIVE,null,null);
     }
 }

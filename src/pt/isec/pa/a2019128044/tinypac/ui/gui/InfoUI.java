@@ -31,15 +31,10 @@ public class InfoUI extends VBox{
         setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
         setPadding(new Insets(10));
 
-        Label lbOut = new Label("Lifes");
-        lbOut.setAlignment(Pos.CENTER);
-        lbOut.setMinWidth(100);
-
-
         vb = new VBox();
         vb.setAlignment(Pos.CENTER);
 
-        this.getChildren().addAll(lbOut, vb);
+        this.getChildren().addAll(vb);
     }
 
     private void registerHandlers() {
@@ -65,11 +60,13 @@ public class InfoUI extends VBox{
             hb.getChildren().add(imageView);
         }
 
+
         vb.getChildren().clear();
         vb.getChildren().add(hb);
 
         int points = gameManager.getPoints();
         Label pointsLabel = new Label("Points: " + points);
+        pointsLabel.getStyleClass().add("info");
         pointsLabel.setTextFill(Color.YELLOW);
         vb.getChildren().add(pointsLabel);
     }

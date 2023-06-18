@@ -76,11 +76,11 @@ public class MainMenuUI extends BorderPane {
     private void registerHandlers() {
         btnStart.setOnAction(event -> {
             gameManager.start();
+            //todo fix loadSave
             this.setVisible(false);
         });
         btnTop5.setOnAction(event -> {
             gameManager.topFive();
-            this.setVisible(false);
         });
         btnExit.setOnAction(event -> {
             System.exit(0);

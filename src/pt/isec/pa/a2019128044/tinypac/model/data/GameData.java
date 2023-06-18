@@ -39,7 +39,7 @@ public class GameData implements Serializable {
         }
         level.spawnLiveElements();
         level.getLevel();
-        playerLives = 0;
+        playerLives = 3;
     }
 
     private boolean createLevel() {

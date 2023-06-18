@@ -27,7 +27,7 @@ public class TopFive implements Serializable {
 
     public static boolean checkIfTopFive(int score) {
 
-        if(topFivePlayers.size() == 0){
+        if(topFivePlayers.size() == 0 || topFivePlayers.size() < 5){
             return true;
         }
 
@@ -48,7 +48,7 @@ public class TopFive implements Serializable {
 
         List<String> ret = new ArrayList<>();
         for (Player player: topFivePlayers) {
-            ret.add( "Player: " + player.getName() + " Score: " + player.getScore());
+            ret.add(String.format("Player: %s \nScore: %s", player.getName(), player.getScore()));
             System.out.println(player.getName() + player.getScore());
         }
         return ret;
