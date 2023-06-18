@@ -1,14 +1,20 @@
 package pt.isec.pa.a2019128044.tinypac.ui.gui;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import pt.isec.pa.a2019128044.tinypac.model.fsm.GameManager;
 import pt.isec.pa.a2019128044.tinypac.ui.gui.resources.ImageManager;
+
+import java.util.Optional;
 
 public class MainMenuUI extends BorderPane {
 
@@ -74,9 +80,13 @@ public class MainMenuUI extends BorderPane {
     }
 
     private void registerHandlers() {
+
+        gameManager.addPropertyChangeListener(GameManager.HASDATA, evt -> {
+            loadGame();
+        });
+
         btnStart.setOnAction(event -> {
             gameManager.start();
-            //todo fix loadSave
             this.setVisible(false);
         });
         btnTop5.setOnAction(event -> {
@@ -85,5 +95,17 @@ public class MainMenuUI extends BorderPane {
         btnExit.setOnAction(event -> {
             System.exit(0);
         });
+    }
+
+
+    private void loadGame(){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Load Game");
+        alert.setHeaderText("Do you wish to load the last game?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            gameManager.load();
+        }
     }
 }

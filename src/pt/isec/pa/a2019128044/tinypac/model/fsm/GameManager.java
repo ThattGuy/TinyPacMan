@@ -45,14 +45,18 @@ public class GameManager implements IGameEngineEvolve {
     }
 
     public void start() {
-        gameEngine.start(200);
         if(Files.exists(Paths.get("", "savedata"))) {
-            deserialize();
             pcs.firePropertyChange(HASDATA,null,null);
         }
+
+        gameEngine.start(200);
         pcs.firePropertyChange(START,null,null);
     }
 
+    public void load(){
+        deserialize();
+        gameEngine.start(200);
+    }
 
     public void restart() {
         fsm = new GameContext();
