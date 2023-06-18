@@ -79,6 +79,7 @@ public class MainMenuUI extends BorderPane {
             this.setVisible(false);
         });
         btnTop5.setOnAction(event -> {
+            gameManager.topFive();
             this.setVisible(false);
         });
         btnExit.setOnAction(event -> {

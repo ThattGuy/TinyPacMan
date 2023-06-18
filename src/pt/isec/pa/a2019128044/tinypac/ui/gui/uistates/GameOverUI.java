@@ -1,8 +1,10 @@
 package pt.isec.pa.a2019128044.tinypac.ui.gui.uistates;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
@@ -12,17 +14,21 @@ import pt.isec.pa.a2019128044.tinypac.model.fsm.GameManager;
 import pt.isec.pa.a2019128044.tinypac.model.fsm.GameState;
 import pt.isec.pa.a2019128044.tinypac.ui.gui.resources.ImageManager;
 
+import java.util.Optional;
+
 public class GameOverUI extends BorderPane {
 
     GameManager gameManager;
-    Button btnResume, btnSave, btnExit;
+    Button btnNewGame, btnExit;
+
+    VBox vbox;
 
     public GameOverUI(GameManager gameManager) {
         this.gameManager = gameManager;
 
         createViews();
         registerHandlers();
-        update();
+        setVisible(false);
     }
 
     private void createViews() {
@@ -30,22 +36,14 @@ public class GameOverUI extends BorderPane {
         imageView.fitWidthProperty().bind(this.widthProperty().multiply(0.3));
         imageView.setPreserveRatio(true);
 
-        ImageView newGame = new ImageView(ImageManager.getImage("resume.png"));
+        ImageView newGame = new ImageView(ImageManager.getImage("newgame.png"));
         newGame.fitWidthProperty().bind(this.widthProperty().multiply(0.1));
         newGame.setPreserveRatio(true);
 
-        btnResume = new Button();
-        btnResume.setGraphic(newGame);
-        btnResume.setMinWidth(200);
-        btnResume.setMinHeight(30);
-
-        ImageView save = new ImageView(ImageManager.getImage("save.png"));
-        save.fitWidthProperty().bind(this.widthProperty().multiply(0.06));
-        save.setPreserveRatio(true);
-        btnSave = new Button();
-        btnSave.setGraphic(save);
-        btnSave.setMinWidth(200);
-        btnSave.setMinHeight(30);
+        btnNewGame = new Button();
+        btnNewGame.setGraphic(newGame);
+        btnNewGame.setMinWidth(200);
+        btnNewGame.setMinHeight(30);
 
         ImageView exitV = new ImageView(ImageManager.getImage("exit.png"));
         exitV.fitWidthProperty().bind(this.widthProperty().multiply(0.05));
@@ -55,21 +53,18 @@ public class GameOverUI extends BorderPane {
         btnExit.setMinWidth(200);
         btnExit.setMinHeight(30);
 
-        VBox vbox = new VBox(imageView, btnResume, btnSave, btnExit);
+        vbox = new VBox(imageView, btnNewGame, btnExit);
         vbox.setAlignment(Pos.CENTER);
         vbox.setSpacing(10);
-        vbox.setMargin(btnResume, new Insets(10, 0, 0, 0));
-        vbox.setMargin(btnSave, new Insets(10, 0, 0, 0));
+        vbox.setMargin(btnNewGame, new Insets(10, 0, 0, 0));
         vbox.setMargin(btnExit, new Insets(10, 0, 0, 0));
 
         double buttonHeightPercentage = 0.05;
-        btnResume.prefHeightProperty().bind(this.heightProperty().multiply(buttonHeightPercentage));
-        btnSave.prefHeightProperty().bind(this.heightProperty().multiply(buttonHeightPercentage));
+        btnNewGame.prefHeightProperty().bind(this.heightProperty().multiply(buttonHeightPercentage));
         btnExit.prefHeightProperty().bind(this.heightProperty().multiply(buttonHeightPercentage));
 
         double buttonWidthPercentage = 0.25;
-        btnResume.minWidthProperty().bind(vbox.widthProperty().multiply(buttonWidthPercentage));
-        btnSave.minWidthProperty().bind(vbox.widthProperty().multiply(buttonWidthPercentage));
+        btnNewGame.minWidthProperty().bind(vbox.widthProperty().multiply(buttonWidthPercentage));
         btnExit.minWidthProperty().bind(vbox.widthProperty().multiply(buttonWidthPercentage));
 
         this.setCenter(vbox);
@@ -77,45 +72,38 @@ public class GameOverUI extends BorderPane {
 
     private void registerHandlers() {
 
-        gameManager.addPropertyChangeListener(evt -> { update(); });
-
-        btnResume.setOnAction(event -> {
-            gameManager.pressKey(KEYPRESS.ESC);
-            this.setVisible(false);
+        gameManager.addPropertyChangeListener(GameManager.EVOLVE, evt -> {
+            Platform.runLater(() -> update((boolean)evt.getNewValue()));
         });
-        btnSave.setOnAction(event -> {
-            gameManager.serialize();
+
+        btnNewGame.setOnAction(event -> {
+            gameManager.restart();
+            this.setVisible(false);
         });
         btnExit.setOnAction(event -> {
             System.exit(0);
         });
 
-        this.setOnKeyPressed((key) -> {
-            if (key.getCode() == KeyCode.UP) {
-                gameManager.pressKey(KEYPRESS.UP);
-            }
-            if (key.getCode() == KeyCode.DOWN) {
-                gameManager.pressKey(KEYPRESS.DOWN);
-            }
-            if (key.getCode() == KeyCode.LEFT) {
-                gameManager.pressKey(KEYPRESS.LEFT);
-            }
-            if (key.getCode() == KeyCode.RIGHT) {
-                gameManager.pressKey(KEYPRESS.RIGHT);
-            }
-            if (key.getCode() == KeyCode.ESCAPE) {
-                gameManager.pressKey(KEYPRESS.ESC);
-            }
-        });
     }
 
-    private void update() {
-        if (gameManager.getState() == GameState.GAMEOVER) {
-            this.setVisible(true);
+    private void update(Boolean res) {
+        if (gameManager.getState() != GameState.GAMEOVER) {
+            this.setVisible(false);
             return;
         }
+        setVisible(true);
 
-        setVisible(false);
+        if(!res){
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("TOP FIVE");
+            dialog.setHeaderText("Congrats, you are in the TOP 5 of players!");
+            dialog.setContentText("Add your name:");
+
+            Optional<String> result = dialog.showAndWait();
+            result.ifPresent(name -> {
+                gameManager.addPlayer(name);
+            });
+        }
     }
 
 }

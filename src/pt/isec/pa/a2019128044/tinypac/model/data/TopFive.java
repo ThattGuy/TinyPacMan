@@ -1,16 +1,16 @@
 package pt.isec.pa.a2019128044.tinypac.model.data;
 
 import java.io.Serializable;
-import java.util.Comparator;
-import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 
 public class TopFive implements Serializable {
 
     private static final SortedSet<Player> topFivePlayers = new TreeSet<>(Comparator.comparingInt(Player::getScore).reversed()); ;
 
-    public static void addPlayer(Player player) {
+    public static void addPlayer(String name, int score) {
+
+        Player player = new Player(name,score);
+
         if (!checkIfTopFive(player.getScore())) {
             return;
         }
@@ -20,9 +20,17 @@ public class TopFive implements Serializable {
         if (topFivePlayers.size() > 5) {
             topFivePlayers.remove(topFivePlayers.last());
         }
+
+        System.out.println(topFivePlayers.size());
+
     }
 
     public static boolean checkIfTopFive(int score) {
+
+        if(topFivePlayers.size() == 0){
+            return true;
+        }
+
         for (Player player : topFivePlayers.stream().toList()) {
             int existingScore = player.getScore();
             if (score > existingScore) {
@@ -34,6 +42,16 @@ public class TopFive implements Serializable {
 
     public static List<Player> getTopFive() {
         return topFivePlayers.stream().toList();
+    }
+
+    public static List<String> getTopFiveString() {
+
+        List<String> ret = new ArrayList<>();
+        for (Player player: topFivePlayers) {
+            ret.add( "Player: " + player.getName() + " Score: " + player.getScore());
+            System.out.println(player.getName() + player.getScore());
+        }
+        return ret;
     }
 
     public static void setTopFive(List<Player> players) {

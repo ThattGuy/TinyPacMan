@@ -18,6 +18,7 @@ public class PacmanVulnerable  extends GameStateAdapter implements Serializable 
     @Override
     public  boolean evolve(long currentTime) {
         ++simultaneio;
+        //todo remove this
         if (simultaneio>1)
             System.out.printf("SIMULTANEIO %d\n", simultaneio);
 
@@ -40,8 +41,7 @@ public class PacmanVulnerable  extends GameStateAdapter implements Serializable 
             return true;
         }
 
-        if(data.getBalls() <= 280 && data.getBalls() != -1){
-            //todo perguntar ao professor
+        if(data.getBalls() <= 0 && data.getBalls() != -1){
             data.changeLevel();
             changeState(GameState.INITIAL,this.getState());
 

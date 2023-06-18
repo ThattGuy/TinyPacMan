@@ -5,6 +5,7 @@ import pt.isec.pa.a2019128044.tinypac.gameengine.IGameEngineEvolve;
 import pt.isec.pa.a2019128044.tinypac.model.data.KEYPRESS;
 import pt.isec.pa.a2019128044.tinypac.model.data.Player;
 import pt.isec.pa.a2019128044.tinypac.model.data.TopFive;
+import pt.isec.pa.a2019128044.tinypac.ui.gui.TopFiveUI;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -19,9 +20,9 @@ public class GameManager implements IGameEngineEvolve {
     private PropertyChangeSupport pcs;
 
     public static final String START = "_start_";
+    public static final String RESTART = "_restart_";
     public static final String HASDATA = "_hasdata_";
     public static final String EVOLVE = "_evolve_";
-    public static final String TOPFIVE = "_topfive_";
 
     IGameEngine gameEngine;
     public GameManager(IGameEngine gameEngine) {
@@ -44,9 +45,15 @@ public class GameManager implements IGameEngineEvolve {
         gameEngine.start(200);
         if(Files.exists(Paths.get("", "savedata"))) {
             deserialize();
-            pcs.firePropertyChange(HASDATA,false,true);
+            pcs.firePropertyChange(HASDATA,null,null);
         }
-        pcs.firePropertyChange(START,false,true);
+        pcs.firePropertyChange(START,null,null);
+    }
+
+
+    public void restart() {
+        fsm = new GameContext();
+        pcs.firePropertyChange(null,null,null);
     }
 
     public void pressKey(KEYPRESS keypress) {
@@ -60,8 +67,8 @@ public class GameManager implements IGameEngineEvolve {
 
     @Override
     public  void evolve(IGameEngine engine,long currentTime) {
-        fsm.evolve(currentTime);
-        pcs.firePropertyChange(EVOLVE, null, null);
+        boolean res = fsm.evolve(currentTime);
+        pcs.firePropertyChange(EVOLVE, null, res);
     }
 
     public char[][] getMaze(){
@@ -77,6 +84,16 @@ public class GameManager implements IGameEngineEvolve {
 
     public int getPoints() {
         return fsm.getPoints();
+    }
+
+    public void addPlayer(String name){
+        System.out.println(name + fsm.getPoints());
+        TopFive.addPlayer(name,fsm.getPoints());
+        serializeTopFive();
+    }
+
+    public List<String> getTopFive(){
+        return TopFive.getTopFiveString();
     }
 
     public void serialize() {
@@ -99,19 +116,7 @@ public class GameManager implements IGameEngineEvolve {
         }
     }
 
-    public void checkScore(int score){
-        boolean result = TopFive.checkIfTopFive(score);
-
-        if(result){
-            pcs.firePropertyChange(TOPFIVE, null, null);
-        }
-    }
-
-    public void setNewPlayer(Player player){
-        TopFive.addPlayer(player);
-    }
-
-    public void serializeTopFive() {
+    public static void serializeTopFive() {
         try(FileOutputStream outputStream = new FileOutputStream("topFive"); ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream)) {
             objectOutputStream.writeObject(TopFive.getTopFive());
 
@@ -129,5 +134,11 @@ public class GameManager implements IGameEngineEvolve {
             System.out.println("ERROR LOADING SAVED DATA: TOP FIVE");
             e.printStackTrace();
         }
+    }
+
+    public static final String TOPFIVE = "_topfive_";
+    public void topFive(){
+        deserializeTopFive();
+        pcs.firePropertyChange(TOPFIVE,null,null);
     }
 }

@@ -30,7 +30,8 @@ public class RootPane extends BorderPane {
                 new MainMenuUI(gameManager),
                 new GamePlayUI(gameManager),
                 new PauseUI(gameManager),
-                new GameOverUI(gameManager)
+                new GameOverUI(gameManager),
+                new TopFiveUI(gameManager)
         );
         stackPane.setBackground(
                 new Background(

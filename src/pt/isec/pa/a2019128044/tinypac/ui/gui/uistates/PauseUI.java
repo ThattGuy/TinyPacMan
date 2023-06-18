@@ -91,18 +91,6 @@ public class PauseUI extends BorderPane {
         });
 
         this.setOnKeyPressed((key) -> {
-            if (key.getCode() == KeyCode.UP) {
-                gameManager.pressKey(KEYPRESS.UP);
-            }
-            if (key.getCode() == KeyCode.DOWN) {
-                gameManager.pressKey(KEYPRESS.DOWN);
-            }
-            if (key.getCode() == KeyCode.LEFT) {
-                gameManager.pressKey(KEYPRESS.LEFT);
-            }
-            if (key.getCode() == KeyCode.RIGHT) {
-                gameManager.pressKey(KEYPRESS.RIGHT);
-            }
             if (key.getCode() == KeyCode.ESCAPE) {
                 gameManager.pressKey(KEYPRESS.ESC);
             }
